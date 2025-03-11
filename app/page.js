@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AiFillCaretDown } from "react-icons/ai";
+import ProjectTile from "./components/ProjectTile";
 
 export default function Home() {
   return (
@@ -10,11 +11,33 @@ export default function Home() {
           <h1 className="text-[96px] font-serif">Je suis Yvan Kerdanet</h1>
           <h2 className="text-4xl font-semibold mt-2">Concepteur développeur de solutions digitales</h2>
           <h3 className="text-base italic mt-1">Actuellement en recherche d'alternance pour l'année scolaire prochaine</h3>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-md absolute bottom-8">En savoir plus...</button>
+          <Link href="/about" className="absolute bottom-8"><button className="bg-blue-500 text-white px-4 py-2 rounded-md">En savoir plus...</button></Link>
         </div>
       </div>
-      <div className="flex justify-center p-4">
+      <div className="flex justify-center p-6">
         <AiFillCaretDown className="text-2xl text-white animate-bounce" />
+      </div>
+
+      {/* Mes derniers projet */}
+      <div className="px-8 text-white relative">
+        <h1 className="font-bold text-[48px] text-linear-65 from-fuchsia-400 to-sky-300">Mes derniers projets</h1>
+        <p className="pl-2 italic text-stone-500">Voici un aperçu de mes derniers projets réalisés. Cette section se base sur des projets complets réalisés pour des clients fictifs ou non.</p>
+        <div className="py-4 px-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <ProjectTile name="Portfolio" url="portfolio" description="Mon portfolio personnel" tech="next" />
+          <ProjectTile name="CoffeeX" url="coffeex" description="Application React ayant pour but de copier le fonctionnement de X (anciennement Twitter) avec un style unique inspiré du café" tech="react" />
+          <ProjectTile name="CoffeeX" url="coffeex" description="Application React ayant pour but de copier le fonctionnement de X (anciennement Twitter) avec un style unique inspiré du café" />
+        </div>
+        <Link href="/project" className="absolute right-8"><button className="bg-blue-500 text-white px-4 py-2 rounded-md">Voir tous</button></Link>
+      </div>
+
+      {/* Mes derniers articles */}
+      <div className="px-8 text-white relative">
+        <h1 className="font-bold text-[48px] text-linear-65 from-fuchsia-400 to-sky-300">Mes derniers articles</h1>
+        <p className="pl-2 italic text-stone-500">Voici un aperçu de mes derniers articles rédigés par mes soins ou des Challenges réalisés qui ne constituent pas un projet complet.</p>
+        <div className="py-4 px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        </div>
+        <Link href="/blog" className="absolute right-8"><button className="bg-blue-500 text-white px-4 py-2 rounded-md">Voir tous</button></Link>
       </div>
 
       <h2 className="text-2xl font-semibold mt-8">Other pages :</h2>
