@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Portfolio Personnel",
+        "url": "portfolio-personnel",
+        "description": "Un site web personnel pour présenter mes projets et compétences. Il comprend une section à propos, une section projets et une section contact.",
+        "tech": "react"
+    },
+    {
+        "name": "Application de Gestion de Tâches",
+        "url": "application-de-gestion-de-taches",
+        "description": "Une application web pour gérer les tâches quotidiennes. Elle permet d'ajouter, de modifier et de supprimer des tâches, ainsi que de les marquer comme complétées.",
+        "tech": "angular"
+    },
+    {
+        "name": "Blog Personnel",
+        "url": "blog-personnel",
+        "description": "Un blog personnel où je partage mes pensées et expériences sur divers sujets. Il comprend des fonctionnalités de commentaires et de partage sur les réseaux sociaux.",
+        "tech": "js"
+    },
+    {
+        "name": "Site de Recettes de Cuisine",
+        "url": "site-de-recettes-de-cuisine",
+        "description": "Un site web pour partager des recettes de cuisine. Les utilisateurs peuvent rechercher des recettes par ingrédients, ajouter des commentaires et noter les recettes.",
+        "tech": "html"
+    },
+    {
+        "name": "Portfolio Photographique",
+        "url": "portfolio-photographique",
+        "description": "Un site web pour présenter mes photographies. Il comprend une galerie d'images, une section à propos et une section contact.",
+        "tech": "css"
+    }
+]
