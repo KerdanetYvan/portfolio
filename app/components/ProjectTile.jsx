@@ -22,7 +22,7 @@ export default function ProjectTile({ name, url, description, tech}) {
             </div>
         </div>
         <p className='text-end italic pb-7 text-purple-950'>{description}</p>
-        <Link href={`/project/${url}`} className='text-sky-100 absolute bottom-4 right-4'>En savoir plus...</Link>
+        <Link href={`/portfolio/${url}`} className='text-sky-100 absolute bottom-4 right-4'>En savoir plus...</Link>
     </div>
   )
 }

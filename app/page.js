@@ -15,7 +15,7 @@ export default function Home() {
         <div className="h-full w-full bg-black/30 backdrop-blur-[5px] flex flex-col justify-center items-end p-16 md:p-32 relative">
           <h1 className="text-4xl md:text-[48px] lg:text-[96px] text-end font-serif">Yvan Kerdanet</h1>
           <h2 className="text-xl md:text-2xl lg:text-4xl text-end font-semibold mt-2">Concepteur développeur de solutions digitales</h2>
-          <h3 className="text-base text-end italic mt-1">Actuellement en recherche d'alternance pour l'année scolaire prochaine</h3>
+          <h3 className="text-base text-end italic mt-1">Actuellement en recherche d'alternance pour l'année 2025/2026</h3>
           <Link href="/about" className="absolute bottom-8"><button className="bg-blue-500 text-white px-4 py-2 rounded-md">En savoir plus...</button></Link>
         </div>
       </div>
@@ -32,7 +32,7 @@ export default function Home() {
             <ProjectTile key={i+projet.name} name={projet.name} url={projet.url} description={projet.description} tech={projet.tech} />
           ))}
         </div>
-        <Link href="/project" className="absolute right-8"><button className="bg-blue-500 text-white px-4 py-2 rounded-md">Voir tous</button></Link>
+        <Link href="/portfolio" className="absolute right-8"><button className="bg-blue-500 text-white px-4 py-2 rounded-md">Voir tous</button></Link>
       </div>
 
       {/* Mes derniers articles */}

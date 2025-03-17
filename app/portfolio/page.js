@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { RiArrowDropRightFill, RiArrowDropDownFill } from "react-icons/ri";
+import { RiArrowDropRightFill, RiArrowDropDownFill, RiMailFill, RiGithubFill, RiLinkedinFill } from "react-icons/ri";
 import projects from '../../public/projets.json';
 
 export default function Portfolio() {
@@ -12,6 +12,8 @@ export default function Portfolio() {
   useEffect(() => {
     setRenderProjects(projectsToDisplay());
     // console.log("render projets :", renderProjects);
+    // console.log(new Date());
+    getTimeOrDate(new Date());
   }, [checkedItems]);
 
   const categories = {
@@ -135,6 +137,61 @@ export default function Portfolio() {
     }
   };
 
+  const getTimeOrDate = (date) => {
+    const today = new Date();
+    const todayString = today.toISOString();
+    const tabToday = todayString.split("T");
+    const dateToday = tabToday[0];
+    const heureToday = tabToday[1];
+
+    // Ensure 'date' is a string
+    const dateString = String(date);
+    // console.log("todayString", todayString);
+    // console.log("dateString", dateString);
+    
+    // Split based on space or another delimiter if needed
+    const tabArt = dateString.split("T"); // ISO format uses "T" to separate date and time
+    const dateArt = tabArt[0];
+    const heureArt = tabArt[1];
+
+    // Compare the two dates
+    // console.log('tabArt', tabArt);
+    // console.log('dateArt', dateArt, "et dateToday", dateToday);
+    if (dateArt == dateToday) {
+      // Compare the two times
+      if (heureArt == heureToday) {
+        return "à l'instant";
+      } else {
+        // Get the time difference
+        const [hours, minutes] = heureArt.split(":");
+        const [hoursToday, minutesToday] = heureToday.split(":");
+        const diffHours = Number(hoursToday) - Number(hours);
+        const diffMinutes = Number(minutesToday) - Number(minutes);
+        if (diffHours >= 12) {
+          return `12h`;
+        } else if (diffHours !== 0) {
+          return `${diffHours} h`;
+        } else {
+          return `${diffMinutes} min`;
+        }
+      }
+    } else {
+      // Get the date difference
+      const [year, month, day] = dateArt.split("-");
+      const [yearToday, monthToday, dayToday] = dateToday.split("-");
+      const diffYears = Number(yearToday) - Number(year);
+      const diffMonths = Number(monthToday) - Number(month);
+      const diffDays = Number(dayToday) - Number(day);
+      if(diffYears === 0 && diffMonths === 0) {
+        return `${diffDays} j`;
+      } else if(diffYears === 0 && diffMonths <= 3) {
+        return `${diffMonths} mois`;
+      } else {
+        return (`${day}/${month}/${year}`);
+      }
+    }
+  }
+
   return (
     <div className="bg-stone-700 min-h-screen p-0 m-0">
       <div className="text-white h-25 md:h-50 lg:h-100 justify-between items-center flex flex-col m-0 p-0 bg-[url(../public/pt-herobanner.webp)] bg-cover bg-center shadow-md">
@@ -148,8 +205,8 @@ export default function Portfolio() {
       </div>
 
       {/* tout mes projets */}
-      <div className='w-full grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 p-4 px-32'>
-        <div className='border-r-1 border-amber-100 text-amber-100'>
+      <div className='w-full grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-4 p-4 md:px-32'>
+        <div className='hidden lg:block border-r-1 border-amber-100 text-amber-100'>
           {Object.entries(categories).map(([category, subCategories]) => (
           <div key={category} className="mb-2">
             <div className="flex items-center">
@@ -203,17 +260,34 @@ export default function Portfolio() {
           </div>
         ))}
         </div>
-        <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
           {renderProjects.map((project) => (
-            <div key={project.id} className="bg-stone-800 p-4 rounded-md shadow-md max-h-80">
-              <h2 className="text-xl font-bold">{project.name}</h2>
-              <p className="text-stone-200">{project.description}</p>
-              <p className="text-stone-200">{project.tech.join(", ")}</p>
-              <p className="text-stone-200">{project.date}</p>
+            <div key={project.id} className="relative bg-linear-65 from-sky-200 to-pink-300 p-4 rounded-md shadow-md min-h-60 lg:max-h-100">
+              <h2 className="text-xl font-bold text-purple-900">{project.name}</h2>
+              <p className="text-black/30 italic pl-4">{project.tech.join(", ")}</p>
+              <p className="text-black text-end pb-8">{project.description}</p>
+              <p className="absolute bottom-2 left-2 text-black text-xs">{getTimeOrDate(project.date)}</p>
+              <Link href={`/portfolio/${project.url}`} className='text-pink-950/30 absolute bottom-4 right-4'>En savoir plus...</Link>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-16 px-6">
+        <h3 className="text-3xl font-semibold text-center text-white mb-8">Contactez-moi</h3>
+        <div className="flex justify-center gap-6">
+          <a href="mailto:kerdanety@gmail.com" className="text-pink-300">
+            <RiMailFill size={32} />
+          </a>
+          <a href="https://github.com/KerdanetYvan" target="_blank" className="text-green-400">
+            <RiGithubFill size={32} />
+          </a>
+          <a href="https://linkedin.com/in/yvankerdanet" target="_blank" className="text-sky-500">
+            <RiLinkedinFill size={32} />
+          </a>
+        </div>
+      </section>
     </div>
   )
 }
