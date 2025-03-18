@@ -2,13 +2,15 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { TiThMenu } from "react-icons/ti";
+import Image from 'next/image';
+import Logo from '../../public/favicon.webp';
 
 export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <header className="bg-stone-800 shadow-md py-4 px-6 flex justify-between items-center">
-      <h1 className="text-2xl font-bold text-white"><Link href='/'>Kerdanet Yvan</Link></h1>
+      <h1 className="text-2xl font-bold text-white"><Link href='/' className='flex items-center gap-2'><Image src={Logo} alt='logo du site' width={30} height={30} className='rounded-sm' />Kerdanet Yvan</Link></h1>
       <nav className="space-x-6 hidden lg:block">
         <Link href="/portfolio" className="text-white hover:text-blue-500 transition">Portfolio</Link>
         <Link href="/blog" className="text-white hover:text-blue-500 transition">Mon Actus</Link>

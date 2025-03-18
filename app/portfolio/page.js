@@ -205,7 +205,7 @@ export default function Portfolio() {
       </div>
 
       {/* tout mes projets */}
-      <div className='w-full grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-4 p-4 md:px-32'>
+      <div className='w-full grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-4 p-4 md:px-16 lg:px-32'>
         <div className='hidden lg:block border-r-1 border-amber-100 text-amber-100'>
           {Object.entries(categories).map(([category, subCategories]) => (
           <div key={category} className="mb-2">

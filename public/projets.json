@@ -6,6 +6,12 @@
         "description": "Un site web personnel pour présenter mes projets et compétences. Il comprend une section à propos, une section projets et une section contact.",
         "tech": ["React"],
         "status": "En cours",
+        "fonctionnalites": ["Section à propos", "Section projets", "Section contact"],
+        "defis": ["Créer un design attrayant", "Intégrer des animations", "Optimiser le site pour les moteurs de recherche"],
+        "evolution": ["Ajouter une section blog", "Ajouter une section portfolio photographique"],
+        "images": ["bg-herobanner.webp", "pt-herobanner.webp"],
+        "site": "https://portfolio-personnel.netlify.app",
+        "github": "sdfsdf",
         "date": "2025-03-16T11:10:00.150Z"
     },
     {
