@@ -194,7 +194,7 @@ export default function Portfolio() {
 
   return (
     <div className="bg-stone-700 min-h-screen p-0 m-0">
-      <div className="text-white h-25 md:h-50 lg:h-100 justify-between items-center flex flex-col m-0 p-0 bg-[url(../public/pt-herobanner.webp)] bg-cover bg-center shadow-md">
+      <div className="text-white h-25 md:h-50 lg:h-100 justify-between items-center flex flex-col m-0 p-0  bg-cover bg-center shadow-md">
         <div className="h-25 md:h-50 lg:h-100 w-full bg-black/30 backdrop-blur-[5px] flex flex-col justify-center items-center relative">
           <h1 className='md:text-[64px] lg:text-[96px] font-serif'>Portfolio</h1>
           <p className='hidden md:block lg:block italic text-stone-200'>Voici un aperçu de mes derniers projets réalisés</p>
@@ -262,12 +262,30 @@ export default function Portfolio() {
         </div>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
           {renderProjects.map((project) => (
-            <div key={project.id} className="relative bg-linear-65 from-sky-200 to-pink-300 p-4 rounded-md shadow-md min-h-60 lg:max-h-100">
-              <h2 className="text-xl font-bold text-purple-900">{project.name}</h2>
-              <p className="text-black/30 italic pl-4">{project.tech.join(", ")}</p>
-              <p className="text-black text-end pb-8">{project.description}</p>
-              <p className="absolute bottom-2 left-2 text-black text-xs">{getTimeOrDate(project.date)}</p>
-              <Link href={`/portfolio/${project.url}`} className='text-pink-950/30 absolute bottom-4 right-4'>En savoir plus...</Link>
+            <div key={project.id} className="relative rounded-md overflow-hidden shadow-md min-h-60 lg:max-h-100">
+              <div className='bg-blue-300 absolute top-0 left-0 h-full w-full overflow-hidden'>
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      width: `${Math.floor(Math.random() * 100) + 50}px`,
+                      height: `${Math.floor(Math.random() * 100) + 50}px`,
+                      position: 'absolute',
+                      top: `${Math.floor(Math.random() * 100)}%`,
+                      left: `${Math.floor(Math.random() * 100)}%`,
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                    className={`${Math.random() > 0.5 ? 'bg-blue-200' : 'bg-blue-400'} opacity-50`}
+                  />
+                ))}
+              </div>
+              <div className='relative z-10 backdrop-blur-[1px] p-4 h-full'>
+                <h2 className="text-xl font-bold text-purple-900">{project.name}</h2>
+                <p className="text-sky-100 italic pl-4">{project.tech.join(", ")}</p>
+                <p className="text-black text-jsutify pb-8">{project.description}</p>
+                <p className="absolute bottom-2 left-2 text-black text-xs">{getTimeOrDate(project.date)}</p>
+                <Link href={`/portfolio/${project.url}`} className='text-pink-950/30 absolute bottom-4 right-4'>En savoir plus...</Link>
+              </div>
             </div>
           ))}
         </div>

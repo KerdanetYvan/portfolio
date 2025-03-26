@@ -1,32 +1,37 @@
 [
     {
+        "id": 1,
         "titre": "Mon Premier Article",
         "url": "mon-premier-article",
         "metadescription": "Ceci est une description détaillée de mon premier article. Dans cet article, nous explorons divers aspects intéressants et informatifs. Nous commençons par une introduction qui vous accueille chaleureusement et vous prépare à plonger dans le contenu principal. La première section fournit des détails approfondis sur le sujet initial, accompagnés d'une image illustrative pour mieux comprendre le contexte. Ensuite, nous passons à la deuxième section où nous continuons à explorer le sujet avec plus de détails et une autre image pour enrichir l'expérience visuelle. Cet article est conçu pour être informatif et engageant, offrant une lecture agréable et éducative. Nous espérons que vous apprécierez la lecture et trouverez les informations présentées utiles et intéressantes. Merci de prendre le temps de lire notre premier article et de nous accompagner dans ce voyage de découverte et d'apprentissage.",
-        "content": "<h3>Introduction</h3><p>Bienvenue dans mon premier article. Voici le contenu principal.</p><h4>Section 1</h4><p>Voici quelques détails sur la première section.</p><img src='image1.jpg' alt='Image 1'><h4>Section 2</h4><p>Voici quelques détails sur la deuxième section.</p><img src='image2.jpg' alt='Image 2'>"
+        "content": "# Introduction\nBienvenue dans mon premier article. Voici le contenu principal.\n## Section 1\nVoici quelques détails sur la première section.\n![Image 1](/bg-herobanner.webp)\n## Section 2\nVoici quelques détails sur la deuxième section.\n![Image 2](/pt-herobanner.webp)"
     },
     {
+        "id": 2,
         "titre": "Deuxième Article",
         "url": "deuxieme-article",
         "metadescription": "Ceci est une description détaillée de mon deuxième article. Dans cet article, nous continuons notre exploration avec de nouveaux sujets captivants. L'introduction vous accueille et vous prépare à découvrir le contenu principal. La première section offre une analyse approfondie du premier sujet, accompagnée d'une image pour illustrer les points clés. Ensuite, nous passons à la deuxième section où nous approfondissons davantage le sujet avec des détails supplémentaires et une autre image pour enrichir l'expérience visuelle. Cet article est conçu pour être à la fois informatif et engageant, offrant une lecture agréable et éducative. Nous espérons que vous apprécierez la lecture et trouverez les informations présentées utiles et intéressantes. Merci de prendre le temps de lire notre deuxième article et de continuer à nous accompagner dans ce voyage de découverte et d'apprentissage.",
-        "content": "<h3>Introduction</h3><p>Bienvenue dans mon deuxième article. Voici le contenu principal.</p><h4>Section 1</h4><p>Voici quelques détails sur la première section.</p><img src='image3.jpg' alt='Image 3'><h4>Section 2</h4><p>Voici quelques détails sur la deuxième section.</p><img src='image4.jpg' alt='Image 4'>"
+        "content": "### Introduction\nBienvenue dans mon deuxième article. Voici le contenu principal.\n## Section 1\nVoici quelques détails sur la première section.\n![Image 3](image3.jpg)\n## Section 2\nVoici quelques détails sur la deuxième section.\n![Image 4](image4.jpg)"
     },
     {
+        "id": 3,
         "titre": "Troisième Article",
         "url": "troisieme-article",
         "metadescription": "Ceci est une description détaillée de mon troisième article. Dans cet article, nous abordons de nouveaux sujets fascinants et informatifs. L'introduction vous accueille chaleureusement et vous prépare à plonger dans le contenu principal. La première section fournit une analyse détaillée du premier sujet, accompagnée d'une image pour illustrer les points clés. Ensuite, nous passons à la deuxième section où nous approfondissons davantage le sujet avec des détails supplémentaires et une autre image pour enrichir l'expérience visuelle. Cet article est conçu pour être à la fois informatif et engageant, offrant une lecture agréable et éducative. Nous espérons que vous apprécierez la lecture et trouverez les informations présentées utiles et intéressantes. Merci de prendre le temps de lire notre troisième article et de continuer à nous accompagner dans ce voyage de découverte et d'apprentissage.",
-        "content": "<h3>Introduction</h3><p>Bienvenue dans mon troisième article. Voici le contenu principal.</p><h4>Section 1</h4><p>Voici quelques détails sur la première section.</p><img src='image5.jpg' alt='Image 5'><h4>Section 2</h4><p>Voici quelques détails sur la deuxième section.</p><img src='image6.jpg' alt='Image 6'>"
+        "content": "### Introduction\nBienvenue dans mon troisième article. Voici le contenu principal.\n#### Section 1\nVoici quelques détails sur la première section.\n![Image 5](image5.jpg)\n#### Section 2\nVoici quelques détails sur la deuxième section.\n![Image 6](image6.jpg)"
     },
     {
+        "id": 4,
         "titre": "Quatrième Article",
         "url": "quatrieme-article",
         "metadescription": "Ceci est une description détaillée de mon quatrième article. Dans cet article, nous explorons de nouveaux sujets captivants et informatifs. L'introduction vous accueille chaleureusement et vous prépare à plonger dans le contenu principal. La première section offre une analyse approfondie du premier sujet, accompagnée d'une image pour illustrer les points clés. Ensuite, nous passons à la deuxième section où nous approfondissons davantage le sujet avec des détails supplémentaires et une autre image pour enrichir l'expérience visuelle. Cet article est conçu pour être à la fois informatif et engageant, offrant une lecture agréable et éducative. Nous espérons que vous apprécierez la lecture et trouverez les informations présentées utiles et intéressantes. Merci de prendre le temps de lire notre quatrième article et de continuer à nous accompagner dans ce voyage de découverte et d'apprentissage.",
-        "content": "<h3>Introduction</h3><p>Bienvenue dans mon quatrième article. Voici le contenu principal.</p><h4>Section 1</h4><p>Voici quelques détails sur la première section.</p><img src='image7.jpg' alt='Image 7'><h4>Section 2</h4><p>Voici quelques détails sur la deuxième section.</p><img src='image8.jpg' alt='Image 8'>"
+        "content": "### Introduction\nBienvenue dans mon quatrième article. Voici le contenu principal.\n#### Section 1\nVoici quelques détails sur la première section.\n![Image 7](image7.jpg)\n#### Section 2\nVoici quelques détails sur la deuxième section.\n![Image 8](image8.jpg)"
     },
     {
+        "id": 5,
         "titre": "Cinquième Article",
         "url": "cinquieme-article",
         "metadescription": "Ceci est une description détaillée de mon cinquième article. Dans cet article, nous continuons notre exploration avec de nouveaux sujets captivants. L'introduction vous accueille chaleureusement et vous prépare à découvrir le contenu principal. La première section offre une analyse approfondie du premier sujet, accompagnée d'une image pour illustrer les points clés. Ensuite, nous passons à la deuxième section où nous approfondissons davantage le sujet avec des détails supplémentaires et une autre image pour enrichir l'expérience visuelle. Cet article est conçu pour être à la fois informatif et engageant, offrant une lecture agréable et éducative. Nous espérons que vous apprécierez la lecture et trouverez les informations présentées utiles et intéressantes. Merci de prendre le temps de lire notre cinquième article et de continuer à nous accompagner dans ce voyage de découverte et d'apprentissage.",
-        "content": "<h3>Introduction</h3><p>Bienvenue dans mon cinquième article. Voici le contenu principal.</p><h4>Section 1</h4><p>Voici quelques détails sur la première section.</p><img src='image9.jpg' alt='Image 9'><h4>Section 2</h4><p>Voici quelques détails sur la deuxième section.</p><img src='image10.jpg' alt='Image 10'>"
+        "content": "### Introduction\nBienvenue dans mon cinquième article. Voici le contenu principal.\n#### Section 1\nVoici quelques détails sur la première section.\n![Image 9](image9.jpg)\n#### Section 2\nVoici quelques détails sur la deuxième section.\n![Image 10](image10.jpg)"
     }
 ]
