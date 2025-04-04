@@ -194,7 +194,7 @@ export default function Portfolio() {
 
   return (
     <div className="bg-stone-700 min-h-screen p-0 m-0">
-      <div className="text-white h-25 md:h-50 lg:h-100 justify-between items-center flex flex-col m-0 p-0  bg-cover bg-center shadow-md">
+      <div className="text-white h-25 md:h-50 lg:h-100 justify-between items-center flex flex-col m-0 p-0 bg-[url(../public/pt-herobanner.webp)] bg-cover bg-center shadow-md">
         <div className="h-25 md:h-50 lg:h-100 w-full bg-black/30 backdrop-blur-[5px] flex flex-col justify-center items-center relative">
           <h1 className='md:text-[64px] lg:text-[96px] font-serif'>Portfolio</h1>
           <p className='hidden md:block lg:block italic text-stone-200'>Voici un aperçu de mes derniers projets réalisés</p>
