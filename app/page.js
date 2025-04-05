@@ -7,6 +7,9 @@ import ArticleTile from "./components/ArticleTile";
 import Projets from "../public/projets.json";
 import Articles from "../public/articles.json";
 
+// Ensure Articles is defined and is an array
+const articlesData = Array.isArray(Articles) ? Articles : [];
+
 export default function Home() {
   return (
     <div className="bg-stone-700 min-h-screen p-0 m-0">
@@ -39,11 +42,15 @@ export default function Home() {
       <div className="px-8 text-white relative">
         <h1 className="font-bold text-[48px] text-linear-65 from-fuchsia-400 to-sky-300">Mes derniers articles</h1>
         <p className="pl-2 italic text-stone-500">Voici un aperçu de mes derniers articles rédigés par mes soins ou des Challenges réalisés qui ne constituent pas un projet complet.</p>
-        <div className="py-4 md:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Articles.slice(0, 3).map((article, i) => (
-            <ArticleTile key={i+article.titre} title={article.titre} url={article.url} metadescription={article.metadescription} />
-          ))}
-        </div>
+        
+        {articlesData.length !== 0 ? (
+          <div className="py-4 md:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {articlesData.slice(0, 3).map((article, i) => (
+            <ArticleTile key={i + article.titre} title={article.titre} url={article.url} metadescription={article.metadescription} />
+            ))}
+          </div>
+        ) : <p className="text-center text-stone-500 text-2xl font-bold py-16">Aucun article n'est disponible pour le moment.</p>}
+        
         <Link href="/blog" className="absolute right-8"><button className="bg-blue-500 text-white px-4 py-2 rounded-md">Voir tous</button></Link>
       </div>
 

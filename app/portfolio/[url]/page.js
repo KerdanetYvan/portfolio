@@ -62,7 +62,7 @@ export default function page({ params }) {
 
     return (
         <div className='min-h-screen bg-stone-700 text-white p-4'>
-            <div className='relative container rounded-lg bg-stone-600 box-shadow shadow-xl p-4 mx-auto'>
+            <div className='relative container rounded-lg bg-stone-600 box-shadow shadow-xl p-8 mx-auto'>
                 <h1 className='font-bold md:text-2xl lg:text-4xl flex items-center gap-2 md:gap-4'><AiOutlinePaperClip />{project.name}</h1>
                 <p className='flex items-center gap-2 md:justify-end'><AiFillCalendar /> {getDate(project)}</p>
                 <LienProj site={project.site} github={project.github} />
@@ -92,7 +92,9 @@ export default function page({ params }) {
                 {project.images && <h2 className='md:text-xl lg:text-2xl flex items-center gap-2 font-semibold md:pl-4 pt-4'><AiFillSetting />Images :</h2>}
                 {project.images && <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4'>
                     {project.images.map((image, i) => (
-                        <img src={`/projects/${project.url}/${image}`} alt={`image${i}_${project.name}`} key={i+image} className='rounded-md' />
+                        <div className='flex justify-center items-center max-h-[400px]' key={i+image}>
+                            <img src={`/projects/${project.url}/${image}`} alt={`image${i}_${project.name}`} className='rounded-md max-h-full max-w-full' />
+                        </div>
                     ))}
                 </div>}
                 {project.evolution && <h2 className='md:text-xl lg:text-2xl flex items-center gap-2 font-semibold md:pl-4 pt-4'><AiFillProduct />Axes d'amélioration :</h2>}

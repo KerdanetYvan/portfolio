@@ -2,6 +2,9 @@ import React from 'react';
 import Link from 'next/link';
 import articles from '../../public/articles.json';
 
+// Ensure Articles is defined and is an array
+const articlesData = Array.isArray(articles) ? articles : [];
+
 export default function Blog() {
   return (
     <div className='min-h-screen bg-stone-700'>
@@ -11,8 +14,9 @@ export default function Blog() {
           <p className='hidden md:block lg:block italic text-stone-200'>Toutes les news en temps réel ? c'est ici !</p>
         </div>
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 md:mx-16 lg:mx-32'>
-        {articles.map((article) => (
+        {articlesData.length !== 0 ? 
+        (<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 md:mx-16 lg:mx-32'>
+          {articlesData.map((article) => (
           <div key={article.id} className='shadow-lg rounded-md overflow-hidden relative'>
             <div className='bg-blue-300 absolute top-0 left-0 h-full w-full overflow-hidden'>
               {Array.from({ length: 5 }).map((_, index) => (
@@ -36,8 +40,8 @@ export default function Blog() {
               <Link href={`/blog/${article.url}`} className='text-white absolute bottom-4 right-4'>En savoir plus...</Link>
             </div>
           </div>
-        ))}
-      </div>
+          ))}
+        </div>) : <p className="text-center text-stone-500 text-2xl font-bold py-16">Aucun article disponible pour l'instant</p>}
     </div>
   )
 }

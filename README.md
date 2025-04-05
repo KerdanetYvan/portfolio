@@ -1,6 +1,7 @@
 # Portfolio App
 
 Welcome to my portfolio app! This application showcases my projects, skills, and experiences.
+**Current Version**: v1.0.1
 
 ## Features
 
