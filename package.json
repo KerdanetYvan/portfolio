@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "express": "^5.1.0",
     "framer-motion": "^12.6.2",
     "next": "^15.2.4",
     "portfolio": "file:",
