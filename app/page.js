@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { AiFillCaretDown } from "react-icons/ai";
-import { RiGithubFill, RiLinkedinFill, RiMailFill } from "react-icons/ri";
 import ProjectTile from "./components/ProjectTile";
 import ArticleTile from "./components/ArticleTile";
 
@@ -54,21 +53,6 @@ export default function Home() {
         <Link href="/blog" className="absolute right-8"><button className="bg-blue-500 text-white px-4 py-2 rounded-md">Voir tous</button></Link>
       </div>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-16 px-6">
-        <h3 className="text-3xl font-semibold text-center text-white mb-8">Contactez-moi</h3>
-        <div className="flex justify-center gap-6">
-          <a href="mailto:kerdanety@gmail.com" className="text-pink-300">
-            <RiMailFill size={32} />
-          </a>
-          <a href="https://github.com/KerdanetYvan" target="_blank" className="text-green-400">
-            <RiGithubFill size={32} />
-          </a>
-          <a href="https://linkedin.com/in/yvankerdanet" target="_blank" className="text-sky-500">
-            <RiLinkedinFill size={32} />
-          </a>
-        </div>
-      </section>
     </div>
   );
 }

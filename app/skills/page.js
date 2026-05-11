@@ -278,11 +278,8 @@ export default function page() {
                 const newState = !newCheckedItems[category];
                 newCheckedItems[category] = newState;
 
-                Object.keys(categories[category]).forEach((sub) => {
-                    newCheckedItems[`${sub}`] = newState;
-                    categories[category][sub].forEach((el) => {
-                        newCheckedItems[`${el}`] = newState;
-                    });
+                categories[category].forEach((sub) => {
+                    newCheckedItems[sub] = newState;
                 });
             } else {
                 newCheckedItems[subcategory] = !newCheckedItems[subcategory];

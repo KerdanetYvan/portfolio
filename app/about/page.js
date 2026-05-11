@@ -1,7 +1,6 @@
 "use client";
 import { motion } from 'framer-motion';
 import React from 'react';
-import Link from 'next/link';
 import { RiGithubFill, RiLinkedinFill, RiMailFill } from 'react-icons/ri';
 
 const timelineData = [
@@ -12,7 +11,7 @@ const timelineData = [
   { year: "2021>2024", title: "Études Ingénieur informatique", description: "J'ai réalisé 3 ans d'étude à L'EILCO Calais pour obtenir un diplôme d'ingénieur informatique", color: "blue" },
   { year: "Juin>Août 2022", title: "Job saisonier", description: "Serveur débarrasseur dans un bar de plage", color: "red" },
   { year: "Août 2023", title: "Interim", description: "Ouvrier à LivBag puis à Cronolac", color: "red" },
-  { year: "Depuis septembre 2024", title: "Étude de concepteur développeur de soliton digitale", description: "Je suis depuis la rentrée 2024 des études à Digital Campus afin de devenir concepteur et développeur de solution digitale", color: "blue" },
+  { year: "Depuis septembre 2024", title: "Étude de concepteur développeur de solution digitale", description: "Je suis depuis la rentrée 2024 des études à Digital Campus afin de devenir concepteur et développeur de solution digitale", color: "blue" },
 ];
 
 export default function About() {
@@ -26,7 +25,7 @@ export default function About() {
     }
     return age;
   }
-  const birthDate = '2000-04-09'; // Replace with your actual birth date
+  const birthDate = '2000-09-04';
   const age = calcAge(birthDate);
 
   return (
@@ -46,7 +45,7 @@ export default function About() {
             <h1 className='font-bold text-sm md:text-2xl'>Courte introduction sur ma personne</h1>
             <div className='md:flex lg:items-center md:gap-4'>
               <h2 className='font-semibold text-sm md:text-base lg:text-xl px-2 md:px-0 md:pl-4'>Âge :</h2>
-              <p className='text-center text-xs md:text-base md:text-start'>{age} ans - 04 septembre 2000</p>
+              <p className='text-center text-xs md:text-base md:text-start'>{age} ans - 04 Septembre 2000</p>
             </div>
             <div className='md:flex lg:items-center md:gap-4'>
               <h2 className='font-semibold text-sm md:text-base lg:text-xl px-2 md:px-0 md:pl-4'>Nationalité :</h2>
@@ -54,7 +53,7 @@ export default function About() {
             </div>
             <h2 className='font-semibold text-sm md:text-base lg:text-xl px-2 md:px-0 md:pl-4'>Études suivies :</h2>
             <p className='text-center text-xs md:text-base md:text-start'>Bachelor Concepteur Développeur de solution digital à <a href='https://www.digital-campus.fr/ecole/paris' target='_blank' className='font-semibold text-cyan-300 hover:text-cyan-400 hover:underline'>Digital Campus</a></p>
-            <h2 className='font-semibold text-sm md:text-base lg:text-xl px-2 md:px-0 md:pl-4'>Job acutellement occupé :</h2>
+            <h2 className='font-semibold text-sm md:text-base lg:text-xl px-2 md:px-0 md:pl-4'>Job actuellement occupé :</h2>
             <p className='text-center text-xs md:text-base md:text-start'>En recherche d'alternance pour l'année 2025/2026</p>
           </div>
         </section>
@@ -116,7 +115,7 @@ export default function About() {
               <h2 className='font-semibold text-xl pl-2 md:pl-4 pb-2'>Mes softs skills :</h2>
               <ul className='list-disc list-inside md:pl-2 gap-1'>
                 <li className='w-full italic'>Patient</li>
-                <li className='w-full italic'>Travail en équipte</li>
+                <li className='w-full italic'>Travail en équipe</li>
                 <li className='w-full italic'>Adaptabilité</li>
                 <li className='w-full italic'>La communication</li>
               </ul>

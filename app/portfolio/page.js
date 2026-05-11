@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { RiArrowDropRightFill, RiArrowDropDownFill, RiMailFill, RiGithubFill, RiLinkedinFill } from "react-icons/ri";
+import { RiArrowDropRightFill, RiArrowDropDownFill } from "react-icons/ri";
 import projects from '../../public/projets.json';
 
 export default function Portfolio() {
@@ -11,9 +11,6 @@ export default function Portfolio() {
 
   useEffect(() => {
     setRenderProjects(projectsToDisplay());
-    // console.log("render projets :", renderProjects);
-    // console.log(new Date());
-    getTimeOrDate(new Date());
   }, [checkedItems]);
 
   const categories = {
@@ -127,7 +124,7 @@ export default function Portfolio() {
 
       let renderProj = [];
       for (let elmt of renderTemp) {
-        if (!(elmt in renderProj)) {
+        if (!renderProj.some(p => p.id === elmt.id)) {
           renderProj.push(elmt);
         }
       }
@@ -284,28 +281,13 @@ export default function Portfolio() {
                 <p className="text-sky-100 italic pl-4">{project.tech.join(", ")}</p>
                 <p className="text-black text-jsutify pb-8">{project.description}</p>
                 <p className="absolute bottom-2 left-2 text-black text-xs">{getTimeOrDate(project.date)}</p>
-                <Link href={`/portfolio/${project.url}`} className='text-pink-950/30 absolute bottom-4 right-4'>En savoir plus...</Link>
+                <Link href={`/portfolio/${project.url}`} className='text-white absolute bottom-4 right-4'>En savoir plus...</Link>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-16 px-6">
-        <h3 className="text-3xl font-semibold text-center text-white mb-8">Contactez-moi</h3>
-        <div className="flex justify-center gap-6">
-          <a href="mailto:kerdanety@gmail.com" className="text-pink-300">
-            <RiMailFill size={32} />
-          </a>
-          <a href="https://github.com/KerdanetYvan" target="_blank" className="text-green-400">
-            <RiGithubFill size={32} />
-          </a>
-          <a href="https://linkedin.com/in/yvankerdanet" target="_blank" className="text-sky-500">
-            <RiLinkedinFill size={32} />
-          </a>
-        </div>
-      </section>
     </div>
   )
 }
