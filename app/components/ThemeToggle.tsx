@@ -17,10 +17,7 @@ export default function ThemeToggle() {
       className="p-2 rounded-md text-muted hover:text-on-surface hover:bg-surface-raised transition-colors cursor-pointer"
       aria-label={resolvedTheme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
     >
-      {resolvedTheme === 'dark'
-        ? <RiSunLine size={18} />
-        : <RiMoonLine size={18} />
-      }
+      {resolvedTheme === 'dark' ? <RiSunLine size={18} /> : <RiMoonLine size={18} />}
     </button>
   );
 }

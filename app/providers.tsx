@@ -1,4 +1,5 @@
 'use client';
+import type { ReactNode } from 'react';
 import { ThemeProvider as NextThemesProvider, useTheme } from 'next-themes';
 import { useEffect } from 'react';
 
@@ -14,7 +15,7 @@ function CookieSync() {
   return null;
 }
 
-export function Providers({ children }) {
+export function Providers({ children }: { children: ReactNode }) {
   return (
     <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
       <CookieSync />

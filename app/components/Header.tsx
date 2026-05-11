@@ -1,17 +1,22 @@
-"use client";
-import React, { useState } from 'react';
+'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { TiThMenu } from "react-icons/ti";
-import { RiCloseLine } from "react-icons/ri";
+import { TiThMenu } from 'react-icons/ti';
+import { RiCloseLine } from 'react-icons/ri';
 import Logo from '../../public/favicon.webp';
 import ThemeToggle from './ThemeToggle';
 
-const navLinks = [
-  { href: "/projects", label: "Projets" },
-  { href: "/skills",   label: "Compétences" },
-  { href: "/about",    label: "À Propos" },
-  { href: "/blog",     label: "Blog" },
+interface NavLink {
+  href: string;
+  label: string;
+}
+
+const navLinks: NavLink[] = [
+  { href: '/projects',  label: 'Projets'       },
+  { href: '/skills',    label: 'Compétences'   },
+  { href: '/about',     label: 'À Propos'      },
+  { href: '/blog',      label: 'Blog'          },
 ];
 
 export default function Header() {

@@ -1,6 +1,8 @@
-export const metadata = {
-  title: "Mentions légales — Kerdanet Yvan",
-  description: "Mentions légales et politique de cookies du portfolio de Yvan Kerdanet.",
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Mentions légales — Kerdanet Yvan',
+  description: 'Mentions légales et politique de cookies du portfolio de Yvan Kerdanet.',
 };
 
 export default function Legal() {
@@ -15,7 +17,7 @@ export default function Legal() {
           <li><span className="text-on-surface font-medium">Nom :</span> Yvan Kerdanet</li>
           <li><span className="text-on-surface font-medium">Statut :</span> Particulier</li>
           <li>
-            <span className="text-on-surface font-medium">Contact :</span>{" "}
+            <span className="text-on-surface font-medium">Contact :</span>{' '}
             <a href="mailto:kerdanety@gmail.com" className="text-accent hover:underline">
               kerdanety@gmail.com
             </a>
@@ -29,7 +31,7 @@ export default function Legal() {
           <li><span className="text-on-surface font-medium">Hébergeur :</span> Vercel Inc.</li>
           <li><span className="text-on-surface font-medium">Adresse :</span> 340 Pine Street, Suite 701, San Francisco, CA 94104, États-Unis</li>
           <li>
-            <span className="text-on-surface font-medium">Site :</span>{" "}
+            <span className="text-on-surface font-medium">Site :</span>{' '}
             <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               vercel.com
             </a>
@@ -48,7 +50,7 @@ export default function Legal() {
         <h2 id="donnees" className="text-xl font-semibold text-on-surface mb-3">Données personnelles</h2>
         <p className="text-muted text-sm leading-relaxed">
           Ce site ne collecte aucune donnée personnelle à des fins de suivi ou de marketing. Aucun formulaire de contact ne stocke de données ; les échanges par email sont gérés directement via votre client mail.
-          Conformément au Règlement Général sur la Protection des Données (RGPD — UE 2016/679), vous pouvez exercer vos droits d'accès, de rectification et de suppression en contactant{" "}
+          Conformément au Règlement Général sur la Protection des Données (RGPD — UE 2016/679), vous pouvez exercer vos droits d'accès, de rectification et de suppression en contactant{' '}
           <a href="mailto:kerdanety@gmail.com" className="text-accent hover:underline">kerdanety@gmail.com</a>.
         </p>
       </section>
