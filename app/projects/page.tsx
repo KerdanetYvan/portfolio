@@ -70,7 +70,14 @@ async function resolveFavicon(homepage: string): Promise<string | null> {
   }
 }
 
-export default async function ProjectsPage() {
+interface PageProps {
+  searchParams?: Promise<{ lang?: string }>;
+}
+
+export default async function ProjectsPage({ searchParams }: PageProps) {
+  const params = searchParams ? await searchParams : {};
+  const initialLang = params?.lang ?? null;
+
   const [repos, user] = await Promise.all([
     fetchGitHub<GitHubRepo[]>('/user/repos?type=all&sort=pushed&per_page=100'),
     fetchGitHub<{ login: string }>('/user'),
@@ -100,7 +107,7 @@ export default async function ProjectsPage() {
           </p>
         </div>
 
-        <ProjectsClient repos={reposWithFavicons} userLogin={user?.login ?? ''} />
+        <ProjectsClient repos={reposWithFavicons} userLogin={user?.login ?? ''} initialLang={initialLang} />
       </div>
     </main>
   );

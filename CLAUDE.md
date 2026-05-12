@@ -1,73 +1,113 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Ce fichier fournit des instructions à Claude Code (claude.ai/code) pour travailler dans ce dépôt.
 
-## Commands
+## Documentation
+
+Toute la documentation du projet (README, CHANGELOG, commentaires de code, messages de commit) est rédigée en **français**.
+
+## Commandes
 
 ```bash
-npm run dev      # Start dev server (Next.js 16 + Turbopack) on http://localhost:3000
-npm run build    # Production build
-npm run start    # Start production server
+npm run dev      # Serveur de développement (Next.js 16 + Turbopack) — http://localhost:3000
+npm run build    # Build de production
+npm run start    # Serveur de production
 npm run lint     # ESLint
 ```
 
 ## Stack
 
 - **Next.js 16** (App Router, fullstack) + **React 19**
-- **Tailwind CSS v4** (PostCSS via `@tailwindcss/postcss` — no `tailwind.config.js`, configured in `globals.css`)
-- **next-themes** for light/dark mode (class-based, cookie-persisted)
-- **Three.js** + `@react-three/fiber` + `@react-three/drei` (die animation on homepage — in progress)
-- **Recharts** (dashboard money — in progress)
-- **Framer Motion** for animations
+- **TypeScript** — tous les fichiers sont `.ts` / `.tsx`, jamais `.js` / `.jsx`
+- **Tailwind CSS v4** (PostCSS via `@tailwindcss/postcss` — pas de `tailwind.config.js`, configuré dans `globals.css`)
+- **next-themes** pour le mode clair/sombre (class-based, persisté en cookie)
+- **Three.js** + `@react-three/fiber` + `@react-three/drei` (animation dé sur l'accueil — en cours)
+- **Recharts** (dashboard argent — en cours)
+- **Framer Motion** pour les animations
 
 ## Architecture
 
-### App Router structure
-All pages are under `app/`. Shared layout (`app/layout.js`) wraps every page with `<Providers>` (next-themes), `<Header>`, and `<Footer>`. The layout reads a `theme` cookie server-side to set the initial `dark` class on `<html>` before hydration (no flash).
+### Structure App Router
 
-### Theme system
-- `app/globals.css` — source file (not compiled output). Starts with `@import "tailwindcss"`, defines `@custom-variant dark`, registers CSS custom properties as Tailwind utilities via `@theme`.
-- `app/providers.jsx` — wraps `NextThemesProvider` (attribute="class", defaultTheme="system"). Contains `CookieSync` which writes `document.cookie` on theme change for SSR persistence.
-- `app/components/ThemeToggle.jsx` — sun/moon toggle, uses `useTheme`, `mounted` guard against hydration mismatch.
+Toutes les pages sont dans `app/`. Le layout partagé (`app/layout.tsx`) encapsule chaque page avec `<Providers>` (next-themes), `<Header>`, et `<Footer>`. Le layout lit un cookie `theme` côté serveur pour définir la classe `dark` sur `<html>` avant l'hydratation (pas de flash).
 
-### Design tokens (CSS custom properties)
-Defined in `:root` / `.dark` in `globals.css`, registered in `@theme` for Tailwind utility generation:
+### Système de thème
 
-| Token | Tailwind utility | Purpose |
-|---|---|---|
-| `--surface` | `bg-surface` | Page background |
-| `--surface-raised` | `bg-surface-raised` | Cards, subtle sections |
-| `--on-surface` | `text-on-surface` | Primary text |
-| `--muted` | `text-muted` | Secondary text |
-| `--border` | `border-border` (or just `border`) | Borders |
-| `--accent` | `bg-accent` / `text-accent` | CTA buttons, links |
-| `--accent-hover` | `bg-accent-hover` | Button hover state |
-| `--pop-blue/purple/green/pink/orange` | `text-pop-*` / `bg-pop-*` | Accent color pops |
+- `app/globals.css` — fichier source (pas un fichier compilé). Commence par `@import "tailwindcss"`, définit `@custom-variant dark`, enregistre les propriétés CSS comme utilitaires Tailwind via `@theme`.
+- `app/providers.tsx` — encapsule `NextThemesProvider` (attribute="class", defaultTheme="system"). Contient `CookieSync` qui écrit `document.cookie` au changement de thème.
+- `app/components/ThemeToggle.tsx` — toggle soleil/lune, utilise `useTheme`, guard `mounted` contre les erreurs d'hydratation.
 
-Light palette is GitHub-inspired (`#0d1117` dark bg, `#0969da` accent). Use `dark:` prefix only for exceptions not covered by the token system.
+### Tokens de design (CSS custom properties)
 
-### Data layer (current — transitioning to DB)
-Static JSON files in `public/`:
-- `public/projets.json` — portfolio projects (id, name, url, description, tech[], status, fonctionnalites[], defis[], evolution[], images[], site, github, date ISO)
-- `public/articles.json` — blog articles (currently empty `[]`)
+Définis dans `:root` / `.dark` dans `globals.css`, enregistrés dans `@theme` pour la génération des utilitaires Tailwind :
 
-Article markdown content lives under `public/articles/<url>/`.
+| Token | Utilitaire Tailwind | Rôle |
+| --- | --- | --- |
+| `--surface` | `bg-surface` | Fond de page |
+| `--surface-raised` | `bg-surface-raised` | Cartes, sections subtiles |
+| `--on-surface` | `text-on-surface` | Texte principal |
+| `--muted` | `text-muted` | Texte secondaire |
+| `--border` | `border-border` | Bordures |
+| `--accent` | `bg-accent` / `text-accent` | Boutons CTA, liens |
+| `--accent-hover` | `bg-accent-hover` | État hover des boutons |
+| `--pop-blue/purple/green/pink/orange` | `text-pop-*` / `bg-pop-*` | Couleurs d'accentuation |
 
-### Planned pages (in progress)
-- `/projects` — replaces `/portfolio`, will pull live from GitHub API (owner + contributor public repos) using a personal access token in env vars
-- `/dashboard/*` — private, protected by NextAuth v5 (credentials, single-user, no registration). `/dashboard/money` for multi-bank finance tracking.
-- `/blog` — disabled for now, will use a private editor + DB when activated
+La palette claire est inspirée de GitHub (`#0d1117` fond sombre, `#0969da` accent). N'utiliser le préfixe `dark:` que pour les exceptions non couvertes par les tokens.
 
-### Auth (to implement)
-NextAuth v5 + Credentials provider. Login/password stored as hashed env vars. JWT sessions. Middleware protects all `/dashboard/*` routes. No user creation flow.
+### Couche de données
+
+- `data/skills.ts` — catégories de compétences, niveaux, hints de détection GitHub
+- `data/learning.ts` — éléments "en apprentissage" (statique, migration BDD prévue)
+- `public/articles.json` — articles de blog (vide `[]`, blog désactivé)
+
+### Pages existantes
+
+- `/` — accueil
+- `/projects` — dépôts GitHub live (propres + contributions, `GITHUB_TOKEN` en env). Paramètre `?lang=` pour pré-filtrer par langage (utilisé depuis `/skills`).
+- `/projects/[owner]/[repo]` — détail d'un dépôt
+- `/skills` — grille de compétences avec stats GitHub. Détection en 3 couches : `githubLanguage` → `githubTopics` → `package.json` parsé via l'API Contents (cache 24h).
+- `/about` — intro terminal + contenu stylisé (voir section dédiée)
+- `/contact` — formulaire de contact
+- `/legal` — mentions légales
+- `/blog` — désactivé, redirige vers `/`
+
+### Pages à venir
+
+- `/dashboard/*` — privé, protégé par NextAuth v5 (credentials, mono-utilisateur). `/dashboard/money` pour le suivi financier multi-banques.
+
+### Structure de la page `/about`
+
+Page en deux temps : `Terminal.tsx` (client, animation typewriter, sessionStorage une fois par session, prefers-reduced-motion) → scroll vers `AboutClient.tsx` (timeline, méthodes de travail, au-delà du dev, langues, loisirs, credo).
+
+- **Easter egg futur** : rendre le terminal interactif avec de vraies commandes (`help`, `skills`, `contact`, `projects`…).
+
+### Migration à prévoir
+
+- `data/learning.ts` → table BDD `learning_items` éditée via un futur back-office admin.
+
+### Page `/contact`
+
+Formulaire avec honeypot anti-spam, états bouton animés (idle / loading / success / error), endpoint mock dans `app/api/contact/route.ts`. Statut de disponibilité configurable dans `data/status.ts`.
+
+**À implémenter plus tard :**
+
+- Endpoint `/api/contact` : persistance en BDD dans une table `contact_messages` (champs : `nom`, `email`, `type_demande`, `entreprise` nullable, `message`, `date_reception`, `statut` — non lu / lu / répondu / archivé)
+- Lecture et gestion des messages depuis `/dashboard`
+- Bandeau de disponibilité éditable depuis le dashboard (migration `data/status.ts` → BDD)
+- Alternative temporaire si besoin de fonctionnel rapide : service tiers type Formspree ou Resend
+
+### Authentification (à implémenter)
+
+NextAuth v5 + Credentials provider. Login/mot de passe stockés en variables d'env hashées. Sessions JWT. Middleware protège toutes les routes `/dashboard/*`. Pas de création de compte.
 
 ### Navigation
-`app/components/Header.jsx` — sticky, backdrop-blur, responsive (hamburger on mobile). Nav links are defined as a `navLinks` array at the top of the file — add/remove links there. The blog link is currently visible but the page will be hidden/disabled.
 
-## Key conventions
+`app/components/Header.tsx` — sticky, backdrop-blur, responsive (hamburger sur mobile). Les liens de navigation sont définis dans le tableau `navLinks` en haut du fichier. Le lien Blog est commenté.
 
-- Max content width: `max-w-6xl mx-auto px-4` (used in Header/Footer, apply consistently to all page sections)
-- Semantic `<main id="main-content">` wraps page content (for skip-to-main / WCAG)
-- No inline contact sections in pages — the shared `<Footer>` handles social links
-- Page hero banners: `h-[200px] md:h-[400px] lg:h-[600px]` with `bg-cover bg-center` and a `bg-black/40 backdrop-blur` overlay
-- Die config lives in `config/roles.js` (to create) — adding an entry auto-adds a face to the Three.js die
+## Conventions clés
+
+- Largeur max du contenu : `max-w-6xl mx-auto px-4` (utilisé dans Header/Footer, à appliquer uniformément)
+- `<main id="main-content">` sémantique encapsule le contenu des pages (WCAG / skip-to-main)
+- Pas de section contact dans les pages — le `<Footer>` partagé gère les liens sociaux
+- Bandeaux hero : `h-[200px] md:h-[400px] lg:h-[600px]` avec `bg-cover bg-center` et overlay `bg-black/40 backdrop-blur`
+- Config du dé Three.js dans `config/roles.js` (à créer) — ajouter une entrée = ajouter une face au dé

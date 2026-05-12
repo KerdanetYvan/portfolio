@@ -1,55 +1,80 @@
-# Portfolio App
+# Portfolio — Yvan Kerdanet
 
-Welcome to my portfolio app! This application showcases my projects, skills, and experiences.
-**Current Version**: v2.0.0
+Portfolio personnel construit avec Next.js 16 App Router. Présente les projets récupérés en direct depuis GitHub, les compétences avec statistiques d'usage, et une page à propos avec une intro façon terminal.
 
-## Features
+**Version actuelle** : v2.0.0
 
-- **Project Showcase**: Display your projects with descriptions, images, and links.
-- **Skills Section**: Highlight your technical skills and proficiencies.
-- **Experience Timeline**: Present your professional journey and achievements.
-- **Responsive Design**: Optimized for both desktop and mobile devices.
+---
 
-## Technologies Used
+## Pages
 
-- **Full Stack**: NextJs, HTML, CSS, JavaScript
-- **Database**: MongoDB
+| Route | Description |
+| --- | --- |
+| `/` | Accueil — hero + points forts |
+| `/projects` | Dépôts GitHub (API live), filtrables par langage |
+| `/projects/[owner]/[repo]` | Détail d'un dépôt |
+| `/skills` | Grille de compétences avec stats GitHub par technologie |
+| `/about` | Intro terminal + timeline, méthodes de travail, loisirs |
+| `/contact` | Formulaire de contact |
+| `/legal` | Mentions légales |
 
-## Installation
+> `/blog` est désactivé — redirige vers `/`.
 
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/KerdanetYvan/portfolio.git
-    ```
-2. Navigate to the project directory:
-    ```bash
-    cd portfolio
-    ```
-3. Install dependencies:
-    ```bash
-    npm install
-    ```
-4. Start the development server:
-    ```bash
-    npm start
-    ```
+---
 
-## Usage
+## Stack
 
-- Visit the homepage to see an overview of the portfolio.
-- Navigate through the projects, skills, and experience sections to learn more about each aspect.
-- Contact information is available for potential collaborations or inquiries.
+- **Framework** : Next.js 16 (App Router) + React 19
+- **Langage** : TypeScript
+- **Styles** : Tailwind CSS v4 (configuré via `globals.css`, sans `tailwind.config.js`)
+- **Thème** : `next-themes` — clair/sombre, class-based, persisté en cookie (sans flash)
+- **3D** : Three.js + `@react-three/fiber` + `@react-three/drei`
+- **Animations** : Framer Motion
+- **Graphiques** : Recharts *(dashboard — en cours)*
+- **Icônes** : `react-icons`
+- **Données** : GitHub REST API (repos, contents) + fichiers statiques dans `data/`
 
-## Contributing
+---
 
-Feel free to submit issues or pull requests if you have suggestions for improvements or new features.
+## Démarrage
 
-## License
+```bash
+# 1. Cloner
+git clone https://github.com/KerdanetYvan/portfolio.git
+cd portfolio
 
-This project is licensed under the MIT License.
+# 2. Installer les dépendances
+npm install
+
+# 3. Configurer les variables d'environnement
+cp .env.local.example .env.local
+
+# 4. Lancer le serveur de développement
+npm run dev        # http://localhost:3000
+```
+
+### Variables d'environnement
+
+```env
+# .env.local
+GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxx   # PAT GitHub — scopes : public_repo, read:user
+```
+
+Générer un token sur <https://github.com/settings/tokens>.
+
+---
+
+## Commandes
+
+```bash
+npm run dev      # Serveur de développement (Turbopack)
+npm run build    # Build de production
+npm run start    # Serveur de production
+npm run lint     # ESLint
+```
+
+---
 
 ## Contact
 
-For any questions or feedback, please reach out to me at [kerdanety@gmail.com](mailto:kerdanety@gmail.com).
-
-Thank you for visiting my portfolio!
+[kerdanety@gmail.com](mailto:kerdanety@gmail.com) · [LinkedIn](https://linkedin.com/in/yvankerdanet) · [GitHub](https://github.com/KerdanetYvan)

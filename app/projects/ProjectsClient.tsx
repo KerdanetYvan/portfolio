@@ -45,10 +45,11 @@ function formatPushed(iso: string): string {
 interface ProjectsClientProps {
   repos: GitHubRepo[];
   userLogin: string;
+  initialLang?: string | null;
 }
 
-export default function ProjectsClient({ repos, userLogin }: ProjectsClientProps) {
-  const [selectedLang, setSelectedLang] = useState<string | null>(null);
+export default function ProjectsClient({ repos, userLogin, initialLang }: ProjectsClientProps) {
+  const [selectedLang, setSelectedLang] = useState<string | null>(initialLang ?? null);
   const [showForks, setShowForks] = useState(false);
 
   const languages = useMemo(() => {

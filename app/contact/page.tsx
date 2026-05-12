@@ -1,48 +1,38 @@
-import { RiMailFill, RiPhoneFill } from 'react-icons/ri';
-import CardReseau from '../components/CardReseau';
-import { SiGithub, SiLinkedin, SiReddit } from 'react-icons/si';
+import type { Metadata } from 'next';
+import { AVAILABILITY } from '@/data/status';
+import ContactForm from './ContactForm';
 
-export default function Contact() {
+export const metadata: Metadata = {
+  title: 'Contact — Yvan Kerdanet',
+  description: 'Envie de discuter d\'un projet ou d\'une opportunité ? Contactez-moi directement.',
+};
+
+export default function ContactPage() {
   return (
-    <div className="bg-stone-700 min-h-screen text-white p-0 m-0 flex items-center justify-center">
-      <div className='container'>
-        <h1 className='text-center text-2xl font-bold pb-4'>Me contacter ?</h1>
-        <div className='bg-stone-600 rounded-lg p-8 shadow-md mb-4'>
-          <p className='md:pl-8 font-semibold text-xl md:text-2xl'>Vous pouvez me contacter via les moyens suivants :</p>
-          <div className='flex flex-col md:flex-row md:justify-around items-center gap-2 pt-4'>
-            <a href="mailto:kerdanety@gmail.com" className="text-sky-300 md:text-xl lg:text-2xl hover:text-sky-500 transition duration-300 flex gap-2 items-center font-bold">
-              <RiMailFill /> kerdanety@gmail.com
-            </a>
-            <a href="tel:0634636918" className="text-sky-300 md:text-xl lg:text-2xl hover:text-sky-500 transition duration-300 flex gap-2 items-center font-bold">
-              <RiPhoneFill /> 06 34 63 69 18
-            </a>
+    <main id="main-content" className="min-h-screen">
+      <div className="mx-auto max-w-[1200px] px-4 py-16">
+
+        {/* Header */}
+        <div className="mb-10">
+          <p className="font-mono text-xs text-accent-bg mb-2">// contact</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-on-surface mb-3">Contact</h1>
+          <p className="text-muted max-w-xl mb-6">
+            Envie de discuter d&apos;un projet ou d&apos;une opportunité ?
+          </p>
+
+          {/* Bandeau disponibilité */}
+          <div className="inline-flex items-center gap-2.5 rounded-md border border-border bg-surface-raised px-4 py-2.5">
+            <span aria-hidden="true">{AVAILABILITY.emoji}</span>
+            <span className="text-sm text-on-surface">{AVAILABILITY.label}</span>
           </div>
+
+          <p className="font-mono text-xs text-muted mt-4">
+            Je réponds généralement sous 48h.
+          </p>
         </div>
-        <p className='pl-8 font-semibold text-xl'>Mais aussi via mes réseaux :</p>
-        <div className='p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-          <CardReseau
-            title="GitHub"
-            pseudo="KerdanetYvan"
-            icon={<SiGithub size={48} color='white' />}
-            link="https://github.com/KerdanetYvan"
-            description="Bonjour 👋, je suis Yvan KERDANET, Étudiant à Digital Campus en alternance en développement web — disponible nov. 2026..."
-          />
-          <CardReseau
-            title="LinkedIn"
-            pseudo="Yvan KERDANET"
-            icon={<SiLinkedin size={48} color='#0A66C2' />}
-            link="https://www.linkedin.com/in/yvankerdanet/"
-            description="Étudiant B2 cherchant une alternance en développement web..."
-          />
-          <CardReseau
-            title="Reddit"
-            pseudo="KerdanetYvan"
-            icon={<SiReddit size={48} color='#FF4500' />}
-            link="https://www.reddit.com/user/yvankdt/"
-            description="Je suis un passionné de développement web et de nouvelles technologies..."
-          />
-        </div>
+
+        <ContactForm />
       </div>
-    </div>
+    </main>
   );
 }
