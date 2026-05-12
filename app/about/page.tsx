@@ -38,7 +38,7 @@ export default function About() {
         <div className='h-[200px] md:h-[400px] lg:h-[600px] w-full bg-black/50 backdrop-blur-[5px] flex flex-col items-end justify-around px-2 md:px-10 lg:px-20'>
           <h1 className='self-start font-bold text-xl md:text-4xl lg:text-[60px]'>Vous voulez en savoir plus sur moi ?</h1>
           <h2 className='text-end font-semibold text-xl md:text-4xl lg:text-[80px]'>Je suis Yvan Kerdanet</h2>
-          <p className='text-end text-xs md:text-base lg:text-2xl'>Concepteur Développeur Web à la recherche d'une alternance</p>
+          <p className='text-end text-xs md:text-base lg:text-2xl'>Concepteur Développeur Web en alternance — disponible nov. 2026</p>
         </div>
       </div>
 
@@ -61,7 +61,7 @@ export default function About() {
               <a href='https://www.digital-campus.fr/ecole/paris' target='_blank' rel="noopener noreferrer" className='font-semibold text-cyan-300 hover:text-cyan-400 hover:underline'>Digital Campus</a>
             </p>
             <h2 className='font-semibold text-sm md:text-base lg:text-xl px-2 md:px-0 md:pl-4'>Job actuellement occupé :</h2>
-            <p className='text-center text-xs md:text-base md:text-start'>En recherche d'alternance pour l'année 2025/2026</p>
+            <p className='text-center text-xs md:text-base md:text-start'>En alternance 2025/2026 — disponible à partir de novembre 2026</p>
           </div>
         </section>
 

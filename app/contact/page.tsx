@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import { RiMailFill, RiPhoneFill } from 'react-icons/ri';
 import CardReseau from '../components/CardReseau';
 import { SiGithub, SiLinkedin, SiReddit } from 'react-icons/si';
@@ -26,7 +25,7 @@ export default function Contact() {
             pseudo="KerdanetYvan"
             icon={<SiGithub size={48} color='white' />}
             link="https://github.com/KerdanetYvan"
-            description="Bonjour 👋, je suis Yvan KERDANET, Étudiant à Digital Campus à la recherche d'une alternance en développement web..."
+            description="Bonjour 👋, je suis Yvan KERDANET, Étudiant à Digital Campus en alternance en développement web — disponible nov. 2026..."
           />
           <CardReseau
             title="LinkedIn"

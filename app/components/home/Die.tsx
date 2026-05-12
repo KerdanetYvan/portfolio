@@ -19,7 +19,7 @@ import { ROLES } from '../../../config/roles';
  *   F3: V2,V3,V1  →  (-1,-1,-1)/√3
  */
 const RADIUS = 1.6;
-const LABEL_DIST = 1.85;
+const LABEL_DIST = 1.1; // slightly above face surface (inradius = R/3 ≈ 0.53)
 
 const RAW_NORMALS = [
   new THREE.Vector3(-1,  1,  1).normalize(),
@@ -35,11 +35,13 @@ interface SceneProps {
 }
 
 function Scene({ reducedMotion }: SceneProps) {
-  const groupRef   = useRef<THREE.Group>(null);
-  const spinning   = useRef(!reducedMotion);
-  const labelRefs  = useRef<(HTMLDivElement | null)[]>([]);
-  const router     = useRouter();
-  const [active, setActive] = useState<number | null>(null);
+  const groupRef  = useRef<THREE.Group>(null);
+  const spinning  = useRef(!reducedMotion);
+  const router    = useRouter();
+  const [active, setActive]           = useState<number | null>(null);
+  /* visibility state — only updates when a face flips front↔back, not every frame */
+  const prevVisRef                    = useRef<boolean[]>([false, false, false, false]);
+  const [faceVisible, setFaceVisible] = useState<boolean[]>([false, false, false, false]);
 
   const edges = useMemo(
     () => new THREE.EdgesGeometry(new THREE.TetrahedronGeometry(RADIUS, 0)),
@@ -54,15 +56,18 @@ function Scene({ reducedMotion }: SceneProps) {
       groupRef.current.rotation.x += delta * 0.18;
     }
 
-    /* Show/hide each label based on whether its face normal points toward the camera */
+    /* Compute which faces point toward the camera this frame */
     const quat = groupRef.current.quaternion;
-    RAW_NORMALS.forEach((normal, i) => {
+    let changed = false;
+    const next = RAW_NORMALS.map((normal, i) => {
       const worldNormal = normal.clone().applyQuaternion(quat);
       const worldPos    = LABEL_POSITIONS[i].clone().applyQuaternion(quat);
       const toCam       = camera.position.clone().sub(worldPos).normalize();
-      const el          = labelRefs.current[i];
-      if (el) el.style.opacity = worldNormal.dot(toCam) > 0.05 ? '1' : '0';
+      const v           = worldNormal.dot(toCam) > 0.05;
+      if (v !== prevVisRef.current[i]) changed = true;
+      return v;
     });
+    if (changed) { prevVisRef.current = next; setFaceVisible(next); }
   });
 
   const onStart = useCallback(() => { spinning.current = false; }, []);
@@ -136,23 +141,12 @@ function Scene({ reducedMotion }: SceneProps) {
               occlude={false}
               style={{ pointerEvents: 'none' }}
             >
-              {/* wrapper div — opacity updated directly in useFrame, no re-render */}
-              <div
-                ref={(el) => { labelRefs.current[i] = el; }}
-                style={{ opacity: 0, transition: 'opacity 0.18s ease' }}
+              <span
+                style={{ opacity: faceVisible[i] ? 1 : 0, transition: 'opacity 0.2s ease, background-color 0.15s, border-color 0.15s, color 0.15s' }}
+                className={`font-mono text-[11px] px-2 py-1 rounded border whitespace-nowrap select-none ${active === i ? 'bg-[#00D26A] text-[#0a0a0a] border-[#00D26A]' : 'bg-[#111111]/80 text-[#ededed] border-[#262626]'}`}
               >
-                <span
-                  className={`
-                    font-mono text-[11px] px-2 py-1 rounded border whitespace-nowrap select-none
-                    transition-all duration-150
-                    ${active === i
-                      ? 'bg-[#00D26A] text-[#0a0a0a] border-[#00D26A]'
-                      : 'bg-[#111111]/80 text-[#ededed] border-[#262626]'}
-                  `}
-                >
-                  {role.label}
-                </span>
-              </div>
+                {role.label}
+              </span>
             </Html>
           );
         })}

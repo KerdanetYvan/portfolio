@@ -48,7 +48,7 @@ export default async function StatusBar() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-bg opacity-60" />
               <span className="relative inline-flex size-2 rounded-full bg-accent-bg" />
             </span>
-            Disponible pour alternance — Nov. 2025
+            Disponible pour alternance — Nov. 2026
           </span>
 
           <span className="hidden sm:block text-border">|</span>

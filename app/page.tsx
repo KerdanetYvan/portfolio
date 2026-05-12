@@ -10,7 +10,7 @@ import CommandPalette from './components/home/CommandPalette';
 export const metadata: Metadata = {
   title: 'Yvan Kerdanet — Concepteur Développeur Digital',
   description:
-    'Portfolio de Yvan Kerdanet — développeur fullstack, spécialiste n8n, conception 3D. Disponible en alternance septembre 2025.',
+    'Portfolio de Yvan Kerdanet — développeur fullstack, spécialiste n8n, conception 3D. Disponible en alternance novembre 2026.',
 };
 
 export default function Home() {
