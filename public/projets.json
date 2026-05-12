@@ -1,14 +1,28 @@
 [
     {
         "id": 1,
-        "name": "Portfolio Personnel",
+        "name": "Portfolio v2",
         "url": "portfolio-personnel",
-        "description": "Une application web développée avec Next.js pour me présenter ainsi que mes projets. Le site est optimisé pour le référencement et comprend des sections sur mes compétences, mes projets et mes expériences professionnelles.",
-        "tech": ["Next.js", "React", "CSS"],
+        "description": "Refonte complète du portfolio en Next.js 16 App Router et TypeScript. L'API GitHub alimente en temps réel les pages /projects et /skills. Design system cohérent (tokens CSS, thème clair/sombre persisté sans flash), page à propos avec intro terminal typewriter.",
+        "tech": ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS v4", "Three.js", "Framer Motion"],
         "status": "En cours",
-        "fonctionnalites": ["Page d'accueil avec aperçu des projets et articles", "Section projets", "Section articles", "Section à propos", "Section contact"],
-        "defis": ["Créer un design sobre", "Réalisation dans un temps réduit", "Optimiser le site pour les moteurs de recherche"],
-        "evolution": ["Ajouter des images de mise en avant pour les projets et articles", "Développé un Dashboard d'administration pour gérer les projets et articles", "Ajouter une section de témoignages"],
+        "fonctionnalites": [
+            "Page projets alimentée par l'API GitHub (repos propres + contributions)",
+            "Page compétences avec stats GitHub par technologie et détection de frameworks via package.json",
+            "Page à propos avec animation terminal typewriter",
+            "Formulaire de contact avec états animés et anti-spam honeypot",
+            "Thème clair/sombre persisté via cookie (sans flash SSR)"
+        ],
+        "defis": [
+            "Détection des frameworks JS via parsing du package.json de chaque repo (API Contents GitHub)",
+            "Zéro flash de thème au chargement sans JavaScript côté client au premier rendu",
+            "Migration TypeScript complète depuis une base JavaScript"
+        ],
+        "evolution": [
+            "Dashboard privé avec suivi financier multi-banques",
+            "Authentification NextAuth v5 pour les routes /dashboard",
+            "Blog avec éditeur privé et persistance en base de données"
+        ],
         "images": ["landing_portfolio.webp", "mobile_skills.webp", "about_info.webp"],
         "site": "https://www.kerdanetyvan.fr",
         "github": "https://github.com/KerdanetYvan/portfolio",
@@ -18,11 +32,19 @@
         "id": 2,
         "name": "Application E-Shop",
         "url": "e-shop",
-        "description": "Application React Native pour un site e-commerce. Les utilisateurs peuvent parcourir les produits, ajouter des articles à leur panier et passer des commandes.",
+        "description": "Application mobile e-commerce en React Native avec backend Node.js. Exploration de l'écosystème mobile React et intégration d'une API de paiement.",
         "tech": ["React Native", "Node.js", "MongoDB"],
-        "status": "Erreur",
-        "fonctionnalites": ["Page d'accueil avec produits en vedette", "Panier d'achat", "Système de paiement"],
-        "defis": ["Intégration de l'API de paiement", "Gestion des stocks en temps réel", "Découverte de React Native"],
+        "status": "Abandonné",
+        "fonctionnalites": [
+            "Catalogue de produits",
+            "Panier d'achat",
+            "Système de paiement"
+        ],
+        "defis": [
+            "Première expérience avec React Native",
+            "Intégration d'une API de paiement tierce",
+            "Gestion des stocks en temps réel"
+        ],
         "github": "https://github.com/KerdanetYvan/e-shop",
         "date": "2025-01-12T15:05:00.150Z"
     },
@@ -30,12 +52,24 @@
         "id": 3,
         "name": "CoffeeX",
         "url": "coffeex",
-        "description": "CoffeeX est une application React reproduisant le réseau social X (anciennement Twitter). Les utilisateurs peuvent créer un compte, publier des messages, suivre d'autres utilisateurs et interagir avec leurs publications.",
-        "tech": ["Next", "React", "Node.js", "MongoDB"],
+        "description": "Clone du réseau social X (ex-Twitter) construit avec Next.js et MongoDB. Création de compte, fil de messages en temps réel et système de suivi entre utilisateurs.",
+        "tech": ["Next.js", "React", "Node.js", "MongoDB"],
         "status": "En cours",
-        "fonctionnalites": ["Création de compte", "Publication de messages en temps réel", "Suivi d'autres utilisateurs"],
-        "defis": ["Réalisation d'une application complète dans un temps limité", "Gestion des notifications en temps réel", "Création d'une API RESTful"],
-        "evolution": ["Ajout de la fonctionnalité de messagerie directe entre utilisateurs", "Intégration d'un système de notifications en temps réel", "Amélioration de l'interface utilisateur"],
+        "fonctionnalites": [
+            "Création de compte et authentification",
+            "Publication et affichage de messages en temps réel",
+            "Système de suivi entre utilisateurs"
+        ],
+        "defis": [
+            "Application fullstack complète dans un temps contraint",
+            "Gestion des événements temps réel",
+            "Conception d'une API RESTful cohérente"
+        ],
+        "evolution": [
+            "Messagerie directe entre utilisateurs",
+            "Notifications en temps réel",
+            "Refonte de l'interface utilisateur"
+        ],
         "github": "https://github.com/KerdanetYvan/tp_y",
         "date": "2025-02-18T14:00:00.150Z"
     },
@@ -43,11 +77,19 @@
         "id": 4,
         "name": "Soutien Orthopédagogique",
         "url": "soutien-orthopedagogique",
-        "description": "Réalisation d'un projet en équipe pour un client dans le cadre de la formation. Le projet consiste en la création d'un site web pour un service de soutien orthopédagogique aux jeunes enfants en situation de difficultés. Le site devait être réalisé sous WordPress en 3 mois.",
-        "tech": ["wordpress", "css", "js", "php"],
+        "description": "Site WordPress livré en 3 mois pour un service de soutien orthopédagogique destiné aux jeunes enfants. Projet client réel réalisé en équipe de 9 personnes de spécialités différentes (dev, design, chef de projet).",
+        "tech": ["WordPress", "PHP", "JavaScript", "CSS"],
         "status": "Terminé",
-        "fonctionnalites": ["Page d'accueil avec présentation du service", "Section témoignages", "Blog"],
-        "defis": ["Respecter le délai de 3 mois", "Créer un design attrayant et fonctionnel", "Intégration de la charte graphique du client", "Travailler en équipe de 9 personnes de spécialités différentes"],
+        "fonctionnalites": [
+            "Présentation du service et des praticiens",
+            "Section témoignages",
+            "Blog"
+        ],
+        "defis": [
+            "Livraison en 3 mois avec un cahier des charges client",
+            "Intégration d'une charte graphique imposée",
+            "Coordination d'une équipe pluridisciplinaire de 9 personnes"
+        ],
         "images": ["tef_landing.webp", "tef_blog.webp", "tef_about.webp"],
         "site": "https://soutien-orthopedagogique.com/",
         "github": "https://github.com/KerdanetYvan/wp-tef",
@@ -57,11 +99,19 @@
         "id": 5,
         "name": "Site E-Commerce",
         "url": "tp_e-commerce",
-        "description": "Cette application web est un projet développé en React et Node.js. Elle sert de vitrine pour un site e-commerce fictif. Nous devions la développer en équipe de 2 et respecter quelques contraintes techniques.",
-        "tech": ["react", "node", "js", "css"],
+        "description": "Vitrine e-commerce fictive développée en binôme avec React et Node.js. Inclut un back-office CRUD complet pour la gestion des produits, utilisateurs et avis.",
+        "tech": ["React", "Node.js", "JavaScript", "CSS"],
         "status": "Terminé",
-        "fonctionnalites": ["Page d'accueil avec produits en vedette", "Panier d'achat", "CRUD pour ajouter, modifier et supprimer des produits/utilisateurs/avis"],
-        "defis": ["Mener le projet à bien dans un temps limité", "Respecter les contraintes techniques", "Travailler en équipe de 2 personnes"],
+        "fonctionnalites": [
+            "Catalogue de produits en vedette",
+            "Panier d'achat",
+            "Back-office CRUD : produits, utilisateurs et avis"
+        ],
+        "defis": [
+            "Livraison dans un temps contraint",
+            "Respect des contraintes techniques imposées",
+            "Développement en binôme"
+        ],
         "github": "https://github.com/KerdanetYvan/tp_e-commerce",
         "date": "2024-11-08T17:00:00.150Z"
     },
@@ -69,13 +119,24 @@
         "id": 6,
         "name": "Encyclopé'DnD",
         "url": "encyclopednd",
-        "description": "Encyclopé'DnD est une application Angular ayant pour but de reprendre les différents concepts et affichage de tout les sites Donjons et Dragons afin de créer une encyclopédie complète sur le sujet. Le projet a été réalisé en équipe de 3 personnes.",
-        "tech": ["angular", "js", "css"],
+        "description": "Encyclopédie Donjons & Dragons développée en équipe de 3 avec Angular et Firebase. Répertorie monstres, sorts, aventuriers et objets via une API externe, avec authentification et hébergement Firebase.",
+        "tech": ["Angular", "TypeScript", "Firebase", "JavaScript", "CSS"],
         "status": "Terminé",
-        "fonctionnalites": ["Page d'accueil avec présentation du projet", "Section monstre", "Section aventurier", "Section sort", "Section objet", "Authentification via Firebase", "Hébergement sur Firebase"],
-        "defis": ["Respecter le délai de 3 mois", "Créer un design attrayant et fonctionnel", "Exploiter une API en ligne pas forcément explicite", "Travailler en équipe de 3 personnes", "Utilisation de Firebase pour l'authentification et l'hébergement"],
+        "fonctionnalites": [
+            "Catalogue de monstres, sorts, aventuriers et objets",
+            "Authentification utilisateur via Firebase",
+            "Hébergement Firebase"
+        ],
+        "defis": [
+            "Exploitation d'une API tierce à la documentation partielle",
+            "Livraison en 3 mois",
+            "Collaboration en équipe de 3 personnes"
+        ],
+        "evolution": [
+            "Refonte de l'interface et de la charte graphique",
+            "Ajout de nouvelles sections (races, classes…)"
+        ],
         "images": ["ency_landing.webp", "ency_auth.webp", "ency_spells.webp"],
-        "evolution": ["Finalisation de l'application", "Repenser l'interface utilisateur ainsi que la charte graphique", "Ajout de nouvelles fonctionnalités"],
         "site": "https://encyclope-dnd.web.app",
         "github": "https://github.com/KerdanetYvan/encyclope-dnd",
         "date": "2024-06-03T17:00:00.150Z"
