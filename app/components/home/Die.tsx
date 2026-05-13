@@ -4,6 +4,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import type { ThreeEvent } from '@react-three/fiber';
 import { ROLES } from '../../../config/roles';
 
@@ -164,11 +165,18 @@ function Scene({ reducedMotion }: SceneProps) {
 
 function DieFallback() {
   return (
-    <div aria-hidden="true" className="w-full h-full flex items-center justify-center">
-      <div
-        className="border border-[#00D26A] w-32 h-32 rotate-45"
-        style={{ boxShadow: '0 0 12px color-mix(in srgb, #00D26A 30%, transparent)' }}
-      />
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
+        {ROLES.map((role) => (
+          <Link
+            key={role.id}
+            href={role.href}
+            className="flex items-center justify-center rounded-lg border border-border bg-surface-raised px-4 py-6 text-sm font-medium text-on-surface hover:border-accent-bg hover:text-accent-bg transition-colors text-center leading-tight"
+          >
+            {role.label}
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
