@@ -5,8 +5,7 @@ import { cookies } from 'next/headers';
 import './globals.css';
 
 import { Providers } from './providers';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import ConditionalNav from './ConditionalNav';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
@@ -32,9 +31,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           >
             Aller au contenu principal
           </a>
-          <Header />
-          <main id="main-content">{children}</main>
-          <Footer />
+          <ConditionalNav>{children}</ConditionalNav>
         </Providers>
       </body>
     </html>

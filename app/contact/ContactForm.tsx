@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   RiCheckLine, RiCloseLine, RiLoader4Line,
   RiFileCopyLine, RiArrowDownSLine,
@@ -27,6 +27,13 @@ export default function ContactForm() {
 
   const frozen = status === 'loading' || status === 'success';
 
+  // Auto-retour à idle après 3s en état error (pour permettre un retry)
+  useEffect(() => {
+    if (status !== 'error') return;
+    const t = setTimeout(() => setStatus('idle'), 3000);
+    return () => clearTimeout(t);
+  }, [status]);
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (status === 'error') { setStatus('idle'); return; }
@@ -40,11 +47,12 @@ export default function ContactForm() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name:    data.name,
-          email:   data.email,
-          type:    data.type,
-          company: data.company || undefined,
-          message: data.message,
+          nom:          data.name,
+          email:        data.email,
+          type_demande: data.type,
+          entreprise:   data.company || undefined,
+          message:      data.message,
+          _honeypot:    data.website,
         }),
       });
       if (!res.ok) throw new Error();
@@ -118,7 +126,7 @@ export default function ContactForm() {
               >
                 <option value="" disabled>Choisir...</option>
                 <option value="alternance">Alternance</option>
-                <option value="freelance">Mission freelance</option>
+                <option value="mission_freelance">Mission freelance</option>
                 <option value="question">Question</option>
                 <option value="autre">Autre</option>
               </select>

@@ -8,6 +8,34 @@
       "when": 1778870456541,
       "tag": "0000_third_wolverine",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1778952770385,
+      "tag": "0001_enable_rls_contact_messages",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778952781025,
+      "tag": "0002_enable_rls_learning_items",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1778952788137,
+      "tag": "0003_enable_rls_status",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1778958100018,
+      "tag": "0004_seed_initial_data",
+      "breakpoints": true
     }
   ]
 }

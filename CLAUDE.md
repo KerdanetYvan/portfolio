@@ -81,20 +81,28 @@ Page en deux temps : `Terminal.tsx` (client, animation typewriter, sessionStorag
 
 - **Easter egg futur** : rendre le terminal interactif avec de vraies commandes (`help`, `skills`, `contact`, `projects`…).
 
-### Migration à prévoir
+### Queries BDD (`/db/queries/`)
 
-- `data/learning.ts` → table BDD `learning_items` éditée via un futur back-office admin.
+Pattern : une fonction par domaine, erreur loggée côté serveur, fallback propre retourné au lieu du crash.
+
+- `db/queries/status.ts` → `getActiveStatus()` — retourne `StatusRow | null`
+- `db/queries/learning.ts` → `getCurrentLearningItems()` — retourne `LearningItem[]` triés par `ordre`
+
+Utiliser ces helpers dans les Server Components publics (pas `useEffect`). Le client Drizzle est le `db` direct de `@/db` (connexion pooler PostgreSQL, bypass RLS — suffisant pour les SELECT publics).
+
+**Mapping couleur enum → classes Tailwind :** centralisé dans `lib/colors.ts` (`COULEUR_CLASSES`, type `Couleur`). À réutiliser partout (dashboard + pages publiques).
 
 ### Page `/contact`
 
-Formulaire avec honeypot anti-spam, états bouton animés (idle / loading / success / error), endpoint mock dans `app/api/contact/route.ts`. Statut de disponibilité configurable dans `data/status.ts`.
+Formulaire branché en BDD (`app/api/contact/route.ts` → `portfolio.contact_messages` via Drizzle). Honeypot anti-spam côté client + serveur. Validation double couche (client HTML5 + serveur regex/enum). États bouton animés (idle / loading / success / error — auto-reset error après 3s). Statut de disponibilité affiché depuis `getActiveStatus()`.
+
+**Attention nommage :** le formulaire envoie `nom`, `email`, `type_demande`, `entreprise`, `_honeypot` — ces noms correspondent aux colonnes BDD. Le champ HTML `name="type"` est mappé côté JS avant le fetch.
 
 **À implémenter plus tard :**
 
-- Endpoint `/api/contact` : persistance en BDD dans une table `contact_messages` (champs : `nom`, `email`, `type_demande`, `entreprise` nullable, `message`, `date_reception`, `statut` — non lu / lu / répondu / archivé)
-- Lecture et gestion des messages depuis `/dashboard`
-- Bandeau de disponibilité éditable depuis le dashboard (migration `data/status.ts` → BDD)
-- Alternative temporaire si besoin de fonctionnel rapide : service tiers type Formspree ou Resend
+- Rate limiting (1 message / minute / IP) pour éviter le spam massif
+- Notification temps réel dashboard quand un nouveau message arrive (Supabase Realtime)
+- Lecture et gestion des messages depuis `/dashboard/contact_message` (déjà implémenté)
 
 ### Base de données
 
@@ -117,6 +125,8 @@ Formulaire avec honeypot anti-spam, états bouton animés (idle / loading / succ
 - `contact_messages` — messages du formulaire /contact
 - `status` — bandeau de disponibilité (une seule ligne `actif=true` à la fois)
 - `learning_items` — éléments "en apprentissage" de /skills
+
+**Seed initial (migration 0004) :** 4 statuts + 3 learning items déjà insérés en BDD. Pour modifier ces données, passer par `/dashboard/personnalize`, pas par une nouvelle migration.
 
 **Commandes Drizzle :**
 
@@ -162,6 +172,48 @@ ADMIN_USER_ID=  # UUID Supabase de l'admin — récupérer dans Auth > Users > U
 
 - Dashboard > Authentication > Providers > GitHub → activer, renseigner Client ID + Secret
 - Dashboard > Authentication > URL Configuration → ajouter `{origin}/auth/callback` dans "Redirect URLs"
+
+### Dashboard (`/dashboard/*`)
+
+Interface de travail privée (desktop-first, 90% des usages). Layout : sidebar collapsible (60px → 220px au hover) + header compact + zone principale.
+
+**Structure :**
+
+```text
+app/dashboard/
+├── layout.tsx              — Auth check (createClient server) + sidebar + header
+├── page.tsx                — Home "morning briefing" (messages, statut, learning)
+├── components/
+│   ├── Sidebar.tsx         — Sidebar Lucide icons, unreadCount badge
+│   ├── DashboardHeader.tsx — Salutation + date + dot statut actif
+│   ├── ToastProvider.tsx   — Context toast (succès/erreur, 3s, bas-droite)
+│   ├── ConfirmModal.tsx    — Modal confirmation actions destructives
+│   └── KeyboardShortcuts.tsx — g+d/p/m navigation, Esc ferme modals
+├── actions/
+│   ├── status.ts           — activateStatus, createStatus, updateStatus, deleteStatus
+│   ├── learning.ts         — createLearningItem, updateLearningItem, deleteLearningItem, markLearningDone
+│   └── messages.ts         — markMessageRead/Unread, archiveMessage, deleteMessage
+├── personnalize/
+│   ├── page.tsx            — Server fetch statuses + items, passe à PersonnalizeClient
+│   ├── PersonnalizeClient.tsx — Tabs internes (Statut / Currently Learning)
+│   ├── StatusSection.tsx   — CRUD statuts, preview actif, activation unique
+│   └── LearningSection.tsx — CRUD items, filtre par statut, modal add/edit
+└── contact_message/
+    ├── page.tsx            — Server fetch tous les messages
+    └── MessageInbox.tsx    — Inbox 3 colonnes (filtres | liste | détail)
+```
+
+**Routing sans Header/Footer :** `app/ConditionalNav.tsx` (client) wrappe Header+main+Footer uniquement hors `/dashboard/*`. Le root layout `app/layout.tsx` délègue à ConditionalNav.
+
+**Auth dans le layout :** `createClient()` de `@/lib/supabase/server` + `supabase.auth.getUser()` → redirect `/login` si non authentifié ou non admin.
+
+**À implémenter plus tard (ne pas réorganiser le layout pour ça) :**
+
+- Drag & drop réorganisation des `learning_items` par champ `ordre`
+- Modules Planning, Tâches, Argent/Stats (icônes "bientôt" déjà dans la sidebar)
+- Card Analytics sur `/dashboard` (placeholder réservé, brancher sur stats visiteurs)
+- Notifications push (PWA, mail, Discord webhook)
+- Optimisation mobile : pas prioritaire, à reprendre avec le design de l'app Flutter
 
 ### Navigation
 

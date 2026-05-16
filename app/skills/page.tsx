@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { SKILL_CATEGORIES } from '@/data/skills';
 import type { SkillCategory } from '@/data/skills';
-import { LEARNING_ITEMS } from '@/data/learning';
+import { getCurrentLearningItems } from '@/db/queries/learning';
 import SkillsGrid from './SkillsGrid';
 
 export const metadata: Metadata = {
@@ -148,7 +148,10 @@ function computeSkillStats(
 }
 
 export default async function SkillsPage() {
-  const repos = await fetchRepos();
+  const [repos, learningItems] = await Promise.all([
+    fetchRepos(),
+    getCurrentLearningItems(),
+  ]);
   const packageMap = await fetchPackageSkills(repos);
   const skillStats = computeSkillStats(repos, SKILL_CATEGORIES, packageMap);
 
@@ -168,7 +171,7 @@ export default async function SkillsPage() {
         <SkillsGrid
           categories={SKILL_CATEGORIES}
           skillStats={skillStats}
-          learningItems={LEARNING_ITEMS}
+          learningItems={learningItems}
         />
       </div>
     </main>

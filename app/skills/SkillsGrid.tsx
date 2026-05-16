@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { SkillCategory, Skill, Level } from '@/data/skills';
-import type { LearningItem } from '@/data/learning';
+import type { LearningItem } from '@/db';
 import type { SkillStat } from './page';
 
 const LEVEL_COLORS: Record<Level, string> = {
@@ -87,27 +87,27 @@ function LearningCard({ item }: { item: LearningItem }) {
   return (
     <div className="flex flex-col gap-2 rounded-lg border border-dashed border-border bg-surface p-4">
       <div className="flex items-start justify-between gap-2">
-        <span className="font-medium text-sm text-on-surface">{item.name}</span>
+        <span className="font-medium text-sm text-on-surface">{item.nom}</span>
         <span className="font-mono text-[10px] px-2 py-0.5 rounded border border-border bg-surface-raised text-muted shrink-0">
-          {item.category}
+          {item.categorie}
         </span>
       </div>
       <p className="text-xs text-muted leading-relaxed flex-1">{item.description}</p>
       <div className="flex items-center gap-2 pt-1 font-mono text-xs text-muted border-t border-border">
-        <span>depuis {formatLearningDate(item.startDate)}</span>
-        {item.status === 'active' && (
+        <span>depuis {formatLearningDate(item.date_debut)}</span>
+        {item.statut === 'en_cours' && (
           <span className="flex items-center gap-1 ml-auto">
             <span className="w-1.5 h-1.5 rounded-full bg-accent-bg animate-pulse" aria-hidden="true" />
             <span className="text-accent-bg">en cours</span>
           </span>
         )}
-        {item.link && (
+        {item.lien && (
           <a
-            href={item.link}
+            href={item.lien}
             target="_blank"
             rel="noopener noreferrer"
             className="text-accent hover:text-accent-hover transition-colors"
-            aria-label={`Ressource pour ${item.name}`}
+            aria-label={`Ressource pour ${item.nom}`}
           >
             →
           </a>
@@ -162,7 +162,7 @@ export default function SkillsGrid({ categories, skillStats, learningItems }: Sk
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {learningItems.map((item) => (
-              <LearningCard key={item.name} item={item} />
+              <LearningCard key={item.id} item={item} />
             ))}
           </div>
         </section>
