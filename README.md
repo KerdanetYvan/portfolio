@@ -2,7 +2,7 @@
 
 Portfolio personnel construit avec Next.js 16 App Router. Présente les projets récupérés en direct depuis GitHub, les compétences avec statistiques d'usage, et une page à propos avec une intro façon terminal.
 
-**Version actuelle** : v2.0.2
+**Version actuelle** : v2.1.0
 
 ---
 
