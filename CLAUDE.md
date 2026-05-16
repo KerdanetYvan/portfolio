@@ -73,7 +73,7 @@ La palette claire est inspirée de GitHub (`#0d1117` fond sombre, `#0969da` acce
 
 ### Pages à venir
 
-- `/dashboard/*` — privé, protégé par NextAuth v5 (credentials, mono-utilisateur). `/dashboard/money` pour le suivi financier multi-banques.
+- `/dashboard/*` — privé, protégé par Supabase Auth + GitHub OAuth (mono-utilisateur). `/dashboard/money` pour le suivi financier multi-banques.
 
 ### Structure de la page `/about`
 
@@ -96,9 +96,72 @@ Formulaire avec honeypot anti-spam, états bouton animés (idle / loading / succ
 - Bandeau de disponibilité éditable depuis le dashboard (migration `data/status.ts` → BDD)
 - Alternative temporaire si besoin de fonctionnel rapide : service tiers type Formspree ou Resend
 
-### Authentification (à implémenter)
+### Base de données
 
-NextAuth v5 + Credentials provider. Login/mot de passe stockés en variables d'env hashées. Sessions JWT. Middleware protège toutes les routes `/dashboard/*`. Pas de création de compte.
+- **Hébergement** : Supabase (PostgreSQL managé)
+- **ORM** : Drizzle — schémas dans `db/schemas/`, migrations dans `db/migrations/`
+- **Organisation** : par schéma métier (`portfolio`, `finance` futur, `tasks` futur) — pas par plateforme, pour permettre le partage avec de futures apps Flutter
+- **Sécurité** : Row Level Security (RLS) activé sur toutes les tables
+- **Connexion** : toujours utiliser le **pooler URL** (`DATABASE_URL`) pour les requêtes runtime ; le **direct URL** (`DIRECT_URL`) est réservé aux migrations Drizzle
+- Variables sensibles dans `.env.local` strict — `SUPABASE_SERVICE_ROLE_KEY` jamais exposée côté client
+
+**À chaque nouveau schéma métier, 4 étapes obligatoires :**
+
+1. Créer le schéma Postgres (via migration Drizzle ou SQL direct) : `CREATE SCHEMA IF NOT EXISTS <nom>;`
+2. **Exposer le schéma dans Supabase** : Dashboard > Project Settings > API > champ "Exposed schemas" → ajouter le nom. Sans cette étape, `supabase-js` renvoie `"schema not exposed"` ou `"relation does not exist"`.
+3. Définir les tables Drizzle avec `pgSchema('<nom>').table(...)` (déjà fait pour `portfolio`)
+4. Activer RLS manuellement sur chaque table (l'auto-RLS Supabase ne couvre que le schéma `public`)
+
+**Schéma `portfolio` (tables existantes) :**
+
+- `contact_messages` — messages du formulaire /contact
+- `status` — bandeau de disponibilité (une seule ligne `actif=true` à la fois)
+- `learning_items` — éléments "en apprentissage" de /skills
+
+**Commandes Drizzle :**
+
+```bash
+npm run db:generate   # Génère les fichiers de migration depuis les schémas
+npm run db:migrate    # Applique les migrations sur la BDD
+npm run db:studio     # Interface Drizzle Studio locale
+```
+
+**Policies RLS à configurer dans Supabase Studio :**
+
+- `contact_messages` : INSERT public, SELECT/UPDATE/DELETE owner uniquement
+- `status` : SELECT public, UPDATE owner uniquement
+- `learning_items` : SELECT public, INSERT/UPDATE/DELETE owner uniquement
+
+### Authentification
+
+**Stack** : Supabase Auth + GitHub OAuth, mono-utilisateur, whitelist par UUID.
+
+**Fichiers créés :**
+
+- `proxy.ts` (racine) — **utiliser `proxy.ts`, PAS `middleware.ts` qui est déprécié en Next.js 16+**. Exporte `function proxy(request: NextRequest)`. Matcher sur `/dashboard/:path*`.
+- `lib/supabase/client.ts` — `createBrowserClient` (composants client)
+- `lib/supabase/server.ts` — `createServerClient` avec `cookies()` (composants serveur)
+- `lib/supabase/proxy.ts` — `updateSession()` helper pour proxy.ts, rafraîchit la session
+- `app/auth/callback/route.ts` — échange le code OAuth contre une session, redirige vers `/dashboard`
+- `app/login/page.tsx` + `app/login/LoginForm.tsx` — page de connexion, bouton GitHub OAuth
+- `app/components/auth/LogoutButton.tsx` — bouton déconnexion réutilisable
+
+**Logique de sécurité dans `proxy.ts` :**
+
+1. Si `ADMIN_USER_ID` est vide → refus immédiat (sécurité par défaut)
+2. Si pas de session → redirect `/login`
+3. Si `user.id !== ADMIN_USER_ID` → `supabase.auth.signOut()` + redirect `/login?error=unauthorized`
+
+**Variable d'env requise :**
+
+```env
+ADMIN_USER_ID=  # UUID Supabase de l'admin — récupérer dans Auth > Users > User UID
+```
+
+**Configuration Supabase requise (une seule fois) :**
+
+- Dashboard > Authentication > Providers > GitHub → activer, renseigner Client ID + Secret
+- Dashboard > Authentication > URL Configuration → ajouter `{origin}/auth/callback` dans "Redirect URLs"
 
 ### Navigation
 
