@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import { db, contactMessages } from '@/db';
-import { eq, count } from 'drizzle-orm';
+import { getUnreadMessagesCount } from '@/db/queries/dashboard';
 import Sidebar from './components/Sidebar';
 import DashboardHeader from './components/DashboardHeader';
 import { ToastProvider } from './components/ToastProvider';
@@ -19,11 +18,13 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   const adminId = process.env.ADMIN_USER_ID;
   if (adminId && user.id !== adminId) redirect('/login?error=unauthorized');
 
-  // Compte des messages non lus pour le badge sidebar
-  const [{ value: unreadCount }] = await db
-    .select({ value: count() })
-    .from(contactMessages)
-    .where(eq(contactMessages.statut, 'non_lu'));
+  // Prénom depuis user_metadata GitHub OAuth (full_name ou name), fallback email
+  const meta = user.user_metadata as Record<string, string> | undefined;
+  const displayName =
+    (meta?.full_name ?? meta?.name ?? '').split(' ')[0] ||
+    (user.email?.split('@')[0] ?? 'Admin');
+
+  const unreadCount = await getUnreadMessagesCount();
 
   return (
     <ToastProvider>
@@ -31,7 +32,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
       <div className="flex h-screen overflow-hidden bg-[#0a0a0a] text-on-surface">
         <Sidebar unreadCount={unreadCount} />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <DashboardHeader />
+          <DashboardHeader displayName={displayName} />
           <main id="main-content" className="flex-1 overflow-hidden">
             {children}
           </main>

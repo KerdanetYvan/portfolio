@@ -1,13 +1,6 @@
 import Link from 'next/link';
-import { db, contactMessages, statusTable, learningItems } from '@/db';
-import { eq, desc } from 'drizzle-orm';
+import { getDashboardOverview } from '@/db/queries/dashboard';
 import type { ContactMessage, StatusRow, LearningItem } from '@/db';
-
-const COLOR_HEX: Record<string, string> = {
-  vert: '#00D26A',
-  jaune: '#f0c040',
-  rouge: '#ef4444',
-};
 
 const COLOR_EMOJI: Record<string, string> = {
   vert: '🟢',
@@ -137,34 +130,16 @@ function LearningCard({ items }: { items: LearningItem[] }) {
 }
 
 export default async function DashboardPage() {
-  const [unread, allMessages, activeStatus, activeLearning] = await Promise.all([
-    db
-      .select()
-      .from(contactMessages)
-      .where(eq(contactMessages.statut, 'non_lu'))
-      .orderBy(desc(contactMessages.date_reception)),
-    db
-      .select()
-      .from(contactMessages)
-      .orderBy(desc(contactMessages.date_reception))
-      .limit(1),
-    db.select().from(statusTable).where(eq(statusTable.actif, true)).limit(1),
-    db
-      .select()
-      .from(learningItems)
-      .where(eq(learningItems.statut, 'en_cours'))
-      .orderBy(learningItems.ordre)
-      .limit(3),
-  ]);
+  const { unreadMessages, lastMessage, activeStatus, recentLearning } = await getDashboardOverview();
 
   return (
     <div className="h-full overflow-auto p-6">
       <div className="mx-auto max-w-5xl space-y-4">
-        <MessagesCard unread={unread} latest={allMessages[0] ?? null} />
+        <MessagesCard unread={unreadMessages} latest={lastMessage} />
 
         <div className="grid grid-cols-2 gap-4">
-          <StatusCard status={activeStatus[0]} />
-          <LearningCard items={activeLearning} />
+          <StatusCard status={activeStatus ?? undefined} />
+          <LearningCard items={recentLearning} />
         </div>
 
         {/* Placeholder Analytics */}

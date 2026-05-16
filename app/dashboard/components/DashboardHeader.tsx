@@ -2,12 +2,21 @@ import { db, statusTable } from '@/db';
 import { eq } from 'drizzle-orm';
 
 const COLOR_HEX: Record<string, string> = {
-  vert: '#00D26A',
+  vert:  '#00D26A',
   jaune: '#f0c040',
   rouge: '#ef4444',
 };
 
-export default async function DashboardHeader() {
+function getGreeting(hourNum: number): string {
+  if (hourNum >= 5  && hourNum < 12) return 'Bonjour';
+  if (hourNum >= 12 && hourNum < 18) return 'Bon après-midi';
+  if (hourNum >= 18 && hourNum < 23) return 'Bonsoir';
+  return 'Bonne nuit';
+}
+
+type Props = { displayName: string };
+
+export default async function DashboardHeader({ displayName }: Props) {
   const rows = await db
     .select()
     .from(statusTable)
@@ -18,9 +27,8 @@ export default async function DashboardHeader() {
   const dotColor = status ? COLOR_HEX[status.couleur] : '#6b7280';
 
   const now = new Date();
-  const hour = now.toLocaleString('fr-FR', { hour: 'numeric', hour12: false, timeZone: 'Europe/Paris' });
-  const hourNum = parseInt(hour, 10);
-  const greeting = hourNum < 12 ? 'Bonjour' : hourNum < 18 ? 'Bon après-midi' : 'Bonsoir';
+  const hourStr = now.toLocaleString('fr-FR', { hour: 'numeric', hour12: false, timeZone: 'Europe/Paris' });
+  const greeting = getGreeting(parseInt(hourStr, 10));
 
   const dateStr = now.toLocaleDateString('fr-FR', {
     weekday: 'long',
@@ -39,7 +47,9 @@ export default async function DashboardHeader() {
           style={{ backgroundColor: dotColor }}
           title={status?.libelle ?? 'Aucun statut actif'}
         />
-        <span className="text-sm font-medium text-on-surface">{greeting}, Yvan</span>
+        <span className="text-sm font-medium text-on-surface">
+          {greeting}, {displayName}
+        </span>
       </div>
       <span className="ml-auto font-mono text-xs text-muted">{dateFmt}</span>
     </header>

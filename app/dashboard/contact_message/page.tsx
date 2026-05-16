@@ -1,16 +1,21 @@
-import { db, contactMessages } from '@/db';
-import { desc } from 'drizzle-orm';
+import { getAllMessages } from '@/db/queries/messages';
 import MessageInbox from './MessageInbox';
 
-export default async function ContactMessagePage() {
-  const messages = await db
-    .select()
-    .from(contactMessages)
-    .orderBy(desc(contactMessages.date_reception));
+export default async function ContactMessagePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ filter?: string; id?: string }>;
+}) {
+  const { filter, id } = await searchParams;
+  const messages = await getAllMessages();
 
   return (
     <div className="h-full overflow-hidden">
-      <MessageInbox messages={messages} />
+      <MessageInbox
+        messages={messages}
+        initialFilter={filter ?? 'non_lu'}
+        initialId={id ?? null}
+      />
     </div>
   );
 }

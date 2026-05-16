@@ -2,8 +2,9 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, Pencil, Trash2, Plus, X } from 'lucide-react';
+import { Check, Pencil, Trash2, Plus, ExternalLink } from 'lucide-react';
 import type { StatusRow } from '@/db';
+import { COULEUR_CLASSES, type Couleur } from '@/lib/colors';
 import {
   activateStatus,
   createStatus,
@@ -12,12 +13,6 @@ import {
 } from '../actions/status';
 import { useToast } from '../components/ToastProvider';
 import ConfirmModal from '../components/ConfirmModal';
-
-const COLOR_HEX: Record<string, string> = {
-  vert: '#00D26A',
-  jaune: '#f0c040',
-  rouge: '#ef4444',
-};
 
 const COLOR_LABELS: Record<string, string> = {
   vert: 'Vert',
@@ -67,6 +62,7 @@ function StatusForm({
       <input
         type="text"
         placeholder="Libellé du statut"
+        maxLength={200}
         value={form.libelle}
         onChange={(e) => setForm((f) => ({ ...f, libelle: e.target.value }))}
         className="w-full rounded-md border border-[#262626] bg-[#0a0a0a] px-3 py-2 text-sm text-on-surface placeholder:text-muted focus:border-accent focus:outline-none"
@@ -122,9 +118,13 @@ export default function StatusSection({ statuses }: { statuses: StatusRow[] }) {
 
   const run = (fn: () => Promise<void>, msg: string) => {
     startTransition(async () => {
-      await fn();
-      showToast(msg);
-      router.refresh();
+      try {
+        await fn();
+        showToast(msg, 'success');
+        router.refresh();
+      } catch {
+        showToast('Une erreur est survenue', 'error');
+      }
     });
   };
 
@@ -138,23 +138,34 @@ export default function StatusSection({ statuses }: { statuses: StatusRow[] }) {
       </div>
 
       {/* Preview statut actif */}
-      {activeStatus && (
-        <div className="rounded-lg border border-[#262626] bg-[#0f0f0f] p-4">
-          <p className="mb-2 font-mono text-[10px] text-muted uppercase tracking-wider">
-            Affiché sur /contact
-          </p>
-          <div className="flex items-center gap-2.5">
-            <span
-              className="h-2.5 w-2.5 shrink-0 rounded-full"
-              style={{ backgroundColor: COLOR_HEX[activeStatus.couleur] }}
-            />
-            <span className="text-sm text-on-surface">{activeStatus.libelle}</span>
-            <span className="ml-2 font-mono text-xs text-muted">
-              ({CODE_LABELS[activeStatus.statut_code]})
-            </span>
+      {activeStatus && (() => {
+        const c = COULEUR_CLASSES[activeStatus.couleur as Couleur];
+        return (
+          <div className={`rounded-lg border ${c.border} ${c.bg} p-4`}>
+            <div className="mb-2 flex items-center justify-between">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
+                Visible sur /contact
+              </p>
+              <a
+                href="/contact"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 font-mono text-[10px] text-muted transition-colors hover:text-on-surface"
+              >
+                <ExternalLink size={10} />
+                Voir sur le site
+              </a>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${c.dot}`} />
+              <span className="text-sm text-on-surface">{activeStatus.libelle}</span>
+              <span className="ml-2 font-mono text-xs text-muted">
+                ({CODE_LABELS[activeStatus.statut_code]})
+              </span>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Bouton + liste */}
       <div className="space-y-2">
@@ -209,8 +220,7 @@ export default function StatusSection({ statuses }: { statuses: StatusRow[] }) {
             ) : (
               <div className="flex items-center gap-3 rounded-lg border border-[#262626] bg-[#111] px-4 py-3 hover:bg-[#161616] transition-colors">
                 <span
-                  className="h-2.5 w-2.5 shrink-0 rounded-full"
-                  style={{ backgroundColor: COLOR_HEX[status.couleur] }}
+                  className={`h-2.5 w-2.5 shrink-0 rounded-full ${COULEUR_CLASSES[status.couleur as Couleur].dot}`}
                 />
                 <span className="flex-1 text-sm text-on-surface">{status.libelle}</span>
                 <span className="font-mono text-xs text-muted">{CODE_LABELS[status.statut_code]}</span>

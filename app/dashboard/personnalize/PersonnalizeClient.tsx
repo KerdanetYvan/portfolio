@@ -33,13 +33,17 @@ export default function PersonnalizeClient({ initialSection, statuses, items }: 
             <button
               key={s.id}
               onClick={() => setSection(s.id)}
-              className={`w-full rounded-md px-3 py-2 text-left text-sm transition-colors
-                ${section === s.id
+              className={[
+                'relative w-full overflow-hidden rounded-md px-3 py-2 text-left text-sm transition-colors',
+                section === s.id
                   ? 'bg-[#161616] text-on-surface'
-                  : 'text-muted hover:bg-[#111] hover:text-on-surface'
-                }`}
+                  : 'text-muted hover:bg-[#111] hover:text-on-surface',
+              ].join(' ')}
             >
-              {s.label}
+              {section === s.id && (
+                <span className="absolute inset-y-0 left-0 w-0.5 rounded-full bg-accent" />
+              )}
+              <span className={section === s.id ? 'pl-1' : undefined}>{s.label}</span>
             </button>
           ))}
         </nav>

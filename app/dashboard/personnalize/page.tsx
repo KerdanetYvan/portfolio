@@ -1,5 +1,4 @@
-import { db, statusTable, learningItems } from '@/db';
-import { desc } from 'drizzle-orm';
+import { getAllStatuses, getAllLearningItems } from '@/db/queries/personnalize';
 import PersonnalizeClient from './PersonnalizeClient';
 
 export default async function PersonnalizePage({
@@ -10,11 +9,8 @@ export default async function PersonnalizePage({
   const { section = 'status' } = await searchParams;
 
   const [statuses, items] = await Promise.all([
-    db.select().from(statusTable).orderBy(desc(statusTable.date_modif)),
-    db
-      .select()
-      .from(learningItems)
-      .orderBy(learningItems.ordre, desc(learningItems.date_debut)),
+    getAllStatuses(),
+    getAllLearningItems(),
   ]);
 
   return (

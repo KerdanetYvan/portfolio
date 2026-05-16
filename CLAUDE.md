@@ -87,8 +87,35 @@ Pattern : une fonction par domaine, erreur loggée côté serveur, fallback prop
 
 - `db/queries/status.ts` → `getActiveStatus()` — retourne `StatusRow | null`
 - `db/queries/learning.ts` → `getCurrentLearningItems()` — retourne `LearningItem[]` triés par `ordre`
+- `db/queries/dashboard.ts` → `getDashboardOverview()` + `getUnreadMessagesCount()` — agrégation dashboard home
+- `db/queries/personnalize.ts` → `getAllStatuses()` (triés couleur vert>jaune>rouge puis date_modif desc) + `getAllLearningItems(filter?)` — pour /dashboard/personnalize
 
 Utiliser ces helpers dans les Server Components publics (pas `useEffect`). Le client Drizzle est le `db` direct de `@/db` (connexion pooler PostgreSQL, bypass RLS — suffisant pour les SELECT publics).
+
+### Server Actions (`/app/dashboard/actions/`)
+
+Pattern pour toutes les mutations du dashboard :
+
+```ts
+'use server';
+// 1. Auth check défense en profondeur (en plus du proxy.ts et layout)
+async function requireAdmin() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Unauthorized');
+  if (process.env.ADMIN_USER_ID && user.id !== process.env.ADMIN_USER_ID) throw new Error('Forbidden');
+}
+// 2. Mutation Drizzle
+// 3. revalidatePath systématique pour cohérence des caches
+```
+
+**`revalidatePath` obligatoire après chaque mutation :**
+
+- Mutations statut → `/dashboard`, `/dashboard/personnalize`, `/contact`
+- Mutations learning → `/dashboard`, `/dashboard/personnalize`, `/skills`
+- Mutations messages → `/dashboard`, `/dashboard/contact_message`
+
+**Ordre insertion learning_items :** utiliser `max(learningItems.ordre) + 1` pour calculer le prochain `ordre` avant INSERT.
 
 **Mapping couleur enum → classes Tailwind :** centralisé dans `lib/colors.ts` (`COULEUR_CLASSES`, type `Couleur`). À réutiliser partout (dashboard + pages publiques).
 
@@ -192,16 +219,34 @@ app/dashboard/
 ├── actions/
 │   ├── status.ts           — activateStatus, createStatus, updateStatus, deleteStatus
 │   ├── learning.ts         — createLearningItem, updateLearningItem, deleteLearningItem, markLearningDone
-│   └── messages.ts         — markMessageRead/Unread, archiveMessage, deleteMessage
+│   └── messages.ts         — markMessageRead/Unread/Replied, archiveMessage, deleteMessage
 ├── personnalize/
 │   ├── page.tsx            — Server fetch statuses + items, passe à PersonnalizeClient
 │   ├── PersonnalizeClient.tsx — Tabs internes (Statut / Currently Learning)
 │   ├── StatusSection.tsx   — CRUD statuts, preview actif, activation unique
 │   └── LearningSection.tsx — CRUD items, filtre par statut, modal add/edit
 └── contact_message/
-    ├── page.tsx            — Server fetch tous les messages
-    └── MessageInbox.tsx    — Inbox 3 colonnes (filtres | liste | détail)
+    ├── page.tsx            — Server fetch tous les messages (getAllMessages), passe initialFilter/initialId depuis searchParams
+    └── MessageInbox.tsx    — Inbox 3 colonnes : FilterSidebar | MessageList | MessageDetail
 ```
+
+**Inbox messages `/dashboard/contact_message` :**
+
+- Layout 3 colonnes : filtres (180px) | liste (340px) | détail (flex-1)
+- Filtres : non_lu, tous, par type (alternance/mission_freelance/question/autre), archivés
+- URL bookmarkable via `window.history.replaceState` (pas de server re-render sur changement de filtre) — `?filter=X` + `?id=Y`
+- Optimistic updates : lecture auto à l'ouverture + rollback sur erreur
+- Action "Répondre" : ouvre `mailto:` avec sujet + citation du message original (préfixée `> `), marque automatiquement `repondu`
+- `markMessageReplied` disponible dans `actions/messages.ts`
+- Statuts messages : `non_lu` → `lu` → `repondu` → `archive`
+
+**Futures améliorations (ne pas implémenter sans demande) :**
+
+- Supabase Realtime sur `portfolio.contact_messages` pour apparition en temps réel
+- Recherche textuelle dans les messages
+- Tags/labels custom
+- Export CSV/JSON
+- Client mail intégré
 
 **Routing sans Header/Footer :** `app/ConditionalNav.tsx` (client) wrappe Header+main+Footer uniquement hors `/dashboard/*`. Le root layout `app/layout.tsx` délègue à ConditionalNav.
 
