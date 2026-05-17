@@ -367,32 +367,28 @@ export default function MessageInbox({ messages: initial, initialFilter, initial
 
   useEffect(() => { setMessages(initial); }, [initial]);
 
-  // Supabase Realtime — nouveau message en temps réel
+  // Supabase Realtime — Broadcast émis par /api/contact après chaque INSERT
   useEffect(() => {
     const supabase = createClient();
+
     const channel = supabase
-      .channel('inbox-realtime')
+      .channel('contact-notifications')
       .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'portfolio', table: 'contact_messages' },
-        (payload) => {
-          const newMsg = payload.new as ContactMessage;
-          setMessages((prev) => [newMsg, ...prev]);
-          showToast(`Nouveau message de ${newMsg.nom}`);
+        'broadcast',
+        { event: 'new_contact' },
+        ({ payload }: { payload: { nom: string } }) => {
+          router.refresh();
+          showToast(`Nouveau message de ${payload.nom}`);
         },
       )
       .subscribe((status, err) => {
-        if (status === 'CHANNEL_ERROR') {
-          console.error('[Realtime] Erreur de connexion :', err);
-        } else if (status === 'TIMED_OUT') {
-          console.warn('[Realtime] Timeout de connexion');
-        } else {
-          console.log('[Realtime] Statut :', status);
-        }
+        if (status === 'CHANNEL_ERROR') console.error('[Realtime] Erreur :', err);
       });
 
-    return () => { supabase.removeChannel(channel); };
-  }, [showToast]);
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [router, showToast]);
 
   // Filtered list
   const filtered = messages.filter((m) => {

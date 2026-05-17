@@ -47,6 +47,31 @@ export async function POST(request: Request) {
       entreprise:   body.entreprise?.trim() || null,
       message:      body.message.trim(),
     });
+
+    // Notifier le dashboard via Supabase Realtime Broadcast (fire-and-forget)
+    void fetch(
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/realtime/v1/broadcast`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+        },
+        body: JSON.stringify({
+          messages: [{
+            topic:   'realtime:contact-notifications',
+            event:   'broadcast',
+            payload: {
+              type:    'broadcast',
+              event:   'new_contact',
+              payload: { nom: body.nom.trim() },
+            },
+          }],
+        }),
+      },
+    ).catch((err) => console.error('[broadcast] erreur :', err));
+
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error('[POST /api/contact]', err);
