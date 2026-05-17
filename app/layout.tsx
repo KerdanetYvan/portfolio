@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { cookies } from 'next/headers';
-import { Analytics } from '@vercel/analytics/next';
+import { Analytics } from './components/Analytics';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 
@@ -35,12 +35,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           </a>
           <ConditionalNav>{children}</ConditionalNav>
         </Providers>
-        <Analytics
-          beforeSend={(event) => {
-            if (event.url.includes('/dashboard')) return null;
-            return event;
-          }}
-        />
+        <Analytics />
         <SpeedInsights />
       </body>
     </html>
