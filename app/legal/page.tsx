@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Mentions légales — Kerdanet Yvan',
-  description: 'Mentions légales et politique de cookies du portfolio de Yvan Kerdanet.',
+  description: 'Mentions légales, données personnelles et politique de cookies du portfolio de Yvan Kerdanet.',
 };
 
 export default function Legal() {
@@ -48,10 +48,22 @@ export default function Legal() {
 
       <section className="mb-10" aria-labelledby="donnees">
         <h2 id="donnees" className="text-xl font-semibold text-on-surface mb-3">Données personnelles</h2>
+        <p className="text-muted text-sm leading-relaxed mb-3">
+          Ce site ne collecte aucune donnée personnelle à des fins de suivi ou de marketing.
+        </p>
+        <p className="text-muted text-sm leading-relaxed mb-3">
+          Le formulaire de contact collecte les informations suivantes : nom, adresse e-mail, type de demande, entreprise (optionnel) et message. Ces données sont stockées dans une base de données sécurisée (Supabase / PostgreSQL) hébergée en Europe, dans le seul but de traiter et répondre à votre demande. Elles ne sont ni partagées avec des tiers, ni utilisées à des fins commerciales.
+        </p>
         <p className="text-muted text-sm leading-relaxed">
-          Ce site ne collecte aucune donnée personnelle à des fins de suivi ou de marketing. Aucun formulaire de contact ne stocke de données ; les échanges par email sont gérés directement via votre client mail.
-          Conformément au Règlement Général sur la Protection des Données (RGPD — UE 2016/679), vous pouvez exercer vos droits d'accès, de rectification et de suppression en contactant{' '}
+          Conformément au Règlement Général sur la Protection des Données (RGPD — UE 2016/679), vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour exercer ces droits, contactez{' '}
           <a href="mailto:kerdanety@gmail.com" className="text-accent hover:underline">kerdanety@gmail.com</a>.
+        </p>
+      </section>
+
+      <section className="mb-10" id="analytics" aria-labelledby="analytics-title">
+        <h2 id="analytics-title" className="text-xl font-semibold text-on-surface mb-3">Mesure d'audience</h2>
+        <p className="text-muted text-sm leading-relaxed">
+          Ce site utilise <strong className="text-on-surface font-medium">Vercel Web Analytics</strong> pour mesurer l'audience de manière anonyme. Cet outil est sans cookie, sans empreinte digitale et sans collecte d'adresse IP. Les données agrégées (pages visitées, pays, appareil) sont strictement anonymes et ne permettent pas d'identifier un utilisateur. Ce service est conforme au RGPD et à la directive ePrivacy — aucun consentement n'est requis.
         </p>
       </section>
 
