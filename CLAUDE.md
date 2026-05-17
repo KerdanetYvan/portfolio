@@ -271,3 +271,16 @@ app/dashboard/
 - Pas de section contact dans les pages — le `<Footer>` partagé gère les liens sociaux
 - Bandeaux hero : `h-[200px] md:h-[400px] lg:h-[600px]` avec `bg-cover bg-center` et overlay `bg-black/40 backdrop-blur`
 - Config du dé Three.js dans `config/roles.js` (à créer) — ajouter une entrée = ajouter une face au dé
+
+### Analytics
+
+- **Vercel Web Analytics** activé (`@vercel/analytics`) — cookieless, RGPD-compliant, pas de bandeau cookies
+- **Vercel Speed Insights** activé (`@vercel/speed-insights`) — Core Web Vitals en production
+- Composants injectés dans `app/layout.tsx`, après `</Providers>` dans le `<body>`
+- Exclusion du tracking sur `/dashboard/*` via `beforeSend` : les pages admin ne sont pas trackées
+- **Custom events** (via `track()` de `@vercel/analytics`) :
+  - `contact_form_submitted` — envoi formulaire /contact (succès uniquement)
+- Pattern pour nouveaux events : `import { track } from '@vercel/analytics'` + `track('nom_event')` dans les handlers client
+- Données accessibles sur vercel.com → projet → onglet Analytics
+- ⚠️ Activer manuellement sur Vercel Dashboard : onglet "Analytics" → Enable, onglet "Speed Insights" → Enable
+- Future amélioration : analytics DIY dans Supabase intégré au /dashboard pour croiser avec les messages

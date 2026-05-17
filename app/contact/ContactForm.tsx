@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import { track } from '@vercel/analytics';
 import {
   RiCheckLine, RiCloseLine, RiLoader4Line,
   RiFileCopyLine, RiArrowDownSLine,
@@ -56,6 +57,7 @@ export default function ContactForm() {
         }),
       });
       if (!res.ok) throw new Error();
+      track('contact_form_submitted');
       setStatus('success');
     } catch {
       setStatus('error');
