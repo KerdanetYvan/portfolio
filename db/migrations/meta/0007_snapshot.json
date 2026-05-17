@@ -1,0 +1,253 @@
+{
+  "id": "b6e34a6d-9154-4052-9b2e-634407324c89",
+  "prevId": "b8c4d102-3e56-4f23-a914-0f72b3e1e854",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "portfolio.contact_messages": {
+      "name": "contact_messages",
+      "schema": "portfolio",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nom": {
+          "name": "nom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type_demande": {
+          "name": "type_demande",
+          "type": "type_demande",
+          "typeSchema": "portfolio",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entreprise": {
+          "name": "entreprise",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date_reception": {
+          "name": "date_reception",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "statut": {
+          "name": "statut",
+          "type": "statut_contact",
+          "typeSchema": "portfolio",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'non_lu'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "portfolio.learning_items": {
+      "name": "learning_items",
+      "schema": "portfolio",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nom": {
+          "name": "nom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "categorie": {
+          "name": "categorie",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date_debut": {
+          "name": "date_debut",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lien": {
+          "name": "lien",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "statut": {
+          "name": "statut",
+          "type": "statut_apprentissage",
+          "typeSchema": "portfolio",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'en_cours'"
+        },
+        "ordre": {
+          "name": "ordre",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "portfolio.status": {
+      "name": "status",
+      "schema": "portfolio",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "statut_code": {
+          "name": "statut_code",
+          "type": "statut_code",
+          "typeSchema": "portfolio",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "libelle": {
+          "name": "libelle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "couleur": {
+          "name": "couleur",
+          "type": "couleur",
+          "typeSchema": "portfolio",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date_modif": {
+          "name": "date_modif",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "actif": {
+          "name": "actif",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "portfolio.statut_contact": {
+      "name": "statut_contact",
+      "schema": "portfolio",
+      "values": [
+        "non_lu",
+        "lu",
+        "repondu",
+        "archive"
+      ]
+    },
+    "portfolio.type_demande": {
+      "name": "type_demande",
+      "schema": "portfolio",
+      "values": [
+        "alternance",
+        "mission_freelance",
+        "question",
+        "autre"
+      ]
+    },
+    "portfolio.statut_apprentissage": {
+      "name": "statut_apprentissage",
+      "schema": "portfolio",
+      "values": [
+        "en_cours",
+        "termine",
+        "abandonne"
+      ]
+    },
+    "portfolio.couleur": {
+      "name": "couleur",
+      "schema": "portfolio",
+      "values": [
+        "vert",
+        "jaune",
+        "rouge"
+      ]
+    },
+    "portfolio.statut_code": {
+      "name": "statut_code",
+      "schema": "portfolio",
+      "values": [
+        "recherche",
+        "cale",
+        "occupe",
+        "pause"
+      ]
+    }
+  },
+  "schemas": {},
+  "views": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

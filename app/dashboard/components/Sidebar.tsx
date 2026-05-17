@@ -6,6 +6,7 @@ import {
   Home,
   Settings2,
   MessageSquare,
+  FileText,
   Calendar,
   Wallet,
   CheckSquare,
@@ -33,6 +34,7 @@ export default function Sidebar({ unreadCount }: Props) {
   const navItems: NavItem[] = [
     { icon: Home, label: 'Accueil', href: '/dashboard', exact: true },
     { icon: Settings2, label: 'Personnaliser', href: '/dashboard/personnalize' },
+    { icon: FileText, label: 'Mon CV', href: '/dashboard/cv' },
     {
       icon: MessageSquare,
       label: 'Messages',

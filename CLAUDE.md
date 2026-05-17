@@ -153,6 +153,34 @@ Formulaire branché en BDD (`app/api/contact/route.ts` → `portfolio.contact_me
 - `status` — bandeau de disponibilité (une seule ligne `actif=true` à la fois)
 - `learning_items` — éléments "en apprentissage" de /skills
 
+**Schéma `cv` (migration 0007) — données CV master, RLS strict admin-only :**
+
+- `cv.profile` — informations générales (nom, prénom, titre, email, bio…)
+- `cv.experiences` — expériences professionnelles (technos: `text[]`, date_fin null = en cours)
+- `cv.formations` — formations / diplômes
+- `cv.competences` — compétences techniques (enum catégorie + niveau)
+- `cv.soft_skills` — compétences comportementales
+- `cv.langues` — langues + niveau CECRL
+- `cv.centres_interet` — centres d'intérêt
+- `cv.certifications` — certifications
+- `cv.projets_meta` — métadonnées projets pour CV (distinct de /projects GitHub)
+
+Enums `cv.*` : `competence_categorie` (frontend/backend/bdd/devops/autres), `competence_niveau` (daily_driver/comfortable/familiar/exploring), `langue_niveau` (A1→C2/natif).
+
+**Schéma `applications` (migration 0007) — suivi candidatures, RLS strict admin-only :**
+
+- `applications.candidatures` — suivi candidatures (statut, type_poste, salaire_cible en k€/an)
+- `applications.candidature_cv` — snapshot JSON du CV envoyé par candidature (FK cascade)
+- `applications.entretiens` — entretiens liés à une candidature (FK cascade)
+
+Enums `applications.*` : `statut` (a_envoyer/envoyee/entretien_programme/en_cours/acceptee/refusee/ghosted), `type_poste` (presentiel/remote/hybride), `entretien_type` (telephone/visio/presentiel), `entretien_status` (prevu/fait/annule).
+
+**Fichiers Drizzle TypeScript :** `db/schemas/cv/` (9 fichiers + index.ts) et `db/schemas/applications/` (3 fichiers + index.ts). Tous re-exportés depuis `db/index.ts`.
+
+**Policies RLS :** une policy `FOR ALL TO authenticated` par table — `USING` + `WITH CHECK` sur `auth.uid() = '4c833b4d-...'::uuid`. Toutes les tables cv et applications sont admin-only (aucun accès public).
+
+**Action Supabase requise :** Dashboard > Project Settings > API > Exposed schemas → ajouter `cv` et `applications`.
+
 **Seed initial (migration 0004) :** 4 statuts + 3 learning items déjà insérés en BDD. Pour modifier ces données, passer par `/dashboard/personnalize`, pas par une nouvelle migration.
 
 **Commandes Drizzle :**
@@ -225,10 +253,43 @@ app/dashboard/
 │   ├── PersonnalizeClient.tsx — Tabs internes (Statut / Currently Learning)
 │   ├── StatusSection.tsx   — CRUD statuts, preview actif, activation unique
 │   └── LearningSection.tsx — CRUD items, filtre par statut, modal add/edit
+├── cv/
+│   ├── page.tsx            — Server Component, async searchParams `?section=X`, switch sur SectionContent
+│   ├── actions.ts          — 'use server', ~30 fonctions CRUD (upsertProfile, createX/updateX/deleteX/toggleXVisible)
+│   └── components/
+│       ├── CvSidebar.tsx         — 9 sections, navigation par ?section=, lien actif avec bar accent
+│       ├── ProfileSection.tsx    — Formulaire singleton (upsert), fieldsets Identité/Contact/Liens/Accroche
+│       ├── ExperiencesSection.tsx — CRUD + DateRangeInput + TagInput technologies + visible toggle
+│       ├── FormationsSection.tsx  — CRUD + DateRangeInput + visible toggle
+│       ├── CompetencesSection.tsx — CRUD groupé par catégorie, filtre chips, badge niveau coloré
+│       ├── LanguesSection.tsx     — CRUD, badge niveau coloré (A1/A2 gris, B1/B2 jaune, C1/C2 vert, natif accent)
+│       ├── SoftSkillsSection.tsx  — CRUD libelle simple, affichage pills
+│       ├── CertificationsSection.tsx — CRUD + date_obtention + url optionnel + visible toggle
+│       ├── CentresInteretSection.tsx — CRUD libelle simple, affichage pills
+│       └── ProjetsSection.tsx    — CRUD + TagInput technologies + url_demo + url_repo + visible toggle
 └── contact_message/
     ├── page.tsx            — Server fetch tous les messages (getAllMessages), passe initialFilter/initialId depuis searchParams
     └── MessageInbox.tsx    — Inbox 3 colonnes : FilterSidebar | MessageList | MessageDetail
 ```
+
+**Page `/dashboard/cv` :**
+
+- URL : `?section=profile|experiences|formations|competences|soft-skills|langues|projets|certifications|centres-interet`
+- `SectionContent` async server component : fetch les données de la section active, rend le composant correspondant
+- `Suspense key={section}` pour reset le skeleton à chaque changement de section
+- Toutes les mutations passent par `app/dashboard/cv/actions.ts` avec `requireAdmin()` + `revalidatePath('/dashboard/cv')`
+
+**DB queries CV (`db/queries/cv.ts`) :**
+
+- `getProfile()` → `Profile | null`
+- `getAllExperiences/Formations/Competences/SoftSkills/Langues/Certifications/CentresInteret/ProjetsMeta()` → tableau trié par `asc(table.ordre)`
+
+**Patterns communs sections CV :**
+
+- Modal inline `fixed inset-0 z-40 bg-black/60 backdrop-blur-sm` + `max-w-lg rounded-lg border border-[#262626] bg-[#111] p-6`
+- `run()` helper : `startTransition(async () => { await fn(); showToast(msg); router.refresh(); })`
+- Optimistic toggle visible : `setItems(prev => prev.map(...))` sans attendre le serveur
+- Composants réutilisables : `app/components/ui/TagInput.tsx` + `app/components/ui/DateRangeInput.tsx`
 
 **Inbox messages `/dashboard/contact_message` :**
 
@@ -236,7 +297,7 @@ app/dashboard/
 - Filtres : non_lu, tous, par type (alternance/mission_freelance/question/autre), archivés
 - URL bookmarkable via `window.history.replaceState` (pas de server re-render sur changement de filtre) — `?filter=X` + `?id=Y`
 - Optimistic updates : lecture auto à l'ouverture + rollback sur erreur
-- Action "Répondre" : ouvre `mailto:` avec sujet + citation du message original (préfixée `> `), marque automatiquement `repondu`
+- Action "Répondre" : ouvre `mailto:` avec sujet + citation du message original (préfixée `>`), marque automatiquement `repondu`
 - `markMessageReplied` disponible dans `actions/messages.ts`
 - Statuts messages : `non_lu` → `lu` → `repondu` → `archive`
 
