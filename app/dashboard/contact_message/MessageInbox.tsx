@@ -6,6 +6,7 @@ import {
   MailOpen, Archive, Trash2, Mail, MessageSquare, ExternalLink,
 } from 'lucide-react';
 import type { ContactMessage } from '@/db';
+import { createClient } from '@/lib/supabase/client';
 import {
   markMessageRead,
   markMessageUnread,
@@ -365,6 +366,25 @@ export default function MessageInbox({ messages: initial, initialFilter, initial
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   useEffect(() => { setMessages(initial); }, [initial]);
+
+  // Supabase Realtime — nouveau message en temps réel
+  useEffect(() => {
+    const supabase = createClient();
+    const channel = supabase
+      .channel('inbox-realtime')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'portfolio', table: 'contact_messages' },
+        (payload) => {
+          const newMsg = payload.new as ContactMessage;
+          setMessages((prev) => [newMsg, ...prev]);
+          showToast(`Nouveau message de ${newMsg.nom}`);
+        },
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [showToast]);
 
   // Filtered list
   const filtered = messages.filter((m) => {
