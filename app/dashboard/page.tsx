@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { getDashboardOverview } from '@/db/queries/dashboard';
+import { getRelancesAFaire } from '@/db/queries/candidatures';
 import type { ContactMessage, StatusRow, LearningItem } from '@/db';
+import RelancesCard from './components/RelancesCard';
 
 const COLOR_EMOJI: Record<string, string> = {
   vert: '🟢',
@@ -130,12 +132,17 @@ function LearningCard({ items }: { items: LearningItem[] }) {
 }
 
 export default async function DashboardPage() {
-  const { unreadMessages, lastMessage, activeStatus, recentLearning } = await getDashboardOverview();
+  const [{ unreadMessages, lastMessage, activeStatus, recentLearning }, relances] = await Promise.all([
+    getDashboardOverview(),
+    getRelancesAFaire(),
+  ]);
 
   return (
     <div className="h-full overflow-auto p-6">
       <div className="mx-auto max-w-5xl space-y-4">
         <MessagesCard unread={unreadMessages} latest={lastMessage} />
+
+        {relances.length > 0 && <RelancesCard relances={relances} />}
 
         <div className="grid grid-cols-2 gap-4">
           <StatusCard status={activeStatus ?? undefined} />

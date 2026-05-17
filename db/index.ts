@@ -11,8 +11,8 @@ import { profile, experiences, formations, competences, softSkills, langues, cen
 import { competenceCategorieEnum, competenceNiveauEnum, langueNiveauEnum }                                                  from './schemas/cv';
 
 // Schéma applications
-import { candidatures, candidatureCv, entretiens }                          from './schemas/applications';
-import { statutCandidatureEnum, typePosteEnum, entretienTypeEnum, entretienStatusEnum } from './schemas/applications';
+import { candidatures, candidatureCv, entretiens, events }                              from './schemas/applications';
+import { statutCandidatureEnum, typePosteEnum, entretienTypeEnum, entretienStatusEnum, eventTypeEnum } from './schemas/applications';
 
 const client = postgres(process.env.DATABASE_URL!, {
   prepare: false, // requis pour le pooler Supabase (PgBouncer transaction mode)
@@ -26,7 +26,7 @@ export const db = drizzle(client, {
     profile, experiences, formations, competences, softSkills, langues,
     centresInteret, certifications, projetsMeta,
     // applications
-    candidatures, candidatureCv, entretiens,
+    candidatures, candidatureCv, entretiens, events,
   },
 });
 
@@ -51,8 +51,9 @@ export type { Certification, NewCertification }     from './schemas/cv/certifica
 export type { ProjetMeta, NewProjetMeta }           from './schemas/cv/projets_meta';
 
 // ─── Re-exports applications ──────────────────────────────────────────────────
-export { candidatures, candidatureCv, entretiens };
-export { statutCandidatureEnum, typePosteEnum, entretienTypeEnum, entretienStatusEnum };
-export type { Candidature, NewCandidature }     from './schemas/applications/candidatures';
-export type { CandidatureCv, NewCandidatureCv } from './schemas/applications/candidature_cv';
-export type { Entretien, NewEntretien }         from './schemas/applications/entretiens';
+export { candidatures, candidatureCv, entretiens, events };
+export { statutCandidatureEnum, typePosteEnum, entretienTypeEnum, entretienStatusEnum, eventTypeEnum };
+export type { Candidature, NewCandidature }               from './schemas/applications/candidatures';
+export type { CandidatureCv, NewCandidatureCv }           from './schemas/applications/candidature_cv';
+export type { Entretien, NewEntretien }                   from './schemas/applications/entretiens';
+export type { CandidatureEvent, NewCandidatureEvent }     from './schemas/applications/events';

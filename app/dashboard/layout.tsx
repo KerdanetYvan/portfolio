@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { getUnreadMessagesCount } from '@/db/queries/dashboard';
+import { getActiveCandidaturesCount } from '@/db/queries/candidatures';
 import Sidebar from './components/Sidebar';
 import DashboardHeader from './components/DashboardHeader';
 import { ToastProvider } from './components/ToastProvider';
@@ -24,13 +25,16 @@ export default async function DashboardLayout({ children }: { children: ReactNod
     (meta?.full_name ?? meta?.name ?? '').split(' ')[0] ||
     (user.email?.split('@')[0] ?? 'Admin');
 
-  const unreadCount = await getUnreadMessagesCount();
+  const [unreadCount, activeCandidaturesCount] = await Promise.all([
+    getUnreadMessagesCount(),
+    getActiveCandidaturesCount(),
+  ]);
 
   return (
     <ToastProvider>
       <KeyboardShortcuts />
       <div className="flex h-screen overflow-hidden bg-[#0a0a0a] text-on-surface">
-        <Sidebar unreadCount={unreadCount} />
+        <Sidebar unreadCount={unreadCount} activeCandidaturesCount={activeCandidaturesCount} />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <DashboardHeader displayName={displayName} />
           <main id="main-content" className="flex-1 overflow-hidden">

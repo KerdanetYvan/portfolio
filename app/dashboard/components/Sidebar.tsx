@@ -7,6 +7,7 @@ import {
   Settings2,
   MessageSquare,
   FileText,
+  ClipboardList,
   Calendar,
   Wallet,
   CheckSquare,
@@ -25,25 +26,31 @@ type NavItem = {
   badgeCount?: number;
 };
 
-type Props = { unreadCount: number };
+type Props = { unreadCount: number; activeCandidaturesCount: number };
 
-export default function Sidebar({ unreadCount }: Props) {
+export default function Sidebar({ unreadCount, activeCandidaturesCount }: Props) {
   const pathname = usePathname();
   const router = useRouter();
 
   const navItems: NavItem[] = [
-    { icon: Home, label: 'Accueil', href: '/dashboard', exact: true },
-    { icon: Settings2, label: 'Personnaliser', href: '/dashboard/personnalize' },
-    { icon: FileText, label: 'Mon CV', href: '/dashboard/cv' },
+    { icon: Home,          label: 'Accueil',       href: '/dashboard', exact: true },
+    { icon: FileText,      label: 'Mon CV',         href: '/dashboard/cv' },
+    {
+      icon: ClipboardList,
+      label: 'Candidatures',
+      href: '/dashboard/candidatures',
+      badgeCount: activeCandidaturesCount,
+    },
+    { icon: Settings2,     label: 'Personnaliser',  href: '/dashboard/personnalize' },
     {
       icon: MessageSquare,
       label: 'Messages',
       href: '/dashboard/contact_message',
       badgeCount: unreadCount,
     },
-    { icon: Calendar, label: 'Planning', disabled: true },
-    { icon: Wallet, label: 'Argent', disabled: true },
-    { icon: CheckSquare, label: 'Tâches', disabled: true },
+    { icon: Calendar,     label: 'Planning', disabled: true },
+    { icon: Wallet,       label: 'Argent',   disabled: true },
+    { icon: CheckSquare,  label: 'Tâches',   disabled: true },
   ];
 
   async function handleLogout() {

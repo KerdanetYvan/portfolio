@@ -167,15 +167,16 @@ Formulaire branché en BDD (`app/api/contact/route.ts` → `portfolio.contact_me
 
 Enums `cv.*` : `competence_categorie` (frontend/backend/bdd/devops/autres), `competence_niveau` (daily_driver/comfortable/familiar/exploring), `langue_niveau` (A1→C2/natif).
 
-**Schéma `applications` (migration 0007) — suivi candidatures, RLS strict admin-only :**
+**Schéma `applications` (migrations 0007 + 0008) — suivi candidatures, RLS strict admin-only :**
 
-- `applications.candidatures` — suivi candidatures (statut, type_poste, salaire_cible en k€/an)
+- `applications.candidatures` — suivi candidatures avec champs : statut, type_poste, detail_offre, contact_nom/email/linkedin, date_candidature (=envoi), date_relance (=relance prévue), relance_effectuee, salaire_cible, notes
 - `applications.candidature_cv` — snapshot JSON du CV envoyé par candidature (FK cascade)
 - `applications.entretiens` — entretiens liés à une candidature (FK cascade)
+- `applications.events` — timeline historisée (migration 0008) : type enum (created/sent/status_changed/entretien_scheduled/entretien_done/relance_done/note_added), description, date, metadata jsonb
 
-Enums `applications.*` : `statut` (a_envoyer/envoyee/entretien_programme/en_cours/acceptee/refusee/ghosted), `type_poste` (presentiel/remote/hybride), `entretien_type` (telephone/visio/presentiel), `entretien_status` (prevu/fait/annule).
+Enums `applications.*` : `statut` (a_envoyer/envoyee/entretien_programme/en_cours/acceptee/refusee/ghosted), `type_poste` (presentiel/remote/hybride), `entretien_type` (telephone/visio/presentiel), `entretien_status` (prevu/fait/annule), `event_type`.
 
-**Fichiers Drizzle TypeScript :** `db/schemas/cv/` (9 fichiers + index.ts) et `db/schemas/applications/` (3 fichiers + index.ts). Tous re-exportés depuis `db/index.ts`.
+**Fichiers Drizzle TypeScript :** `db/schemas/cv/` (9 fichiers + index.ts) et `db/schemas/applications/` (4 fichiers + index.ts dont events.ts). Tous re-exportés depuis `db/index.ts`.
 
 **Policies RLS :** une policy `FOR ALL TO authenticated` par table — `USING` + `WITH CHECK` sur `auth.uid() = '4c833b4d-...'::uuid`. Toutes les tables cv et applications sont admin-only (aucun accès public).
 
@@ -267,10 +268,43 @@ app/dashboard/
 │       ├── CertificationsSection.tsx — CRUD + date_obtention + url optionnel + visible toggle
 │       ├── CentresInteretSection.tsx — CRUD libelle simple, affichage pills
 │       └── ProjetsSection.tsx    — CRUD + TagInput technologies + url_demo + url_repo + visible toggle
+├── candidatures/
+│   ├── page.tsx              — Server Component, fetch list + counts + detail (si ?id=), passe à CandidaturesClient
+│   ├── actions.ts            — 'use server', createCandidature/updateCandidature/deleteCandidature/changeStatus/markAsSent/markRelanceDone/scheduleEntretien/updateEntretienStatus
+│   ├── CandidaturesClient.tsx — Layout 2 colonnes : liste filtrée (400px) + détail. Filtre client-side via replaceState, sélection via router.push
+│   └── components/
+│       ├── CandidatureModal.tsx  — Formulaire create/edit (4 sections : L'offre/Localisation/Contact/Suivi)
+│       ├── CandidatureDetail.tsx — Panneau droit : header + offre + contact + entretiens + timeline + CV + notes + actions rapides
+│       └── EntretienModal.tsx    — Modal programmation entretien (type, datetime-local, interlocuteur, notes)
 └── contact_message/
     ├── page.tsx            — Server fetch tous les messages (getAllMessages), passe initialFilter/initialId depuis searchParams
     └── MessageInbox.tsx    — Inbox 3 colonnes : FilterSidebar | MessageList | MessageDetail
 ```
+
+**Page `/dashboard/candidatures` :**
+
+- URL : `?filter=all|a_envoyer|en_cours|relance|acceptee|refusee|ghosted` + `?id=<uuid>`
+- Filtres côté client (replaceState) pour rapidité ; sélection d'une candidature via `router.push` (server re-render pour charger le détail avec events + entretiens)
+- Statut badge dans le détail est cliquable → dropdown inline pour changer le statut
+- Relance auto : `markAsSent()` calcule `date_relance = date_envoi + 7 jours` si non renseignée
+- Timeline dans `applications.events` : chaque action significative insère un événement (created/sent/status_changed/…)
+
+**Card relances sur `/dashboard` home :**
+
+- `RelancesCard` (`app/dashboard/components/RelancesCard.tsx`) : affichée seulement si relances > 0
+- Candidatures avec `date_relance <= aujourd'hui AND relance_effectuee = false AND statut NOT IN (acceptee/refusee/ghosted)`
+- Max 3 affichées + lien "Voir tout" → `/dashboard/candidatures?filter=relance`
+- Bouton "Fait" inline appelle `markRelanceDone(id)` + router.refresh()
+
+**DB queries candidatures (`db/queries/candidatures.ts`) :**
+
+- `getAllCandidatures()` → triées par `updated_at DESC`
+- `getCandidatureById(id)` → avec entretiens + events + cv (Promise.all)
+- `getRelancesAFaire()` → date_relance <= today AND relance_effectuee = false AND statut non terminal
+- `getCandidaturesCounts()` → compteurs par filtre (tout calculé JS depuis fetch unique)
+- `getActiveCandidaturesCount()` → pour le badge sidebar (statut NOT IN acceptee/refusee/ghosted)
+
+**Sidebar globale mise à jour :** ordre 1-Home 2-CV 3-Candidatures (badge actives) 4-Personnaliser 5-Messages 6-disabled. `layout.tsx` passe `activeCandidaturesCount` via `getActiveCandidaturesCount()`.
 
 **Page `/dashboard/cv` :**
 
