@@ -43,6 +43,13 @@
       "when": 1747526400000,
       "tag": "0005_enable_realtime_contact_messages",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1747526460000,
+      "tag": "0006_realtime_replica_identity",
+      "breakpoints": true
     }
   ]
 }

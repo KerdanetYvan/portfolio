@@ -381,7 +381,15 @@ export default function MessageInbox({ messages: initial, initialFilter, initial
           showToast(`Nouveau message de ${newMsg.nom}`);
         },
       )
-      .subscribe();
+      .subscribe((status, err) => {
+        if (status === 'CHANNEL_ERROR') {
+          console.error('[Realtime] Erreur de connexion :', err);
+        } else if (status === 'TIMED_OUT') {
+          console.warn('[Realtime] Timeout de connexion');
+        } else {
+          console.log('[Realtime] Statut :', status);
+        }
+      });
 
     return () => { supabase.removeChannel(channel); };
   }, [showToast]);
