@@ -57,6 +57,20 @@
       "when": 1779043973597,
       "tag": "0007_setup_cv_and_applications",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1779146700505,
+      "tag": "0008_candidatures_events",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1779146760000,
+      "tag": "0009_cv_storage_bucket",
+      "breakpoints": true
     }
   ]
 }

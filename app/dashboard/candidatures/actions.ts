@@ -1,9 +1,10 @@
 'use server';
 
-import { db, candidatures, entretiens, events } from '@/db';
+import { db, candidatures, candidatureCv, entretiens, events } from '@/db';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
+import type { CvConfig } from '@/lib/cv/types';
 
 async function requireAdmin() {
   const supabase = await createClient();
@@ -167,4 +168,45 @@ export async function updateEntretienStatus(
     await insertEvent(candidature_id, 'entretien_done', 'Entretien effectué');
   }
   revalidateAll();
+}
+
+export async function saveCvConfig(candidatureId: string, config: CvConfig): Promise<void> {
+  await requireAdmin();
+  const updated = { ...config, version: config.version + 1, savedAt: new Date().toISOString() };
+
+  const [existing] = await db
+    .select({ id: candidatureCv.id })
+    .from(candidatureCv)
+    .where(eq(candidatureCv.candidature_id, candidatureId))
+    .limit(1);
+
+  if (existing) {
+    // UPDATE uniquement le JSON — préserve nom_fichier (chemin PDF stocké)
+    await db.update(candidatureCv)
+      .set({ contenu_json: updated })
+      .where(eq(candidatureCv.id, existing.id));
+  } else {
+    await db.insert(candidatureCv).values({ candidature_id: candidatureId, contenu_json: updated });
+  }
+  revalidatePath('/dashboard/candidatures');
+}
+
+export async function saveCvPdfPath(candidatureId: string, pdfPath: string): Promise<void> {
+  await requireAdmin();
+  await db.update(candidatureCv)
+    .set({ nom_fichier: pdfPath })
+    .where(eq(candidatureCv.candidature_id, candidatureId));
+}
+
+export async function getCvDownloadUrl(candidatureId: string): Promise<string | null> {
+  await requireAdmin();
+  const [row] = await db
+    .select({ nom_fichier: candidatureCv.nom_fichier })
+    .from(candidatureCv)
+    .where(eq(candidatureCv.candidature_id, candidatureId))
+    .limit(1);
+  if (!row?.nom_fichier) return null;
+
+  const { getSignedCvPdfUrl } = await import('@/lib/supabase/storage');
+  return getSignedCvPdfUrl(row.nom_fichier);
 }

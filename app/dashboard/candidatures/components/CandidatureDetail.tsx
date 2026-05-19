@@ -2,13 +2,15 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   Pencil, Trash2, ExternalLink, Send, RefreshCw, CheckCheck,
-  Phone, Monitor, MapPin, FileText, X, Copy, Check,
+  Phone, Monitor, MapPin, FileText, X, Copy, Check, Download, Loader2,
 } from 'lucide-react';
 import type { CandidatureWithDetails } from '@/db/queries/candidatures';
 import {
-  changeStatus, markAsSent, markRelanceDone, deleteCandidature, updateCandidature, updateEntretienStatus,
+  changeStatus, markAsSent, markRelanceDone, deleteCandidature, updateCandidature,
+  updateEntretienStatus, getCvDownloadUrl,
 } from '../actions';
 import { useToast } from '../../components/ToastProvider';
 import EntretienModal from './EntretienModal';
@@ -74,6 +76,7 @@ export default function CandidatureDetail({ candidature, onEdit, onDeleted }: Pr
   const [editingNotes, setEditingNotes] = useState(false);
   const [notes, setNotes] = useState(candidature.notes ?? '');
   const [copied, setCopied] = useState(false);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
 
   const run = (fn: () => Promise<void>, msg: string) => {
     startTransition(async () => {
@@ -107,6 +110,24 @@ export default function CandidatureDetail({ candidature, onEdit, onDeleted }: Pr
   const handleSaveNotes = () => {
     run(() => updateCandidature(candidature.id, { notes: notes || null }), 'Notes sauvegardées');
     setEditingNotes(false);
+  };
+
+  const handleDownloadPdf = async () => {
+    setDownloadingPdf(true);
+    try {
+      const url = await getCvDownloadUrl(candidature.id);
+      if (!url) { showToast('PDF introuvable', 'error'); return; }
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cv-${candidature.poste}-${candidature.entreprise}.pdf`.replace(/[^a-z0-9.-]/gi, '-');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch {
+      showToast('Erreur lors du téléchargement', 'error');
+    } finally {
+      setDownloadingPdf(false);
+    }
   };
 
   const handleCopyOffre = () => {
@@ -320,26 +341,54 @@ export default function CandidatureDetail({ candidature, onEdit, onDeleted }: Pr
           <section className="px-6 py-4">
             <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-muted">CV généré</p>
             {candidature.cv ? (
-              <div className="flex items-center gap-3 text-sm">
-                <FileText size={14} className="text-muted" />
-                <span className="text-on-surface">{candidature.cv.nom_fichier ?? 'cv.pdf'}</span>
-                <span className="font-mono text-[10px] text-muted/60">
-                  {new Date(candidature.cv.created_at).toLocaleDateString('fr-FR')}
-                </span>
-                <button disabled className="ml-auto rounded border border-[#262626] px-2.5 py-1 text-xs text-muted/50 cursor-not-allowed">
-                  Régénérer
-                </button>
+              <div className="space-y-2">
+                <div className="flex items-center gap-3 rounded-md border border-[#262626] bg-[#0a0a0a] px-3 py-2.5">
+                  <FileText size={14} className="shrink-0 text-muted" />
+                  <div className="min-w-0 flex-1">
+                    {(() => {
+                      const cfg = candidature.cv!.contenu_json as { version?: number; savedAt?: string } | null;
+                      const v = cfg?.version ?? 1;
+                      const d = cfg?.savedAt ? new Date(cfg.savedAt).toLocaleDateString('fr-FR') : null;
+                      const hasPdf = !!candidature.cv!.nom_fichier;
+                      return (
+                        <>
+                          <span className="text-sm text-on-surface">
+                            Configuration CV v{v}
+                            {hasPdf && <span className="ml-2 text-[10px] text-green-400 font-mono">PDF généré</span>}
+                          </span>
+                          {d && <p className="font-mono text-[10px] text-muted/60">Modifié le {d}</p>}
+                        </>
+                      );
+                    })()}
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {candidature.cv.nom_fichier && (
+                      <button
+                        onClick={handleDownloadPdf}
+                        disabled={downloadingPdf}
+                        className="rounded-md border border-[#262626] px-2 py-1 text-xs text-muted transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+                        title="Télécharger le PDF"
+                      >
+                        {downloadingPdf ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
+                      </button>
+                    )}
+                    <Link
+                      href={`/dashboard/candidatures/${candidature.id}/cv`}
+                      className="rounded-md border border-[#262626] px-2.5 py-1 text-xs text-muted transition-colors hover:border-accent hover:text-accent"
+                    >
+                      Modifier
+                    </Link>
+                  </div>
+                </div>
               </div>
             ) : (
-              <button
-                disabled
-                className="flex items-center gap-2 rounded-md border border-dashed border-[#262626] px-4 py-2.5 text-sm text-muted/50 cursor-not-allowed"
-                title="Disponible prochainement"
+              <Link
+                href={`/dashboard/candidatures/${candidature.id}/cv`}
+                className="flex items-center gap-2 rounded-md border border-dashed border-[#262626] px-4 py-2.5 text-sm text-muted transition-colors hover:border-accent hover:text-accent"
               >
                 <FileText size={14} />
                 Générer un CV pour cette candidature
-                <span className="ml-1 font-mono text-[10px] opacity-60">bientôt</span>
-              </button>
+              </Link>
             )}
           </section>
 

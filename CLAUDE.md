@@ -270,11 +270,14 @@ app/dashboard/
 │       └── ProjetsSection.tsx    — CRUD + TagInput technologies + url_demo + url_repo + visible toggle
 ├── candidatures/
 │   ├── page.tsx              — Server Component, fetch list + counts + detail (si ?id=), passe à CandidaturesClient
-│   ├── actions.ts            — 'use server', createCandidature/updateCandidature/deleteCandidature/changeStatus/markAsSent/markRelanceDone/scheduleEntretien/updateEntretienStatus
+│   ├── actions.ts            — 'use server', createCandidature/updateCandidature/deleteCandidature/changeStatus/markAsSent/markRelanceDone/scheduleEntretien/updateEntretienStatus/saveCvConfig
 │   ├── CandidaturesClient.tsx — Layout 2 colonnes : liste filtrée (400px) + détail. Filtre client-side via replaceState, sélection via router.push
+│   ├── [id]/cv/
+│   │   ├── page.tsx          — Server Component : fetch candidature + toutes données CV + config existante → CvConfigClient
+│   │   └── CvConfigClient.tsx — Client : 2 colonnes (360px config | flex-1 preview iframe), keywords badges, sections accordéon avec items
 │   └── components/
 │       ├── CandidatureModal.tsx  — Formulaire create/edit (4 sections : L'offre/Localisation/Contact/Suivi)
-│       ├── CandidatureDetail.tsx — Panneau droit : header + offre + contact + entretiens + timeline + CV + notes + actions rapides
+│       ├── CandidatureDetail.tsx — Panneau droit : header + offre + contact + entretiens + timeline + CV (lien /[id]/cv) + notes + actions rapides
 │       └── EntretienModal.tsx    — Modal programmation entretien (type, datetime-local, interlocuteur, notes)
 └── contact_message/
     ├── page.tsx            — Server fetch tous les messages (getAllMessages), passe initialFilter/initialId depuis searchParams
@@ -334,6 +337,75 @@ app/dashboard/
 - Action "Répondre" : ouvre `mailto:` avec sujet + citation du message original (préfixée `>`), marque automatiquement `repondu`
 - `markMessageReplied` disponible dans `actions/messages.ts`
 - Statuts messages : `non_lu` → `lu` → `repondu` → `archive`
+
+**Page `/dashboard/candidatures/[id]/cv` — génération de CV :**
+
+- Server Component fetch : `getCandidatureById` + toutes les queries CV en `Promise.all`
+- Si `candidature.cv.contenu_json` existe → charge la config sauvegardée ; sinon → `generateInitialConfig()`
+- `CvConfigClient` (client) : 2 colonnes — panneau config (360px) + aperçu iframe (flex-1)
+- Panneau config : badges keywords en haut, puis liste de sections accordéon avec checkboxes items + badge score + flèches réordonnancement
+- Aperçu iframe : `srcDoc={html}` recalculé via `useMemo` à chaque changement de config (aucun server round-trip)
+- "Sauvegarder" : appelle `saveCvConfig()` (delete + insert dans `applications.candidature_cv`), incrémente `version`
+- "Exporter PDF" : placeholder disabled (à implémenter au prochain prompt)
+- Retour : lien vers `/dashboard/candidatures?id={id}`
+
+**Lib CV (`lib/cv/`) :**
+
+- `types.ts` — `SectionId | ItemConfig | SectionConfig | CvConfig` (stocké tel quel en JSONB)
+- `keyword-extraction.ts` — `extractKeywords(text)` : normalise, tokenize, filtre stopwords FR+EN, trie par fréquence ; `computeScore(text, keywords)` : score 0-100
+- `cv-matching.ts` — `generateInitialConfig(candidatureId, offerText, data)` : threshold adaptatif (15 si >10 keywords, sinon 5) ; langues/soft-skills/certifications/centres-interet toujours tous sélectionnés
+- `cv-template.ts` — `generateCvHtml(config, data)` : HTML self-contained (inline CSS, fond blanc, police système, ATS-friendly 1 colonne) ; sections triées par `order`, items filtrés par `selected`
+
+**`saveCvConfig` dans `candidatures/actions.ts` :**
+
+```ts
+// DELETE where candidature_id = X + INSERT nouveau (upsert simplifié)
+// Incrémente config.version + 1 avant insertion
+```
+
+**Génération PDF (`app/api/cv/generate/route.ts`) :**
+
+- POST `/api/cv/generate` avec `{ candidatureId }` — auth admin requise
+- `maxDuration = 60` (Vercel) car Puppeteer peut prendre 10-20s
+- Stack : `puppeteer-core` + `@sparticuz/chromium` (compatible Vercel Functions)
+- Environnement local : set `CHROME_EXECUTABLE_PATH` dans `.env.local` pour pointer vers Chrome installé (ex: `C:\Program Files\Google\Chrome\Application\chrome.exe` sur Windows). Sans ça, la génération PDF ne fonctionnera qu'en prod.
+- Environnement production : @sparticuz/chromium fournit le binaire Chromium
+- PDF généré via `page.pdf({ format: 'A4', printBackground: true, margin: 14mm/16mm })`
+- Upload dans Supabase Storage bucket `cv-pdfs` (PRIVATE) via service role key
+- Path stocké dans `applications.candidature_cv.nom_fichier` (ex: `{candidatureId}/v{version}.pdf`)
+- Téléchargement via signed URL expirable 1h — `getSignedCvPdfUrl()` dans `lib/supabase/storage.ts`
+
+**`lib/supabase/storage.ts` :**
+
+- `uploadCvPdf(candidatureId, version, buffer)` → path interne
+- `getSignedCvPdfUrl(path, expiresIn=3600)` → signed URL avec `download: true`
+- `deleteCvPdf(path)` → suppression
+- Toutes les opérations utilisent le service role key (bucket privé)
+
+**Supabase Storage — déjà configuré via migration `0009_cv_storage_bucket.sql` :**
+
+- Bucket `cv-pdfs` créé (privé, 10 Mo max, PDF uniquement) + 4 policies RLS admin-only (`auth.uid() = ADMIN_UUID`)
+
+**Bouton "Exporter PDF" dans `CvConfigClient` :**
+
+- Disabled si `hasUnsaved = true` (config non sauvegardée)
+- Click → `POST /api/cv/generate` → loader → `pdfPath` en state
+- Bouton "Télécharger PDF" apparaît après génération → appelle `getCvDownloadUrl()` server action → signed URL → download programmatique
+- Dans `CandidatureDetail` : icône download si `nom_fichier` existe (even chemin vers PDF)
+
+**`saveCvConfig` (fix important) :**
+
+- Utilise SELECT + UPDATE/INSERT (pas DELETE+INSERT) pour préserver `nom_fichier` (chemin PDF)
+- Si on DELETE+INSERT, le chemin PDF serait perdu à chaque sauvegarde de config
+
+**Futures améliorations CV (ne pas implémenter sans demande) :**
+
+- Réordonnancement drag & drop des sections (pour l'instant flèches haut/bas)
+- Matching sémantique IA (actuellement tag-based simple, intentionnellement)
+- Diff visuel entre versions de CV
+- Champ `intro_custom` pour personnaliser l'accroche par candidature
+- Template alternatif "corporate" (sans accent vert, plus classique)
+- Génération lettre de motivation avec template similaire
 
 **Futures améliorations (ne pas implémenter sans demande) :**
 

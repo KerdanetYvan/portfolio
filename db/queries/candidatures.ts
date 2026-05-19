@@ -38,6 +38,35 @@ export async function getAllCandidatures(): Promise<Candidature[]> {
   }
 }
 
+export type CandidatureForCvPage = {
+  candidature: Candidature;
+  cv: CandidatureCv | null;
+};
+
+/**
+ * Requête légère pour la page CV — uniquement candidature + config CV.
+ * N'inclut PAS events/entretiens (inutiles pour cette page, et events peut être lent).
+ */
+export async function getCandidatureForCvPage(id: string): Promise<CandidatureForCvPage | null> {
+  try {
+    console.time(`[getCandidatureForCvPage] ${id}`);
+    const [candidatureRows, cvRows] = await Promise.all([
+      db.select().from(candidatures).where(eq(candidatures.id, id)).limit(1),
+      db.select().from(candidatureCv)
+        .where(eq(candidatureCv.candidature_id, id))
+        .orderBy(desc(candidatureCv.created_at))
+        .limit(1),
+    ]);
+    console.timeEnd(`[getCandidatureForCvPage] ${id}`);
+
+    if (!candidatureRows[0]) return null;
+    return { candidature: candidatureRows[0], cv: cvRows[0] ?? null };
+  } catch (err) {
+    console.error('[getCandidatureForCvPage]', err);
+    return null;
+  }
+}
+
 export async function getCandidatureById(id: string): Promise<CandidatureWithDetails | null> {
   try {
     const [candidature, candidatureEntretiens, candidatureEvents, candidatureCvs] = await Promise.all([

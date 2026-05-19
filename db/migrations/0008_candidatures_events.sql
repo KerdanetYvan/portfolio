@@ -7,16 +7,14 @@ ALTER TABLE applications.candidatures ADD COLUMN IF NOT EXISTS contact_email    
 ALTER TABLE applications.candidatures ADD COLUMN IF NOT EXISTS contact_linkedin text;
 ALTER TABLE applications.candidatures ADD COLUMN IF NOT EXISTS relance_effectuee boolean NOT NULL DEFAULT false;
 
--- 2. Enum pour le type d'événement timeline
-CREATE TYPE applications.event_type AS ENUM (
-  'created',
-  'sent',
-  'status_changed',
-  'entretien_scheduled',
-  'entretien_done',
-  'relance_done',
-  'note_added'
-);
+-- 2. Enum pour le type d'événement timeline (idempotent)
+DO $$ BEGIN
+  CREATE TYPE applications.event_type AS ENUM (
+    'created', 'sent', 'status_changed',
+    'entretien_scheduled', 'entretien_done', 'relance_done', 'note_added'
+  );
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- 3. Table events (timeline historisée)
 CREATE TABLE IF NOT EXISTS applications.events (
@@ -31,6 +29,7 @@ CREATE TABLE IF NOT EXISTS applications.events (
 -- 4. RLS
 ALTER TABLE applications.events ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "admin_only_events" ON applications.events;
 CREATE POLICY "admin_only_events"
   ON applications.events
   FOR ALL
