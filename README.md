@@ -2,7 +2,7 @@
 
 Portfolio personnel construit avec Next.js 16 App Router. Présente les projets récupérés en direct depuis GitHub, les compétences avec statistiques d'usage, une page à propos avec intro façon terminal, un formulaire de contact branché en base de données, et un dashboard d'administration privé.
 
-**Version actuelle** : v2.1.0
+**Version actuelle** : v2.1.1
 
 ---
 
@@ -18,7 +18,10 @@ Portfolio personnel construit avec Next.js 16 App Router. Présente les projets 
 | `/contact` | Formulaire de contact branché en base de données |
 | `/legal` | Mentions légales |
 | `/login` | Connexion admin (GitHub OAuth via Supabase) |
-| `/dashboard` | Home dashboard — résumé messages, statut, apprentissages |
+| `/dashboard` | Home dashboard — résumé messages, statut, apprentissages, relances |
+| `/dashboard/cv` | Données CV master (profil, expériences, compétences, projets…) |
+| `/dashboard/candidatures` | Suivi des candidatures avec timeline, entretiens, relances |
+| `/dashboard/candidatures/[id]/cv` | Générateur de CV personnalisé par candidature + export PDF |
 | `/dashboard/personnalize` | CRUD statuts de disponibilité + Currently Learning |
 | `/dashboard/contact_message` | Inbox messages reçus (3 colonnes, filtres, actions) |
 
@@ -41,8 +44,10 @@ Portfolio personnel construit avec Next.js 16 App Router. Présente les projets 
 ### Back-end & données
 
 - **ORM** : Drizzle — schémas dans `db/schemas/`, migrations dans `db/migrations/`
-- **Base de données** : Supabase (PostgreSQL managé), schéma métier `portfolio`
+- **Base de données** : Supabase (PostgreSQL managé) — schémas `portfolio`, `cv`, `applications`
 - **Auth** : Supabase Auth + GitHub OAuth — mono-utilisateur, whitelist par UUID
+- **Storage** : Supabase Storage — bucket privé `cv-pdfs`, accès via signed URLs
+- **PDF** : Puppeteer (dev) / puppeteer-core + @sparticuz/chromium (prod)
 - **API GitHub** : REST API (repos, contents) pour `/projects` et `/skills`
 
 ### Observabilité
@@ -84,9 +89,13 @@ DIRECT_URL=postgresql://...            # Direct URL (migrations Drizzle uniqueme
 # Supabase — Auth
 NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+SUPABASE_SERVICE_ROLE_KEY=eyJ...   # Jamais exposée côté client (Storage PDF)
 
 # Dashboard — UUID de l'utilisateur admin (Auth > Users dans Supabase)
 ADMIN_USER_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+# Puppeteer (dev local uniquement — laisser vide, Chromium téléchargé automatiquement)
+# CHROME_EXECUTABLE_PATH=
 ```
 
 ---

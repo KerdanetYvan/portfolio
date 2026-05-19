@@ -6,7 +6,8 @@
       "Bash(node -e \"require\\('puppeteer-core'\\); require\\('@sparticuz/chromium'\\); console.log\\('OK'\\)\")",
       "Bash(npx drizzle-kit *)",
       "Bash(Remove-Item \"e:\\\\Documents\\\\Projet Pers\\\\portfolio\\\\db\\\\migrations\\\\0008_foamy_skreet.sql\" -Force)",
-      "Bash(node -e \"const p = require\\('./package.json'\\); const deps = {...p.dependencies, ...p.devDependencies}; ['puppeteer', 'puppeteer-core', '@sparticuz/chromium'].forEach\\(k => console.log\\(k, deps[k] ?? 'NOT INSTALLED'\\)\\)\")"
+      "Bash(node -e \"const p = require\\('./package.json'\\); const deps = {...p.dependencies, ...p.devDependencies}; ['puppeteer', 'puppeteer-core', '@sparticuz/chromium'].forEach\\(k => console.log\\(k, deps[k] ?? 'NOT INSTALLED'\\)\\)\")",
+      "Bash(Test-Path \"e:\\\\Documents\\\\Projet Pers\\\\portfolio\\\\README.md\")"
     ]
   }
 }
