@@ -13,6 +13,7 @@ import {
   getProfile, getAllExperiences, getAllFormations, getAllCompetences,
   getAllSoftSkills, getAllLangues, getAllCertifications, getAllCentresInteret, getAllProjetsMeta,
 } from '@/db/queries/cv';
+import { getGitHubRepos } from '@/lib/github/repos';
 
 type PageProps = { searchParams: Promise<{ section?: string }> };
 
@@ -56,8 +57,16 @@ async function SectionContent({ section }: { section: string }) {
       return <LanguesSection initial={items} />;
     }
     case 'projets': {
-      const items = await getAllProjetsMeta();
-      return <ProjetsSection initial={items} />;
+      const [repos, metas] = await Promise.all([
+        getGitHubRepos(),
+        getAllProjetsMeta(),
+      ]);
+      const metaByRepoId = new Map(metas.map((m) => [m.github_repo_id, m]));
+      const enriched = repos.map((repo) => ({
+        ...repo,
+        meta: metaByRepoId.get(String(repo.id)) ?? null,
+      }));
+      return <ProjetsSection repos={enriched} />;
     }
     case 'certifications': {
       const items = await getAllCertifications();

@@ -8,7 +8,7 @@ import {
   RiGitRepositoryLine,
   RiGitForkLine,
 } from 'react-icons/ri';
-import type { GitHubRepo } from './page';
+import type { GitHubRepo } from '@/lib/github/repos';
 
 const LANG_COLORS: Record<string, string> = {
   TypeScript:  '#3178c6',

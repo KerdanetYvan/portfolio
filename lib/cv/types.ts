@@ -1,5 +1,15 @@
 // Types pour la configuration de CV généré par candidature
 
+export type ProjetCvData = {
+  id: string;
+  nom: string;
+  description: string;
+  technologies: string[];
+  url_repo: string;
+  url_demo: string | null;
+  inclure_par_defaut: boolean;
+};
+
 export type SectionId =
   | 'experiences'
   | 'formations'

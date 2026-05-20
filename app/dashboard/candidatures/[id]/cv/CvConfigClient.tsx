@@ -8,10 +8,10 @@ import {
 } from 'lucide-react';
 import { generateCvHtml } from '@/lib/cv/cv-template';
 import { saveCvConfig, getCvDownloadUrl } from '@/app/dashboard/candidatures/actions';
-import type { CvConfig, SectionId, SectionConfig, ItemConfig } from '@/lib/cv/types';
+import type { CvConfig, SectionId, SectionConfig, ItemConfig, ProjetCvData } from '@/lib/cv/types';
 import type {
   Profile, Experience, Formation, Competence, SoftSkill, Langue,
-  Certification, CentreInteret, ProjetMeta,
+  Certification, CentreInteret,
 } from '@/db';
 
 type CvData = {
@@ -22,7 +22,7 @@ type CvData = {
   langues:        Langue[];
   certifications: Certification[];
   centresInteret: CentreInteret[];
-  projets:        ProjetMeta[];
+  projets:        ProjetCvData[];
 };
 
 type Props = {
@@ -158,6 +158,19 @@ function SectionRow({
               )}
             </label>
           ))}
+        </div>
+      )}
+      {open && section.id === 'projets' && section.items.length === 0 && (
+        <div className="px-3 py-3 border-t border-[#1a1a1a]">
+          <p className="text-[11px] text-muted">Aucun projet dans le pool CV.</p>
+          <a
+            href="/dashboard/cv?section=projets"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 inline-flex items-center gap-1 text-[11px] text-accent hover:underline"
+          >
+            Gérer les projets GitHub →
+          </a>
         </div>
       )}
     </div>

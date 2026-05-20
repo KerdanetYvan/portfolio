@@ -260,38 +260,31 @@ export async function deleteCentreInteret(id: string) {
   revalidateAll();
 }
 
-// ─── Projets meta ─────────────────────────────────────────────────────────────
+// ─── Projets meta (liés aux repos GitHub) ─────────────────────────────────────
 
 type ProjetMetaInput = {
-  nom: string;
-  description: string;
-  technologies?: string[] | null;
-  url_demo?: string | null;
-  url_repo?: string | null;
-  visible?: boolean;
+  github_repo_id: string;
+  titre_cv?: string | null;
+  description_cv?: string | null;
+  tags?: string[] | null;
+  inclure_par_defaut?: boolean;
 };
 
-export async function createProjetMeta(data: ProjetMetaInput) {
+export async function addProjetToCV(data: ProjetMetaInput) {
   await requireAdmin();
   const [{ value: maxOrdre }] = await db.select({ value: max(projetsMeta.ordre) }).from(projetsMeta);
   await db.insert(projetsMeta).values({ ...data, ordre: (maxOrdre ?? 0) + 1 });
   revalidateAll();
 }
 
-export async function updateProjetMeta(id: string, data: ProjetMetaInput) {
+export async function updateProjetMeta(id: string, data: Omit<ProjetMetaInput, 'github_repo_id'>) {
   await requireAdmin();
-  await db.update(projetsMeta).set(data).where(eq(projetsMeta.id, id));
+  await db.update(projetsMeta).set({ ...data, date_modif: new Date() }).where(eq(projetsMeta.id, id));
   revalidateAll();
 }
 
-export async function deleteProjetMeta(id: string) {
+export async function removeProjetFromCV(id: string) {
   await requireAdmin();
   await db.delete(projetsMeta).where(eq(projetsMeta.id, id));
-  revalidateAll();
-}
-
-export async function toggleProjetMetaVisible(id: string, visible: boolean) {
-  await requireAdmin();
-  await db.update(projetsMeta).set({ visible }).where(eq(projetsMeta.id, id));
   revalidateAll();
 }

@@ -7,7 +7,14 @@
       "Bash(npx drizzle-kit *)",
       "Bash(Remove-Item \"e:\\\\Documents\\\\Projet Pers\\\\portfolio\\\\db\\\\migrations\\\\0008_foamy_skreet.sql\" -Force)",
       "Bash(node -e \"const p = require\\('./package.json'\\); const deps = {...p.dependencies, ...p.devDependencies}; ['puppeteer', 'puppeteer-core', '@sparticuz/chromium'].forEach\\(k => console.log\\(k, deps[k] ?? 'NOT INSTALLED'\\)\\)\")",
-      "Bash(Test-Path \"e:\\\\Documents\\\\Projet Pers\\\\portfolio\\\\README.md\")"
+      "Bash(Test-Path \"e:\\\\Documents\\\\Projet Pers\\\\portfolio\\\\README.md\")",
+      "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\(JSON.stringify\\(p.scripts, null, 2\\)\\)\")",
+      "Bash(node -e \"const s=require\\('./db/migrations/meta/0009_snapshot.json'\\); const tbl=s.tables['cv.projets_meta']; console.log\\(JSON.stringify\\(tbl, null, 2\\)\\)\")",
+      "Bash(node -e \"const s=require\\('./db/migrations/meta/0009_snapshot.json'\\); console.log\\(JSON.stringify\\({version: s.version, dialect: s.dialect, tableKeys: Object.keys\\(s.tables\\).slice\\(0,5\\)}, null, 2\\)\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(node -e \"const s10 = require\\('./db/migrations/meta/0010_snapshot.json'\\); const s09 = require\\('./db/migrations/meta/0009_snapshot.json'\\); console.log\\('0009 id:', s09.id\\); console.log\\('0010 id:', s10.id\\); console.log\\('0010 prevId:', s10.prevId\\);\")",
+      "Bash(cd \"/e/Documents/Projet Pers/portfolio\" && cat \"db/migrations/meta/0010_snapshot.json\" | sed 's/\"id\": \"ea36b2af-e763-4c1e-966f-6be5c5d30c39\"/\"id\": \"f1a2b3c4-d5e6-7890-abcd-ef1234567890\"/' | sed 's/\"prevId\": \"c5e8f2a1-3d74-4b29-8e0f-92a3b1c7d5e6\"/\"prevId\": \"ea36b2af-e763-4c1e-966f-6be5c5d30c39\"/' > \"db/migrations/meta/0011_snapshot.json\" && echo \"OK\")",
+      "Read(//e/e/Documents/Projet Pers/portfolio/db/migrations/meta/**)"
     ]
   }
 }

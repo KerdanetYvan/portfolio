@@ -3,7 +3,7 @@ import {
   profile, experiences, formations, competences,
   softSkills, langues, centresInteret, certifications, projetsMeta,
 } from '@/db';
-import { asc } from 'drizzle-orm';
+import { asc, desc, sql } from 'drizzle-orm';
 
 export async function getProfile() {
   try {
@@ -17,7 +17,9 @@ export async function getProfile() {
 
 export async function getAllExperiences() {
   try {
-    return await db.select().from(experiences).orderBy(asc(experiences.ordre));
+    // En cours (date_fin IS NULL) en premier, puis par date_debut DESC
+    return await db.select().from(experiences)
+      .orderBy(desc(sql`${experiences.date_fin} IS NULL`), desc(experiences.date_debut));
   } catch (err) {
     console.error('[cv/getAllExperiences]', err);
     return [];
@@ -26,7 +28,7 @@ export async function getAllExperiences() {
 
 export async function getAllFormations() {
   try {
-    return await db.select().from(formations).orderBy(asc(formations.ordre));
+    return await db.select().from(formations).orderBy(desc(formations.date_debut));
   } catch (err) {
     console.error('[cv/getAllFormations]', err);
     return [];
@@ -62,7 +64,7 @@ export async function getAllLangues() {
 
 export async function getAllCertifications() {
   try {
-    return await db.select().from(certifications).orderBy(asc(certifications.ordre));
+    return await db.select().from(certifications).orderBy(desc(certifications.date_obtention));
   } catch (err) {
     console.error('[cv/getAllCertifications]', err);
     return [];

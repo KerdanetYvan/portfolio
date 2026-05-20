@@ -6,9 +6,10 @@ import {
   getProfile, getAllExperiences, getAllFormations, getAllCompetences,
   getAllSoftSkills, getAllLangues, getAllCertifications, getAllCentresInteret, getAllProjetsMeta,
 } from '@/db/queries/cv';
+import { getGitHubRepos } from '@/lib/github/repos';
 import { generateCvHtml } from '@/lib/cv/cv-template';
 import { uploadCvPdf } from '@/lib/supabase/storage';
-import type { CvConfig } from '@/lib/cv/types';
+import type { CvConfig, ProjetCvData } from '@/lib/cv/types';
 
 export const maxDuration = 60;
 
@@ -90,11 +91,30 @@ export async function POST(req: NextRequest) {
   // ── 2. Charger toutes les données CV ─────────────────────────────────────────
   const [
     profile, experiences, formations, competences,
-    softSkills, langues, certifications, centresInteret, projets,
+    softSkills, langues, certifications, centresInteret, projetsMeta, githubRepos,
   ] = await Promise.all([
     getProfile(), getAllExperiences(), getAllFormations(), getAllCompetences(),
-    getAllSoftSkills(), getAllLangues(), getAllCertifications(), getAllCentresInteret(), getAllProjetsMeta(),
+    getAllSoftSkills(), getAllLangues(), getAllCertifications(), getAllCentresInteret(),
+    getAllProjetsMeta(),
+    Promise.race([getGitHubRepos(), new Promise<[]>((resolve) => setTimeout(() => resolve([]), 5000))]),
   ]);
+
+  const repoById = new Map(githubRepos.map((r) => [String(r.id), r]));
+  const projets: ProjetCvData[] = projetsMeta.map((meta) => {
+    const repo = repoById.get(meta.github_repo_id);
+    return {
+      id:                 meta.id,
+      nom:                meta.titre_cv ?? repo?.name ?? meta.github_repo_id,
+      description:        meta.description_cv ?? repo?.description ?? '',
+      technologies:       [
+        ...(meta.tags ?? []),
+        ...(repo?.language && !(meta.tags ?? []).includes(repo.language) ? [repo.language] : []),
+      ],
+      url_repo:           repo?.html_url ?? '',
+      url_demo:           repo?.homepage ?? null,
+      inclure_par_defaut: meta.inclure_par_defaut,
+    };
+  });
 
   // ── 3. Générer le HTML ────────────────────────────────────────────────────────
   console.log('[cv/generate] génération HTML...');
@@ -117,14 +137,17 @@ export async function POST(req: NextRequest) {
     page.setDefaultNavigationTimeout(30_000);
 
     console.log('[cv/generate] setContent...');
-    await page.setContent(html, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+    // networkidle0 nécessaire pour charger les Google Fonts (Inter + JetBrains Mono)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await page.setContent(html, { waitUntil: 'networkidle0' as any, timeout: 55_000 });
     console.log('[cv/generate] setContent OK');
 
     console.log('[cv/generate] génération PDF...');
     const pdfUint8 = await page.pdf({
       format: 'A4',
       printBackground: true,
-      margin: { top: '14mm', right: '16mm', bottom: '14mm', left: '16mm' },
+      // Marges à 0 : le template gère son propre padding via CSS (@page { margin: 0 })
+      margin: { top: '0', right: '0', bottom: '0', left: '0' },
       displayHeaderFooter: false,
     });
     console.log('[cv/generate] PDF prêt (%d bytes)', pdfUint8.byteLength);

@@ -1,0 +1,1394 @@
+﻿{
+    "id":  "a1b2c3d4-e5f6-7890-abcd-012345678901",
+    "prevId":  "f1a2b3c4-d5e6-7890-abcd-ef1234567890",
+    "version":  "7",
+    "dialect":  "postgresql",
+    "tables":  {
+                   "applications.candidature_cv":  {
+                                                       "name":  "candidature_cv",
+                                                       "schema":  "applications",
+                                                       "columns":  {
+                                                                       "id":  {
+                                                                                  "name":  "id",
+                                                                                  "type":  "uuid",
+                                                                                  "primaryKey":  true,
+                                                                                  "notNull":  true,
+                                                                                  "default":  "gen_random_uuid()"
+                                                                              },
+                                                                       "candidature_id":  {
+                                                                                              "name":  "candidature_id",
+                                                                                              "type":  "uuid",
+                                                                                              "primaryKey":  false,
+                                                                                              "notNull":  true
+                                                                                          },
+                                                                       "contenu_json":  {
+                                                                                            "name":  "contenu_json",
+                                                                                            "type":  "jsonb",
+                                                                                            "primaryKey":  false,
+                                                                                            "notNull":  true
+                                                                                        },
+                                                                       "nom_fichier":  {
+                                                                                           "name":  "nom_fichier",
+                                                                                           "type":  "text",
+                                                                                           "primaryKey":  false,
+                                                                                           "notNull":  false
+                                                                                       },
+                                                                       "created_at":  {
+                                                                                          "name":  "created_at",
+                                                                                          "type":  "timestamp with time zone",
+                                                                                          "primaryKey":  false,
+                                                                                          "notNull":  true,
+                                                                                          "default":  "now()"
+                                                                                      }
+                                                                   },
+                                                       "indexes":  {
+
+                                                                   },
+                                                       "foreignKeys":  {
+                                                                           "candidature_cv_candidature_id_candidatures_id_fk":  {
+                                                                                                                                    "name":  "candidature_cv_candidature_id_candidatures_id_fk",
+                                                                                                                                    "tableFrom":  "candidature_cv",
+                                                                                                                                    "tableTo":  "candidatures",
+                                                                                                                                    "schemaTo":  "applications",
+                                                                                                                                    "columnsFrom":  [
+                                                                                                                                                        "candidature_id"
+                                                                                                                                                    ],
+                                                                                                                                    "columnsTo":  [
+                                                                                                                                                      "id"
+                                                                                                                                                  ],
+                                                                                                                                    "onDelete":  "cascade",
+                                                                                                                                    "onUpdate":  "no action"
+                                                                                                                                }
+                                                                       },
+                                                       "compositePrimaryKeys":  {
+
+                                                                                },
+                                                       "uniqueConstraints":  {
+
+                                                                             },
+                                                       "policies":  {
+
+                                                                    },
+                                                       "checkConstraints":  {
+
+                                                                            },
+                                                       "isRLSEnabled":  false
+                                                   },
+                   "applications.candidatures":  {
+                                                     "name":  "candidatures",
+                                                     "schema":  "applications",
+                                                     "columns":  {
+                                                                     "id":  {
+                                                                                "name":  "id",
+                                                                                "type":  "uuid",
+                                                                                "primaryKey":  true,
+                                                                                "notNull":  true,
+                                                                                "default":  "gen_random_uuid()"
+                                                                            },
+                                                                     "entreprise":  {
+                                                                                        "name":  "entreprise",
+                                                                                        "type":  "text",
+                                                                                        "primaryKey":  false,
+                                                                                        "notNull":  true
+                                                                                    },
+                                                                     "poste":  {
+                                                                                   "name":  "poste",
+                                                                                   "type":  "text",
+                                                                                   "primaryKey":  false,
+                                                                                   "notNull":  true
+                                                                               },
+                                                                     "type_poste":  {
+                                                                                        "name":  "type_poste",
+                                                                                        "type":  "type_poste",
+                                                                                        "typeSchema":  "applications",
+                                                                                        "primaryKey":  false,
+                                                                                        "notNull":  true
+                                                                                    },
+                                                                     "localisation":  {
+                                                                                          "name":  "localisation",
+                                                                                          "type":  "text",
+                                                                                          "primaryKey":  false,
+                                                                                          "notNull":  false
+                                                                                      },
+                                                                     "url_offre":  {
+                                                                                       "name":  "url_offre",
+                                                                                       "type":  "text",
+                                                                                       "primaryKey":  false,
+                                                                                       "notNull":  false
+                                                                                   },
+                                                                     "detail_offre":  {
+                                                                                          "name":  "detail_offre",
+                                                                                          "type":  "text",
+                                                                                          "primaryKey":  false,
+                                                                                          "notNull":  false
+                                                                                      },
+                                                                     "statut":  {
+                                                                                    "name":  "statut",
+                                                                                    "type":  "statut",
+                                                                                    "typeSchema":  "applications",
+                                                                                    "primaryKey":  false,
+                                                                                    "notNull":  true,
+                                                                                    "default":  "\u0027a_envoyer\u0027"
+                                                                                },
+                                                                     "date_candidature":  {
+                                                                                              "name":  "date_candidature",
+                                                                                              "type":  "date",
+                                                                                              "primaryKey":  false,
+                                                                                              "notNull":  false
+                                                                                          },
+                                                                     "date_relance":  {
+                                                                                          "name":  "date_relance",
+                                                                                          "type":  "date",
+                                                                                          "primaryKey":  false,
+                                                                                          "notNull":  false
+                                                                                      },
+                                                                     "relance_effectuee":  {
+                                                                                               "name":  "relance_effectuee",
+                                                                                               "type":  "boolean",
+                                                                                               "primaryKey":  false,
+                                                                                               "notNull":  true,
+                                                                                               "default":  false
+                                                                                           },
+                                                                     "contact_nom":  {
+                                                                                         "name":  "contact_nom",
+                                                                                         "type":  "text",
+                                                                                         "primaryKey":  false,
+                                                                                         "notNull":  false
+                                                                                     },
+                                                                     "contact_email":  {
+                                                                                           "name":  "contact_email",
+                                                                                           "type":  "text",
+                                                                                           "primaryKey":  false,
+                                                                                           "notNull":  false
+                                                                                       },
+                                                                     "contact_linkedin":  {
+                                                                                              "name":  "contact_linkedin",
+                                                                                              "type":  "text",
+                                                                                              "primaryKey":  false,
+                                                                                              "notNull":  false
+                                                                                          },
+                                                                     "salaire_cible":  {
+                                                                                           "name":  "salaire_cible",
+                                                                                           "type":  "integer",
+                                                                                           "primaryKey":  false,
+                                                                                           "notNull":  false
+                                                                                       },
+                                                                     "notes":  {
+                                                                                   "name":  "notes",
+                                                                                   "type":  "text",
+                                                                                   "primaryKey":  false,
+                                                                                   "notNull":  false
+                                                                               },
+                                                                     "created_at":  {
+                                                                                        "name":  "created_at",
+                                                                                        "type":  "timestamp with time zone",
+                                                                                        "primaryKey":  false,
+                                                                                        "notNull":  true,
+                                                                                        "default":  "now()"
+                                                                                    },
+                                                                     "updated_at":  {
+                                                                                        "name":  "updated_at",
+                                                                                        "type":  "timestamp with time zone",
+                                                                                        "primaryKey":  false,
+                                                                                        "notNull":  true,
+                                                                                        "default":  "now()"
+                                                                                    }
+                                                                 },
+                                                     "indexes":  {
+
+                                                                 },
+                                                     "foreignKeys":  {
+
+                                                                     },
+                                                     "compositePrimaryKeys":  {
+
+                                                                              },
+                                                     "uniqueConstraints":  {
+
+                                                                           },
+                                                     "policies":  {
+
+                                                                  },
+                                                     "checkConstraints":  {
+
+                                                                          },
+                                                     "isRLSEnabled":  false
+                                                 },
+                   "applications.entretiens":  {
+                                                   "name":  "entretiens",
+                                                   "schema":  "applications",
+                                                   "columns":  {
+                                                                   "id":  {
+                                                                              "name":  "id",
+                                                                              "type":  "uuid",
+                                                                              "primaryKey":  true,
+                                                                              "notNull":  true,
+                                                                              "default":  "gen_random_uuid()"
+                                                                          },
+                                                                   "candidature_id":  {
+                                                                                          "name":  "candidature_id",
+                                                                                          "type":  "uuid",
+                                                                                          "primaryKey":  false,
+                                                                                          "notNull":  true
+                                                                                      },
+                                                                   "type":  {
+                                                                                "name":  "type",
+                                                                                "type":  "entretien_type",
+                                                                                "typeSchema":  "applications",
+                                                                                "primaryKey":  false,
+                                                                                "notNull":  true
+                                                                            },
+                                                                   "status":  {
+                                                                                  "name":  "status",
+                                                                                  "type":  "entretien_status",
+                                                                                  "typeSchema":  "applications",
+                                                                                  "primaryKey":  false,
+                                                                                  "notNull":  true,
+                                                                                  "default":  "\u0027prevu\u0027"
+                                                                              },
+                                                                   "date_entretien":  {
+                                                                                          "name":  "date_entretien",
+                                                                                          "type":  "timestamp with time zone",
+                                                                                          "primaryKey":  false,
+                                                                                          "notNull":  true
+                                                                                      },
+                                                                   "contact":  {
+                                                                                   "name":  "contact",
+                                                                                   "type":  "text",
+                                                                                   "primaryKey":  false,
+                                                                                   "notNull":  false
+                                                                               },
+                                                                   "notes":  {
+                                                                                 "name":  "notes",
+                                                                                 "type":  "text",
+                                                                                 "primaryKey":  false,
+                                                                                 "notNull":  false
+                                                                             },
+                                                                   "created_at":  {
+                                                                                      "name":  "created_at",
+                                                                                      "type":  "timestamp with time zone",
+                                                                                      "primaryKey":  false,
+                                                                                      "notNull":  true,
+                                                                                      "default":  "now()"
+                                                                                  }
+                                                               },
+                                                   "indexes":  {
+
+                                                               },
+                                                   "foreignKeys":  {
+                                                                       "entretiens_candidature_id_candidatures_id_fk":  {
+                                                                                                                            "name":  "entretiens_candidature_id_candidatures_id_fk",
+                                                                                                                            "tableFrom":  "entretiens",
+                                                                                                                            "tableTo":  "candidatures",
+                                                                                                                            "schemaTo":  "applications",
+                                                                                                                            "columnsFrom":  [
+                                                                                                                                                "candidature_id"
+                                                                                                                                            ],
+                                                                                                                            "columnsTo":  [
+                                                                                                                                              "id"
+                                                                                                                                          ],
+                                                                                                                            "onDelete":  "cascade",
+                                                                                                                            "onUpdate":  "no action"
+                                                                                                                        }
+                                                                   },
+                                                   "compositePrimaryKeys":  {
+
+                                                                            },
+                                                   "uniqueConstraints":  {
+
+                                                                         },
+                                                   "policies":  {
+
+                                                                },
+                                                   "checkConstraints":  {
+
+                                                                        },
+                                                   "isRLSEnabled":  false
+                                               },
+                   "applications.events":  {
+                                               "name":  "events",
+                                               "schema":  "applications",
+                                               "columns":  {
+                                                               "id":  {
+                                                                          "name":  "id",
+                                                                          "type":  "uuid",
+                                                                          "primaryKey":  true,
+                                                                          "notNull":  true,
+                                                                          "default":  "gen_random_uuid()"
+                                                                      },
+                                                               "candidature_id":  {
+                                                                                      "name":  "candidature_id",
+                                                                                      "type":  "uuid",
+                                                                                      "primaryKey":  false,
+                                                                                      "notNull":  true
+                                                                                  },
+                                                               "type":  {
+                                                                            "name":  "type",
+                                                                            "type":  "event_type",
+                                                                            "typeSchema":  "applications",
+                                                                            "primaryKey":  false,
+                                                                            "notNull":  true
+                                                                        },
+                                                               "description":  {
+                                                                                   "name":  "description",
+                                                                                   "type":  "text",
+                                                                                   "primaryKey":  false,
+                                                                                   "notNull":  false
+                                                                               },
+                                                               "date":  {
+                                                                            "name":  "date",
+                                                                            "type":  "timestamp with time zone",
+                                                                            "primaryKey":  false,
+                                                                            "notNull":  true,
+                                                                            "default":  "now()"
+                                                                        },
+                                                               "metadata":  {
+                                                                                "name":  "metadata",
+                                                                                "type":  "jsonb",
+                                                                                "primaryKey":  false,
+                                                                                "notNull":  false
+                                                                            }
+                                                           },
+                                               "indexes":  {
+
+                                                           },
+                                               "foreignKeys":  {
+                                                                   "events_candidature_id_candidatures_id_fk":  {
+                                                                                                                    "name":  "events_candidature_id_candidatures_id_fk",
+                                                                                                                    "tableFrom":  "events",
+                                                                                                                    "tableTo":  "candidatures",
+                                                                                                                    "schemaTo":  "applications",
+                                                                                                                    "columnsFrom":  [
+                                                                                                                                        "candidature_id"
+                                                                                                                                    ],
+                                                                                                                    "columnsTo":  [
+                                                                                                                                      "id"
+                                                                                                                                  ],
+                                                                                                                    "onDelete":  "cascade",
+                                                                                                                    "onUpdate":  "no action"
+                                                                                                                }
+                                                               },
+                                               "compositePrimaryKeys":  {
+
+                                                                        },
+                                               "uniqueConstraints":  {
+
+                                                                     },
+                                               "policies":  {
+
+                                                            },
+                                               "checkConstraints":  {
+
+                                                                    },
+                                               "isRLSEnabled":  false
+                                           },
+                   "cv.centres_interet":  {
+                                              "name":  "centres_interet",
+                                              "schema":  "cv",
+                                              "columns":  {
+                                                              "id":  {
+                                                                         "name":  "id",
+                                                                         "type":  "uuid",
+                                                                         "primaryKey":  true,
+                                                                         "notNull":  true,
+                                                                         "default":  "gen_random_uuid()"
+                                                                     },
+                                                              "libelle":  {
+                                                                              "name":  "libelle",
+                                                                              "type":  "text",
+                                                                              "primaryKey":  false,
+                                                                              "notNull":  true
+                                                                          },
+                                                              "ordre":  {
+                                                                            "name":  "ordre",
+                                                                            "type":  "integer",
+                                                                            "primaryKey":  false,
+                                                                            "notNull":  true,
+                                                                            "default":  0
+                                                                        }
+                                                          },
+                                              "indexes":  {
+
+                                                          },
+                                              "foreignKeys":  {
+
+                                                              },
+                                              "compositePrimaryKeys":  {
+
+                                                                       },
+                                              "uniqueConstraints":  {
+
+                                                                    },
+                                              "policies":  {
+
+                                                           },
+                                              "checkConstraints":  {
+
+                                                                   },
+                                              "isRLSEnabled":  false
+                                          },
+                   "cv.certifications":  {
+                                             "name":  "certifications",
+                                             "schema":  "cv",
+                                             "columns":  {
+                                                             "id":  {
+                                                                        "name":  "id",
+                                                                        "type":  "uuid",
+                                                                        "primaryKey":  true,
+                                                                        "notNull":  true,
+                                                                        "default":  "gen_random_uuid()"
+                                                                    },
+                                                             "nom":  {
+                                                                         "name":  "nom",
+                                                                         "type":  "text",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true
+                                                                     },
+                                                             "organisme":  {
+                                                                               "name":  "organisme",
+                                                                               "type":  "text",
+                                                                               "primaryKey":  false,
+                                                                               "notNull":  true
+                                                                           },
+                                                             "date_obtention":  {
+                                                                                    "name":  "date_obtention",
+                                                                                    "type":  "date",
+                                                                                    "primaryKey":  false,
+                                                                                    "notNull":  true
+                                                                                },
+                                                             "url":  {
+                                                                         "name":  "url",
+                                                                         "type":  "text",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  false
+                                                                     },
+                                                             "ordre":  {
+                                                                           "name":  "ordre",
+                                                                           "type":  "integer",
+                                                                           "primaryKey":  false,
+                                                                           "notNull":  true,
+                                                                           "default":  0
+                                                                       },
+                                                             "visible":  {
+                                                                             "name":  "visible",
+                                                                             "type":  "boolean",
+                                                                             "primaryKey":  false,
+                                                                             "notNull":  true,
+                                                                             "default":  true
+                                                                         }
+                                                         },
+                                             "indexes":  {
+
+                                                         },
+                                             "foreignKeys":  {
+
+                                                             },
+                                             "compositePrimaryKeys":  {
+
+                                                                      },
+                                             "uniqueConstraints":  {
+
+                                                                   },
+                                             "policies":  {
+
+                                                          },
+                                             "checkConstraints":  {
+
+                                                                  },
+                                             "isRLSEnabled":  false
+                                         },
+                   "cv.competences":  {
+                                          "name":  "competences",
+                                          "schema":  "cv",
+                                          "columns":  {
+                                                          "id":  {
+                                                                     "name":  "id",
+                                                                     "type":  "uuid",
+                                                                     "primaryKey":  true,
+                                                                     "notNull":  true,
+                                                                     "default":  "gen_random_uuid()"
+                                                                 },
+                                                          "nom":  {
+                                                                      "name":  "nom",
+                                                                      "type":  "text",
+                                                                      "primaryKey":  false,
+                                                                      "notNull":  true
+                                                                  },
+                                                          "categorie":  {
+                                                                            "name":  "categorie",
+                                                                            "type":  "competence_categorie",
+                                                                            "typeSchema":  "cv",
+                                                                            "primaryKey":  false,
+                                                                            "notNull":  true
+                                                                        },
+                                                          "niveau":  {
+                                                                         "name":  "niveau",
+                                                                         "type":  "competence_niveau",
+                                                                         "typeSchema":  "cv",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true
+                                                                     },
+                                                          "ordre":  {
+                                                                        "name":  "ordre",
+                                                                        "type":  "integer",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  true,
+                                                                        "default":  0
+                                                                    },
+                                                          "visible":  {
+                                                                          "name":  "visible",
+                                                                          "type":  "boolean",
+                                                                          "primaryKey":  false,
+                                                                          "notNull":  true,
+                                                                          "default":  true
+                                                                      }
+                                                      },
+                                          "indexes":  {
+
+                                                      },
+                                          "foreignKeys":  {
+
+                                                          },
+                                          "compositePrimaryKeys":  {
+
+                                                                   },
+                                          "uniqueConstraints":  {
+
+                                                                },
+                                          "policies":  {
+
+                                                       },
+                                          "checkConstraints":  {
+
+                                                               },
+                                          "isRLSEnabled":  false
+                                      },
+                   "cv.experiences":  {
+                                          "name":  "experiences",
+                                          "schema":  "cv",
+                                          "columns":  {
+                                                          "id":  {
+                                                                     "name":  "id",
+                                                                     "type":  "uuid",
+                                                                     "primaryKey":  true,
+                                                                     "notNull":  true,
+                                                                     "default":  "gen_random_uuid()"
+                                                                 },
+                                                          "entreprise":  {
+                                                                             "name":  "entreprise",
+                                                                             "type":  "text",
+                                                                             "primaryKey":  false,
+                                                                             "notNull":  true
+                                                                         },
+                                                          "poste":  {
+                                                                        "name":  "poste",
+                                                                        "type":  "text",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  true
+                                                                    },
+                                                          "description":  {
+                                                                              "name":  "description",
+                                                                              "type":  "text",
+                                                                              "primaryKey":  false,
+                                                                              "notNull":  true
+                                                                          },
+                                                          "date_debut":  {
+                                                                             "name":  "date_debut",
+                                                                             "type":  "date",
+                                                                             "primaryKey":  false,
+                                                                             "notNull":  true
+                                                                         },
+                                                          "date_fin":  {
+                                                                           "name":  "date_fin",
+                                                                           "type":  "date",
+                                                                           "primaryKey":  false,
+                                                                           "notNull":  false
+                                                                       },
+                                                          "localisation":  {
+                                                                               "name":  "localisation",
+                                                                               "type":  "text",
+                                                                               "primaryKey":  false,
+                                                                               "notNull":  false
+                                                                           },
+                                                          "technologies":  {
+                                                                               "name":  "technologies",
+                                                                               "type":  "text[]",
+                                                                               "primaryKey":  false,
+                                                                               "notNull":  false
+                                                                           },
+                                                          "ordre":  {
+                                                                        "name":  "ordre",
+                                                                        "type":  "integer",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  true,
+                                                                        "default":  0
+                                                                    },
+                                                          "visible":  {
+                                                                          "name":  "visible",
+                                                                          "type":  "boolean",
+                                                                          "primaryKey":  false,
+                                                                          "notNull":  true,
+                                                                          "default":  true
+                                                                      }
+                                                      },
+                                          "indexes":  {
+
+                                                      },
+                                          "foreignKeys":  {
+
+                                                          },
+                                          "compositePrimaryKeys":  {
+
+                                                                   },
+                                          "uniqueConstraints":  {
+
+                                                                },
+                                          "policies":  {
+
+                                                       },
+                                          "checkConstraints":  {
+
+                                                               },
+                                          "isRLSEnabled":  false
+                                      },
+                   "cv.formations":  {
+                                         "name":  "formations",
+                                         "schema":  "cv",
+                                         "columns":  {
+                                                         "id":  {
+                                                                    "name":  "id",
+                                                                    "type":  "uuid",
+                                                                    "primaryKey":  true,
+                                                                    "notNull":  true,
+                                                                    "default":  "gen_random_uuid()"
+                                                                },
+                                                         "etablissement":  {
+                                                                               "name":  "etablissement",
+                                                                               "type":  "text",
+                                                                               "primaryKey":  false,
+                                                                               "notNull":  true
+                                                                           },
+                                                         "diplome":  {
+                                                                         "name":  "diplome",
+                                                                         "type":  "text",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true
+                                                                     },
+                                                         "domaine":  {
+                                                                         "name":  "domaine",
+                                                                         "type":  "text",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  false
+                                                                     },
+                                                         "date_debut":  {
+                                                                            "name":  "date_debut",
+                                                                            "type":  "date",
+                                                                            "primaryKey":  false,
+                                                                            "notNull":  true
+                                                                        },
+                                                         "date_fin":  {
+                                                                          "name":  "date_fin",
+                                                                          "type":  "date",
+                                                                          "primaryKey":  false,
+                                                                          "notNull":  false
+                                                                      },
+                                                         "ordre":  {
+                                                                       "name":  "ordre",
+                                                                       "type":  "integer",
+                                                                       "primaryKey":  false,
+                                                                       "notNull":  true,
+                                                                       "default":  0
+                                                                   },
+                                                         "visible":  {
+                                                                         "name":  "visible",
+                                                                         "type":  "boolean",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true,
+                                                                         "default":  true
+                                                                     }
+                                                     },
+                                         "indexes":  {
+
+                                                     },
+                                         "foreignKeys":  {
+
+                                                         },
+                                         "compositePrimaryKeys":  {
+
+                                                                  },
+                                         "uniqueConstraints":  {
+
+                                                               },
+                                         "policies":  {
+
+                                                      },
+                                         "checkConstraints":  {
+
+                                                              },
+                                         "isRLSEnabled":  false
+                                     },
+                   "cv.langues":  {
+                                      "name":  "langues",
+                                      "schema":  "cv",
+                                      "columns":  {
+                                                      "id":  {
+                                                                 "name":  "id",
+                                                                 "type":  "uuid",
+                                                                 "primaryKey":  true,
+                                                                 "notNull":  true,
+                                                                 "default":  "gen_random_uuid()"
+                                                             },
+                                                      "langue":  {
+                                                                     "name":  "langue",
+                                                                     "type":  "text",
+                                                                     "primaryKey":  false,
+                                                                     "notNull":  true
+                                                                 },
+                                                      "niveau":  {
+                                                                     "name":  "niveau",
+                                                                     "type":  "langue_niveau",
+                                                                     "typeSchema":  "cv",
+                                                                     "primaryKey":  false,
+                                                                     "notNull":  true
+                                                                 },
+                                                      "ordre":  {
+                                                                    "name":  "ordre",
+                                                                    "type":  "integer",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  true,
+                                                                    "default":  0
+                                                                }
+                                                  },
+                                      "indexes":  {
+
+                                                  },
+                                      "foreignKeys":  {
+
+                                                      },
+                                      "compositePrimaryKeys":  {
+
+                                                               },
+                                      "uniqueConstraints":  {
+
+                                                            },
+                                      "policies":  {
+
+                                                   },
+                                      "checkConstraints":  {
+
+                                                           },
+                                      "isRLSEnabled":  false
+                                  },
+                   "cv.profile":  {
+                                      "name":  "profile",
+                                      "schema":  "cv",
+                                      "columns":  {
+                                                      "id":  {
+                                                                 "name":  "id",
+                                                                 "type":  "uuid",
+                                                                 "primaryKey":  true,
+                                                                 "notNull":  true,
+                                                                 "default":  "gen_random_uuid()"
+                                                             },
+                                                      "nom":  {
+                                                                  "name":  "nom",
+                                                                  "type":  "text",
+                                                                  "primaryKey":  false,
+                                                                  "notNull":  true
+                                                              },
+                                                      "prenom":  {
+                                                                     "name":  "prenom",
+                                                                     "type":  "text",
+                                                                     "primaryKey":  false,
+                                                                     "notNull":  true
+                                                                 },
+                                                      "titre":  {
+                                                                    "name":  "titre",
+                                                                    "type":  "text",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  true
+                                                                },
+                                                      "email":  {
+                                                                    "name":  "email",
+                                                                    "type":  "text",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  true
+                                                                },
+                                                      "telephone":  {
+                                                                        "name":  "telephone",
+                                                                        "type":  "text",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  false
+                                                                    },
+                                                      "localisation":  {
+                                                                           "name":  "localisation",
+                                                                           "type":  "text",
+                                                                           "primaryKey":  false,
+                                                                           "notNull":  false
+                                                                       },
+                                                      "linkedin_url":  {
+                                                                           "name":  "linkedin_url",
+                                                                           "type":  "text",
+                                                                           "primaryKey":  false,
+                                                                           "notNull":  false
+                                                                       },
+                                                      "github_url":  {
+                                                                         "name":  "github_url",
+                                                                         "type":  "text",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  false
+                                                                     },
+                                                      "portfolio_url":  {
+                                                                            "name":  "portfolio_url",
+                                                                            "type":  "text",
+                                                                            "primaryKey":  false,
+                                                                            "notNull":  false
+                                                                        },
+                                                      "bio":  {
+                                                                  "name":  "bio",
+                                                                  "type":  "text",
+                                                                  "primaryKey":  false,
+                                                                  "notNull":  false
+                                                              },
+                                                      "updated_at":  {
+                                                                         "name":  "updated_at",
+                                                                         "type":  "timestamp with time zone",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true,
+                                                                         "default":  "now()"
+                                                                     }
+                                                  },
+                                      "indexes":  {
+
+                                                  },
+                                      "foreignKeys":  {
+
+                                                      },
+                                      "compositePrimaryKeys":  {
+
+                                                               },
+                                      "uniqueConstraints":  {
+
+                                                            },
+                                      "policies":  {
+
+                                                   },
+                                      "checkConstraints":  {
+
+                                                           },
+                                      "isRLSEnabled":  false
+                                  },
+                   "cv.projets_meta":  {
+                                           "name":  "projets_meta",
+                                           "schema":  "cv",
+                                           "columns":  {
+                                                           "id":  {
+                                                                      "name":  "id",
+                                                                      "type":  "uuid",
+                                                                      "primaryKey":  true,
+                                                                      "notNull":  true,
+                                                                      "default":  "gen_random_uuid()"
+                                                                  },
+                                                           "ordre":  {
+                                                                         "name":  "ordre",
+                                                                         "type":  "integer",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true,
+                                                                         "default":  0
+                                                                     },
+                                                           "github_repo_id":  {
+                                                                                  "name":  "github_repo_id",
+                                                                                  "type":  "text",
+                                                                                  "primaryKey":  false,
+                                                                                  "notNull":  true
+                                                                              },
+                                                           "titre_cv":  {
+                                                                            "name":  "titre_cv",
+                                                                            "type":  "text",
+                                                                            "primaryKey":  false,
+                                                                            "notNull":  false
+                                                                        },
+                                                           "description_cv":  {
+                                                                                  "name":  "description_cv",
+                                                                                  "type":  "text",
+                                                                                  "primaryKey":  false,
+                                                                                  "notNull":  false
+                                                                              },
+                                                           "tags":  {
+                                                                        "name":  "tags",
+                                                                        "type":  "text[]",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  false
+                                                                    },
+                                                           "inclure_par_defaut":  {
+                                                                                      "name":  "inclure_par_defaut",
+                                                                                      "type":  "boolean",
+                                                                                      "primaryKey":  false,
+                                                                                      "notNull":  true,
+                                                                                      "default":  false
+                                                                                  },
+                                                           "date_modif":  {
+                                                                              "name":  "date_modif",
+                                                                              "type":  "timestamp with time zone",
+                                                                              "primaryKey":  false,
+                                                                              "notNull":  true,
+                                                                              "default":  "now()"
+                                                                          }
+                                                       },
+                                           "indexes":  {
+
+                                                       },
+                                           "foreignKeys":  {
+
+                                                           },
+                                           "compositePrimaryKeys":  {
+
+                                                                    },
+                                           "uniqueConstraints":  {
+                                                                     "projets_meta_github_repo_id_unique":  {
+                                                                                                                "name":  "projets_meta_github_repo_id_unique",
+                                                                                                                "nullsNotDistinct":  false,
+                                                                                                                "columns":  [
+                                                                                                                                "github_repo_id"
+                                                                                                                            ]
+                                                                                                            }
+                                                                 },
+                                           "policies":  {
+
+                                                        },
+                                           "checkConstraints":  {
+
+                                                                },
+                                           "isRLSEnabled":  false
+                                       },
+                   "cv.soft_skills":  {
+                                          "name":  "soft_skills",
+                                          "schema":  "cv",
+                                          "columns":  {
+                                                          "id":  {
+                                                                     "name":  "id",
+                                                                     "type":  "uuid",
+                                                                     "primaryKey":  true,
+                                                                     "notNull":  true,
+                                                                     "default":  "gen_random_uuid()"
+                                                                 },
+                                                          "libelle":  {
+                                                                          "name":  "libelle",
+                                                                          "type":  "text",
+                                                                          "primaryKey":  false,
+                                                                          "notNull":  true
+                                                                      },
+                                                          "ordre":  {
+                                                                        "name":  "ordre",
+                                                                        "type":  "integer",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  true,
+                                                                        "default":  0
+                                                                    }
+                                                      },
+                                          "indexes":  {
+
+                                                      },
+                                          "foreignKeys":  {
+
+                                                          },
+                                          "compositePrimaryKeys":  {
+
+                                                                   },
+                                          "uniqueConstraints":  {
+
+                                                                },
+                                          "policies":  {
+
+                                                       },
+                                          "checkConstraints":  {
+
+                                                               },
+                                          "isRLSEnabled":  false
+                                      },
+                   "portfolio.contact_messages":  {
+                                                      "name":  "contact_messages",
+                                                      "schema":  "portfolio",
+                                                      "columns":  {
+                                                                      "id":  {
+                                                                                 "name":  "id",
+                                                                                 "type":  "uuid",
+                                                                                 "primaryKey":  true,
+                                                                                 "notNull":  true,
+                                                                                 "default":  "gen_random_uuid()"
+                                                                             },
+                                                                      "nom":  {
+                                                                                  "name":  "nom",
+                                                                                  "type":  "text",
+                                                                                  "primaryKey":  false,
+                                                                                  "notNull":  true
+                                                                              },
+                                                                      "email":  {
+                                                                                    "name":  "email",
+                                                                                    "type":  "text",
+                                                                                    "primaryKey":  false,
+                                                                                    "notNull":  true
+                                                                                },
+                                                                      "type_demande":  {
+                                                                                           "name":  "type_demande",
+                                                                                           "type":  "type_demande",
+                                                                                           "typeSchema":  "portfolio",
+                                                                                           "primaryKey":  false,
+                                                                                           "notNull":  true
+                                                                                       },
+                                                                      "entreprise":  {
+                                                                                         "name":  "entreprise",
+                                                                                         "type":  "text",
+                                                                                         "primaryKey":  false,
+                                                                                         "notNull":  false
+                                                                                     },
+                                                                      "message":  {
+                                                                                      "name":  "message",
+                                                                                      "type":  "text",
+                                                                                      "primaryKey":  false,
+                                                                                      "notNull":  true
+                                                                                  },
+                                                                      "date_reception":  {
+                                                                                             "name":  "date_reception",
+                                                                                             "type":  "timestamp with time zone",
+                                                                                             "primaryKey":  false,
+                                                                                             "notNull":  true,
+                                                                                             "default":  "now()"
+                                                                                         },
+                                                                      "statut":  {
+                                                                                     "name":  "statut",
+                                                                                     "type":  "statut_contact",
+                                                                                     "typeSchema":  "portfolio",
+                                                                                     "primaryKey":  false,
+                                                                                     "notNull":  true,
+                                                                                     "default":  "\u0027non_lu\u0027"
+                                                                                 }
+                                                                  },
+                                                      "indexes":  {
+
+                                                                  },
+                                                      "foreignKeys":  {
+
+                                                                      },
+                                                      "compositePrimaryKeys":  {
+
+                                                                               },
+                                                      "uniqueConstraints":  {
+
+                                                                            },
+                                                      "policies":  {
+
+                                                                   },
+                                                      "checkConstraints":  {
+
+                                                                           },
+                                                      "isRLSEnabled":  false
+                                                  },
+                   "portfolio.learning_items":  {
+                                                    "name":  "learning_items",
+                                                    "schema":  "portfolio",
+                                                    "columns":  {
+                                                                    "id":  {
+                                                                               "name":  "id",
+                                                                               "type":  "uuid",
+                                                                               "primaryKey":  true,
+                                                                               "notNull":  true,
+                                                                               "default":  "gen_random_uuid()"
+                                                                           },
+                                                                    "nom":  {
+                                                                                "name":  "nom",
+                                                                                "type":  "text",
+                                                                                "primaryKey":  false,
+                                                                                "notNull":  true
+                                                                            },
+                                                                    "categorie":  {
+                                                                                      "name":  "categorie",
+                                                                                      "type":  "text",
+                                                                                      "primaryKey":  false,
+                                                                                      "notNull":  true
+                                                                                  },
+                                                                    "description":  {
+                                                                                        "name":  "description",
+                                                                                        "type":  "text",
+                                                                                        "primaryKey":  false,
+                                                                                        "notNull":  true
+                                                                                    },
+                                                                    "date_debut":  {
+                                                                                       "name":  "date_debut",
+                                                                                       "type":  "date",
+                                                                                       "primaryKey":  false,
+                                                                                       "notNull":  true
+                                                                                   },
+                                                                    "lien":  {
+                                                                                 "name":  "lien",
+                                                                                 "type":  "text",
+                                                                                 "primaryKey":  false,
+                                                                                 "notNull":  false
+                                                                             },
+                                                                    "statut":  {
+                                                                                   "name":  "statut",
+                                                                                   "type":  "statut_apprentissage",
+                                                                                   "typeSchema":  "portfolio",
+                                                                                   "primaryKey":  false,
+                                                                                   "notNull":  true,
+                                                                                   "default":  "\u0027en_cours\u0027"
+                                                                               },
+                                                                    "ordre":  {
+                                                                                  "name":  "ordre",
+                                                                                  "type":  "integer",
+                                                                                  "primaryKey":  false,
+                                                                                  "notNull":  true,
+                                                                                  "default":  0
+                                                                              }
+                                                                },
+                                                    "indexes":  {
+
+                                                                },
+                                                    "foreignKeys":  {
+
+                                                                    },
+                                                    "compositePrimaryKeys":  {
+
+                                                                             },
+                                                    "uniqueConstraints":  {
+
+                                                                          },
+                                                    "policies":  {
+
+                                                                 },
+                                                    "checkConstraints":  {
+
+                                                                         },
+                                                    "isRLSEnabled":  false
+                                                },
+                   "portfolio.status":  {
+                                            "name":  "status",
+                                            "schema":  "portfolio",
+                                            "columns":  {
+                                                            "id":  {
+                                                                       "name":  "id",
+                                                                       "type":  "uuid",
+                                                                       "primaryKey":  true,
+                                                                       "notNull":  true,
+                                                                       "default":  "gen_random_uuid()"
+                                                                   },
+                                                            "statut_code":  {
+                                                                                "name":  "statut_code",
+                                                                                "type":  "statut_code",
+                                                                                "typeSchema":  "portfolio",
+                                                                                "primaryKey":  false,
+                                                                                "notNull":  true
+                                                                            },
+                                                            "libelle":  {
+                                                                            "name":  "libelle",
+                                                                            "type":  "text",
+                                                                            "primaryKey":  false,
+                                                                            "notNull":  true
+                                                                        },
+                                                            "couleur":  {
+                                                                            "name":  "couleur",
+                                                                            "type":  "couleur",
+                                                                            "typeSchema":  "portfolio",
+                                                                            "primaryKey":  false,
+                                                                            "notNull":  true
+                                                                        },
+                                                            "date_modif":  {
+                                                                               "name":  "date_modif",
+                                                                               "type":  "timestamp with time zone",
+                                                                               "primaryKey":  false,
+                                                                               "notNull":  true,
+                                                                               "default":  "now()"
+                                                                           },
+                                                            "actif":  {
+                                                                          "name":  "actif",
+                                                                          "type":  "boolean",
+                                                                          "primaryKey":  false,
+                                                                          "notNull":  true,
+                                                                          "default":  false
+                                                                      }
+                                                        },
+                                            "indexes":  {
+
+                                                        },
+                                            "foreignKeys":  {
+
+                                                            },
+                                            "compositePrimaryKeys":  {
+
+                                                                     },
+                                            "uniqueConstraints":  {
+
+                                                                  },
+                                            "policies":  {
+
+                                                         },
+                                            "checkConstraints":  {
+
+                                                                 },
+                                            "isRLSEnabled":  false
+                                        }
+               },
+    "enums":  {
+                  "applications.statut":  {
+                                              "name":  "statut",
+                                              "schema":  "applications",
+                                              "values":  [
+                                                             "a_envoyer",
+                                                             "envoyee",
+                                                             "entretien_programme",
+                                                             "en_cours",
+                                                             "acceptee",
+                                                             "refusee",
+                                                             "ghosted"
+                                                         ]
+                                          },
+                  "applications.type_poste":  {
+                                                  "name":  "type_poste",
+                                                  "schema":  "applications",
+                                                  "values":  [
+                                                                 "presentiel",
+                                                                 "remote",
+                                                                 "hybride"
+                                                             ]
+                                              },
+                  "applications.entretien_status":  {
+                                                        "name":  "entretien_status",
+                                                        "schema":  "applications",
+                                                        "values":  [
+                                                                       "prevu",
+                                                                       "fait",
+                                                                       "annule"
+                                                                   ]
+                                                    },
+                  "applications.entretien_type":  {
+                                                      "name":  "entretien_type",
+                                                      "schema":  "applications",
+                                                      "values":  [
+                                                                     "telephone",
+                                                                     "visio",
+                                                                     "presentiel"
+                                                                 ]
+                                                  },
+                  "applications.event_type":  {
+                                                  "name":  "event_type",
+                                                  "schema":  "applications",
+                                                  "values":  [
+                                                                 "created",
+                                                                 "sent",
+                                                                 "status_changed",
+                                                                 "entretien_scheduled",
+                                                                 "entretien_done",
+                                                                 "relance_done",
+                                                                 "note_added"
+                                                             ]
+                                              },
+                  "cv.competence_categorie":  {
+                                                  "name":  "competence_categorie",
+                                                  "schema":  "cv",
+                                                  "values":  [
+                                                                 "frontend",
+                                                                 "backend",
+                                                                 "bdd",
+                                                                 "devops",
+                                                                 "autres"
+                                                             ]
+                                              },
+                  "cv.competence_niveau":  {
+                                               "name":  "competence_niveau",
+                                               "schema":  "cv",
+                                               "values":  [
+                                                              "daily_driver",
+                                                              "comfortable",
+                                                              "familiar",
+                                                              "exploring"
+                                                          ]
+                                           },
+                  "cv.langue_niveau":  {
+                                           "name":  "langue_niveau",
+                                           "schema":  "cv",
+                                           "values":  [
+                                                          "A1",
+                                                          "A2",
+                                                          "B1",
+                                                          "B2",
+                                                          "C1",
+                                                          "C2",
+                                                          "natif"
+                                                      ]
+                                       },
+                  "portfolio.statut_contact":  {
+                                                   "name":  "statut_contact",
+                                                   "schema":  "portfolio",
+                                                   "values":  [
+                                                                  "non_lu",
+                                                                  "lu",
+                                                                  "repondu",
+                                                                  "archive"
+                                                              ]
+                                               },
+                  "portfolio.type_demande":  {
+                                                 "name":  "type_demande",
+                                                 "schema":  "portfolio",
+                                                 "values":  [
+                                                                "alternance",
+                                                                "mission_freelance",
+                                                                "question",
+                                                                "autre"
+                                                            ]
+                                             },
+                  "portfolio.statut_apprentissage":  {
+                                                         "name":  "statut_apprentissage",
+                                                         "schema":  "portfolio",
+                                                         "values":  [
+                                                                        "en_cours",
+                                                                        "termine",
+                                                                        "abandonne"
+                                                                    ]
+                                                     },
+                  "portfolio.couleur":  {
+                                            "name":  "couleur",
+                                            "schema":  "portfolio",
+                                            "values":  [
+                                                           "vert",
+                                                           "jaune",
+                                                           "rouge"
+                                                       ]
+                                        },
+                  "portfolio.statut_code":  {
+                                                "name":  "statut_code",
+                                                "schema":  "portfolio",
+                                                "values":  [
+                                                               "recherche",
+                                                               "cale",
+                                                               "occupe",
+                                                               "pause"
+                                                           ]
+                                            }
+              },
+    "schemas":  {
+
+                },
+    "sequences":  {
+
+                  },
+    "roles":  {
+
+              },
+    "policies":  {
+
+                 },
+    "views":  {
+
+              },
+    "_meta":  {
+                  "columns":  {
+
+                              },
+                  "schemas":  {
+
+                              },
+                  "tables":  {
+
+                             }
+              }
+}

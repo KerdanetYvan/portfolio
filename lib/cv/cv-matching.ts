@@ -1,10 +1,10 @@
 // Génération de la configuration initiale du CV par matching tag-based avec l'offre
 
 import { computeScore, extractKeywords } from './keyword-extraction';
-import type { CvConfig, SectionConfig, ItemConfig, SectionId } from './types';
+import type { CvConfig, SectionConfig, ItemConfig, SectionId, ProjetCvData } from './types';
 import type {
   Experience, Formation, Competence, SoftSkill, Langue,
-  Certification, CentreInteret, ProjetMeta,
+  Certification, CentreInteret,
 } from '@/db';
 
 type CvData = {
@@ -15,7 +15,7 @@ type CvData = {
   langues:        Langue[];
   certifications: Certification[];
   centresInteret: CentreInteret[];
-  projets:        ProjetMeta[];
+  projets:        ProjetCvData[];
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -30,22 +30,19 @@ function itemText(item: Record<string, unknown>): string {
 function buildItemConfigs<T extends { id: string; visible?: boolean }>(
   items: T[],
   keywords: string[],
-  threshold: number, // score minimum pour sélection auto (0-100)
+  threshold: number,
   alwaysSelectAll: boolean = false,
 ): ItemConfig[] {
-  const withScores = items.map((item) => ({
-    id:   item.id,
-    score: computeScore(itemText(item as Record<string, unknown>), keywords),
-    visible: item.visible ?? true,
-  }));
-
-  return withScores.map(({ id, score, visible }) => ({
-    id,
-    score,
-    selected: alwaysSelectAll
-      ? visible
-      : (visible && (score >= threshold || keywords.length === 0)),
-  }));
+  return items.map((item) => {
+    const score = computeScore(itemText(item as Record<string, unknown>), keywords);
+    return {
+      id:       item.id,
+      score,
+      selected: alwaysSelectAll
+        ? (item.visible ?? true)
+        : ((item.visible ?? true) && (score >= threshold || keywords.length === 0)),
+    };
+  });
 }
 
 // ─── Génération de la config initiale ─────────────────────────────────────────
@@ -53,6 +50,7 @@ function buildItemConfigs<T extends { id: string; visible?: boolean }>(
 /**
  * Génère la configuration initiale du CV basée sur le matching avec l'offre.
  * Les items les plus pertinents sont pré-sélectionnés.
+ * Pour les projets, inclure_par_defaut = true force la sélection.
  */
 export function generateInitialConfig(
   candidatureId: string,
@@ -60,7 +58,7 @@ export function generateInitialConfig(
   data: CvData,
 ): CvConfig {
   const keywords = extractKeywords(offerText);
-  const THRESHOLD = keywords.length > 10 ? 15 : 5; // seuil adaptatif
+  const THRESHOLD = keywords.length > 10 ? 15 : 5;
 
   const sections: SectionConfig[] = [
     {
@@ -89,21 +87,28 @@ export function generateInitialConfig(
       label:   'Langues',
       visible: true,
       order:   3,
-      items:   buildItemConfigs(data.langues, keywords, 0, true), // toutes sélectionnées
+      items:   buildItemConfigs(data.langues, keywords, 0, true),
     },
     {
       id:      'soft-skills' as SectionId,
       label:   'Soft skills',
       visible: true,
       order:   4,
-      items:   buildItemConfigs(data.softSkills, keywords, 0, true), // toutes sélectionnées
+      items:   buildItemConfigs(data.softSkills, keywords, 0, true),
     },
     {
       id:      'projets' as SectionId,
       label:   'Projets',
       visible: data.projets.length > 0,
       order:   5,
-      items:   buildItemConfigs(data.projets, keywords, THRESHOLD),
+      items:   data.projets.map((p) => {
+        const score = computeScore(itemText(p as unknown as Record<string, unknown>), keywords);
+        return {
+          id:       p.id,
+          score,
+          selected: p.inclure_par_defaut || keywords.length === 0 || score >= THRESHOLD,
+        };
+      }),
     },
     {
       id:      'certifications' as SectionId,
