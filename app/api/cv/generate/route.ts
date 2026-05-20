@@ -21,6 +21,12 @@ async function requireAdmin(): Promise<boolean> {
   return true;
 }
 
+// URL du binaire Chromium hébergé — évite le dépassement de la limite 50MB Vercel
+// Correspond à @sparticuz/chromium v148 (même version que chromium-min installé)
+const CHROMIUM_REMOTE_URL =
+  process.env.CHROMIUM_REMOTE_URL ??
+  'https://github.com/Sparticuz/chromium/releases/download/v148.0.0/chromium-v148.0.0-pack.tar';
+
 async function launchBrowser() {
   const isDev = process.env.NODE_ENV !== 'production';
 
@@ -34,14 +40,14 @@ async function launchBrowser() {
     });
   }
 
-  console.log('[cv/generate] prod — puppeteer-core + @sparticuz/chromium');
+  console.log('[cv/generate] prod — puppeteer-core + @sparticuz/chromium-min (remote)');
   const [puppeteer, chromium] = await Promise.all([
     import('puppeteer-core').then(m => m.default),
-    import('@sparticuz/chromium').then(m => m.default),
+    import('@sparticuz/chromium-min').then(m => m.default),
   ]);
   return puppeteer.launch({
     args: chromium.args,
-    executablePath: await chromium.executablePath(),
+    executablePath: await chromium.executablePath(CHROMIUM_REMOTE_URL),
     headless: true,
     timeout: 30_000,
   });

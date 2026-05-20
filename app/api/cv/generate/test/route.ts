@@ -19,6 +19,10 @@ export async function GET() {
   const isDev = process.env.NODE_ENV !== 'production';
   console.log('[cv/test] NODE_ENV=%s isDev=%s', process.env.NODE_ENV, isDev);
 
+  const CHROMIUM_REMOTE_URL =
+    process.env.CHROMIUM_REMOTE_URL ??
+    'https://github.com/Sparticuz/chromium/releases/download/v148.0.0/chromium-v148.0.0-pack.tar';
+
   let browser;
   try {
     if (isDev) {
@@ -31,14 +35,14 @@ export async function GET() {
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
       });
     } else {
-      console.log('[cv/test] import puppeteer-core + chromium...');
+      console.log('[cv/test] import puppeteer-core + chromium-min (remote)...');
       const [puppeteer, chromium] = await Promise.all([
         import('puppeteer-core').then(m => m.default),
-        import('@sparticuz/chromium').then(m => m.default),
+        import('@sparticuz/chromium-min').then(m => m.default),
       ]);
       browser = await puppeteer.launch({
         args: chromium.args,
-        executablePath: await chromium.executablePath(),
+        executablePath: await chromium.executablePath(CHROMIUM_REMOTE_URL),
         headless: true,
         timeout: 30_000,
       });
