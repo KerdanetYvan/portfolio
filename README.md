@@ -2,7 +2,7 @@
 
 Portfolio personnel construit avec Next.js 16 App Router. Présente les projets récupérés en direct depuis GitHub, les compétences avec statistiques d'usage, une page à propos avec intro façon terminal, un formulaire de contact branché en base de données, et un dashboard d'administration privé.
 
-**Version actuelle** : v2.1.1
+**Version actuelle** : v2.1.2
 
 ---
 
@@ -93,9 +93,6 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...   # Jamais exposée côté client (Storage PDF)
 
 # Dashboard — UUID de l'utilisateur admin (Auth > Users dans Supabase)
 ADMIN_USER_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-
-# Puppeteer (dev local uniquement — laisser vide, Chromium téléchargé automatiquement)
-# CHROME_EXECUTABLE_PATH=
 ```
 
 ---

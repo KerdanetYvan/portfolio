@@ -366,10 +366,10 @@ app/dashboard/
 **Génération PDF (`app/api/cv/generate/route.ts`) :**
 
 - POST `/api/cv/generate` avec `{ candidatureId }` — auth admin requise
-- `maxDuration = 60` (Vercel) car Puppeteer peut prendre 10-20s
-- Stack : `puppeteer-core` + `@sparticuz/chromium` (compatible Vercel Functions)
-- Environnement local : set `CHROME_EXECUTABLE_PATH` dans `.env.local` pour pointer vers Chrome installé (ex: `C:\Program Files\Google\Chrome\Application\chrome.exe` sur Windows). Sans ça, la génération PDF ne fonctionnera qu'en prod.
-- Environnement production : @sparticuz/chromium fournit le binaire Chromium
+- `maxDuration = 60` + `runtime = 'nodejs'` (Vercel) — Puppeteer peut prendre 10-20s
+- Stack dev : `puppeteer` (devDependency, Chromium embarqué) — aucune config requise
+- Stack prod : `puppeteer-core` + `@sparticuz/chromium` (binaire embarqué, pas de téléchargement réseau)
+- Mémoire allouée : 3008 MB via `vercel.json` à la racine (obligatoire pour Puppeteer en prod)
 - PDF généré via `page.pdf({ format: 'A4', printBackground: true, margin: 14mm/16mm })`
 - Upload dans Supabase Storage bucket `cv-pdfs` (PRIVATE) via service role key
 - Path stocké dans `applications.candidature_cv.nom_fichier` (ex: `{candidatureId}/v{version}.pdf`)
