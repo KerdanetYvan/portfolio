@@ -2,7 +2,7 @@
 
 Portfolio personnel construit avec Next.js 16 App Router. Présente les projets récupérés en direct depuis GitHub, les compétences avec statistiques d'usage, une page à propos avec intro façon terminal, un formulaire de contact branché en base de données, et un dashboard d'administration privé.
 
-**Version actuelle** : v2.1.1
+**Version actuelle** : v2.1.4
 
 ---
 
@@ -47,7 +47,7 @@ Portfolio personnel construit avec Next.js 16 App Router. Présente les projets 
 - **Base de données** : Supabase (PostgreSQL managé) — schémas `portfolio`, `cv`, `applications`
 - **Auth** : Supabase Auth + GitHub OAuth — mono-utilisateur, whitelist par UUID
 - **Storage** : Supabase Storage — bucket privé `cv-pdfs`, accès via signed URLs
-- **PDF** : Puppeteer (dev) / puppeteer-core + @sparticuz/chromium (prod)
+- **PDF** : [PDFShift](https://pdfshift.io) (SaaS, `fetch` natif) — isolé dans `lib/cv/pdf-service.ts`
 - **API GitHub** : REST API (repos, contents) pour `/projects` et `/skills`
 
 ### Observabilité
@@ -94,8 +94,9 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...   # Jamais exposée côté client (Storage PDF)
 # Dashboard — UUID de l'utilisateur admin (Auth > Users dans Supabase)
 ADMIN_USER_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 
-# Puppeteer (dev local uniquement — laisser vide, Chromium téléchargé automatiquement)
-# CHROME_EXECUTABLE_PATH=
+# PDFShift — génération PDF (https://pdfshift.io)
+PDF_BUILD_URL=https://api.pdfshift.io/v3/convert/pdf
+PDF_BUILD_KEY=sk_xxxxxxxxxxxxxxxxxxxx
 ```
 
 ---

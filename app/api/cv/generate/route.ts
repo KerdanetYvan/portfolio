@@ -8,6 +8,7 @@ import {
 } from '@/db/queries/cv';
 import { getGitHubRepos } from '@/lib/github/repos';
 import { generateCvHtml } from '@/lib/cv/cv-template';
+import { generatePdfFromHtml } from '@/lib/cv/pdf-service';
 import { uploadCvPdf } from '@/lib/supabase/storage';
 import type { CvConfig, ProjetCvData } from '@/lib/cv/types';
 
@@ -19,38 +20,6 @@ async function requireAdmin(): Promise<boolean> {
   if (!user) return false;
   if (process.env.ADMIN_USER_ID && user.id !== process.env.ADMIN_USER_ID) return false;
   return true;
-}
-
-// URL du binaire Chromium hébergé — évite le dépassement de la limite 50MB Vercel
-// Correspond à @sparticuz/chromium v148 (même version que chromium-min installé)
-const CHROMIUM_REMOTE_URL =
-  process.env.CHROMIUM_REMOTE_URL ??
-  'https://github.com/Sparticuz/chromium/releases/download/v148.0.0/chromium-v148.0.0-pack.tar';
-
-async function launchBrowser() {
-  const isDev = process.env.NODE_ENV !== 'production';
-
-  if (isDev) {
-    console.log('[cv/generate] dev — puppeteer (Chromium embarqué)');
-    const puppeteer = (await import('puppeteer')).default;
-    return puppeteer.launch({
-      headless: true,
-      timeout: 30_000,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
-  }
-
-  console.log('[cv/generate] prod — puppeteer-core + @sparticuz/chromium-min (remote)');
-  const [puppeteer, chromium] = await Promise.all([
-    import('puppeteer-core').then(m => m.default),
-    import('@sparticuz/chromium-min').then(m => m.default),
-  ]);
-  return puppeteer.launch({
-    args: chromium.args,
-    executablePath: await chromium.executablePath(CHROMIUM_REMOTE_URL),
-    headless: true,
-    timeout: 30_000,
-  });
 }
 
 export async function POST(req: NextRequest) {
@@ -130,43 +99,18 @@ export async function POST(req: NextRequest) {
   });
   console.log('[cv/generate] HTML prêt (%d chars)', html.length);
 
-  // ── 4. Puppeteer → PDF ────────────────────────────────────────────────────────
+  // ── 4. PDFShift → PDF ─────────────────────────────────────────────────────────
   let pdfBuffer: Buffer;
-  let browser;
   try {
-    console.log('[cv/generate] lancement navigateur...');
-    browser = await launchBrowser();
-    console.log('[cv/generate] navigateur lancé');
-
-    const page = await browser.newPage();
-    page.setDefaultTimeout(30_000);
-    page.setDefaultNavigationTimeout(30_000);
-
-    console.log('[cv/generate] setContent...');
-    // networkidle0 nécessaire pour charger les Google Fonts (Inter + JetBrains Mono)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await page.setContent(html, { waitUntil: 'networkidle0' as any, timeout: 55_000 });
-    console.log('[cv/generate] setContent OK');
-
-    console.log('[cv/generate] génération PDF...');
-    const pdfUint8 = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      // Marges à 0 : le template gère son propre padding via CSS (@page { margin: 0 })
-      margin: { top: '0', right: '0', bottom: '0', left: '0' },
-      displayHeaderFooter: false,
-    });
-    console.log('[cv/generate] PDF prêt (%d bytes)', pdfUint8.byteLength);
-
-    pdfBuffer = Buffer.from(pdfUint8);
+    console.log('[cv/generate] appel PDFShift...');
+    pdfBuffer = await generatePdfFromHtml(html);
+    console.log('[cv/generate] PDF prêt (%d bytes)', pdfBuffer.byteLength);
   } catch (err) {
-    console.error('[cv/generate] erreur Puppeteer:', err);
+    console.error('[cv/generate] erreur PDFShift:', err);
     return NextResponse.json(
-      { error: 'Erreur génération PDF', detail: String(err) },
+      { error: err instanceof Error ? err.message : 'Erreur génération PDF' },
       { status: 500 },
     );
-  } finally {
-    if (browser) await browser.close().catch(() => {});
   }
 
   // ── 5. Upload dans Supabase Storage ──────────────────────────────────────────

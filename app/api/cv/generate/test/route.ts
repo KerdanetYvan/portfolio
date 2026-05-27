@@ -1,5 +1,7 @@
+// Route de test PDFShift — utilise le mode sandbox (watermark, ne consomme pas le quota)
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { generatePdfFromHtml } from '@/lib/cv/pdf-service';
 
 export const maxDuration = 60;
 
@@ -16,65 +18,33 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const isDev = process.env.NODE_ENV !== 'production';
-  console.log('[cv/test] NODE_ENV=%s isDev=%s', process.env.NODE_ENV, isDev);
+  console.log('[cv/test] test PDFShift sandbox...');
 
-  const CHROMIUM_REMOTE_URL =
-    process.env.CHROMIUM_REMOTE_URL ??
-    'https://github.com/Sparticuz/chromium/releases/download/v148.0.0/chromium-v148.0.0-pack.tar';
+  const testHtml = `<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><title>Test PDFShift</title></head>
+<body style="font-family:sans-serif;padding:40px">
+  <h1>Hello PDFShift</h1>
+  <p>Test d'intégration PDFShift — mode sandbox (watermark visible, quota non consommé).</p>
+  <p>Date : ${new Date().toISOString()}</p>
+</body>
+</html>`;
 
-  let browser;
   try {
-    if (isDev) {
-      console.log('[cv/test] import puppeteer...');
-      const puppeteer = (await import('puppeteer')).default;
-      console.log('[cv/test] puppeteer importé, launch()...');
-      browser = await puppeteer.launch({
-        headless: true,
-        timeout: 30_000,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      });
-    } else {
-      console.log('[cv/test] import puppeteer-core + chromium-min (remote)...');
-      const [puppeteer, chromium] = await Promise.all([
-        import('puppeteer-core').then(m => m.default),
-        import('@sparticuz/chromium-min').then(m => m.default),
-      ]);
-      browser = await puppeteer.launch({
-        args: chromium.args,
-        executablePath: await chromium.executablePath(CHROMIUM_REMOTE_URL),
-        headless: true,
-        timeout: 30_000,
-      });
-    }
-    console.log('[cv/test] navigateur lancé ✓');
-
-    const page = await browser.newPage();
-    page.setDefaultTimeout(30_000);
-
-    console.log('[cv/test] setContent...');
-    await page.setContent(
-      '<html><body style="font-family:sans-serif"><h1>Hello World</h1><p>Test Puppeteer OK</p></body></html>',
-      { waitUntil: 'domcontentloaded', timeout: 15_000 },
-    );
-    console.log('[cv/test] setContent OK ✓');
-
-    console.log('[cv/test] pdf()...');
-    const pdfUint8 = await page.pdf({ format: 'A4' });
-    console.log('[cv/test] pdf OK ✓ (%d bytes)', pdfUint8.byteLength);
+    // sandbox=true : ajoute un watermark mais ne consomme pas le quota free tier
+    const pdfBuffer = await generatePdfFromHtml(testHtml, true);
+    console.log('[cv/test] PDF sandbox OK (%d bytes)', pdfBuffer.byteLength);
 
     return NextResponse.json({
       ok: true,
-      env: process.env.NODE_ENV,
-      pdfBytes: pdfUint8.byteLength,
+      pdfBytes: pdfBuffer.byteLength,
+      sandbox: true,
     });
   } catch (err) {
-    console.error('[cv/test] erreur:', err);
+    console.error('[cv/test] erreur PDFShift:', err);
     return NextResponse.json(
-      { ok: false, env: process.env.NODE_ENV, error: String(err) },
+      { ok: false, error: err instanceof Error ? err.message : String(err) },
       { status: 500 },
     );
-  } finally {
-    if (browser) await browser.close().catch(() => {});
   }
 }

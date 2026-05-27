@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { generateCvHtml } from '@/lib/cv/cv-template';
 import { saveCvConfig, getCvDownloadUrl } from '@/app/dashboard/candidatures/actions';
+import { useToast } from '@/app/dashboard/components/ToastProvider';
 import type { CvConfig, SectionId, SectionConfig, ItemConfig, ProjetCvData } from '@/lib/cv/types';
 import type {
   Profile, Experience, Formation, Competence, SoftSkill, Langue,
@@ -183,6 +184,8 @@ export default function CvConfigClient({
   candidatureId, candidatureLabel, initialConfig,
   hasExistingConfig, initialPdfPath, profile, data,
 }: Props) {
+  const { showToast } = useToast();
+
   const [config, setConfig] = useState<CvConfig>(initialConfig);
   // Pas de changements non sauvegardés si la config vient de la BDD
   const [hasUnsaved, setHasUnsaved] = useState(!hasExistingConfig);
@@ -192,8 +195,10 @@ export default function CvConfigClient({
   // PDF state
   const [generating, setGenerating] = useState(false);
   const [pdfPath, setPdfPath] = useState<string | null>(initialPdfPath);
+  const [pdfVersion, setPdfVersion] = useState<number | null>(
+    initialPdfPath ? initialConfig.version : null,
+  );
   const [downloadingUrl, setDownloadingUrl] = useState(false);
-  const [generateError, setGenerateError] = useState<string | null>(null);
 
   const sortedSections = useMemo(
     () => [...config.sections].sort((a, b) => a.order - b.order),
@@ -275,7 +280,6 @@ export default function CvConfigClient({
   async function handleExportPdf() {
     if (hasUnsaved) return;
     setGenerating(true);
-    setGenerateError(null);
     try {
       const res = await fetch('/api/cv/generate', {
         method: 'POST',
@@ -285,8 +289,10 @@ export default function CvConfigClient({
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? 'Erreur inconnue');
       setPdfPath(json.pdfPath);
+      setPdfVersion(json.version);
+      showToast(`PDF v${json.version} généré`);
     } catch (err) {
-      setGenerateError(err instanceof Error ? err.message : 'Erreur lors de la génération');
+      showToast(err instanceof Error ? err.message : 'Erreur lors de la génération', 'error');
     } finally {
       setGenerating(false);
     }
@@ -380,13 +386,6 @@ export default function CvConfigClient({
           <span className="text-xs font-medium text-muted uppercase tracking-wider shrink-0">Aperçu</span>
 
           <div className="flex items-center gap-2 ml-auto">
-            {/* Erreur génération */}
-            {generateError && (
-              <span className="text-xs text-red-400 max-w-[200px] truncate" title={generateError}>
-                {generateError}
-              </span>
-            )}
-
             {/* Télécharger si PDF généré */}
             {pdfPath && (
               <button
@@ -403,12 +402,12 @@ export default function CvConfigClient({
             <button
               onClick={handleExportPdf}
               disabled={hasUnsaved || generating}
-              title={hasUnsaved ? 'Sauvegardez d\'abord la configuration' : pdfPath ? 'Régénérer le PDF' : 'Générer le PDF'}
+              title={hasUnsaved ? "Sauvegardez d'abord la configuration" : pdfPath ? 'Régénérer le PDF' : 'Générer le PDF'}
               className="flex items-center gap-1.5 rounded-md border border-[#363636] px-3 py-1.5 text-xs text-muted hover:border-[#555] hover:text-on-surface disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               {generating
                 ? <><Loader2 size={13} className="animate-spin" /> Génération…</>
-                : <><FileDown size={13} /> {pdfPath ? 'Régénérer PDF' : 'Exporter PDF'}</>
+                : <><FileDown size={13} /> {pdfPath ? `Régénérer PDF (v${pdfVersion})` : 'Exporter PDF'}</>
               }
             </button>
 

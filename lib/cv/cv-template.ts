@@ -1,6 +1,5 @@
 // Template HTML "portfolio-light" v2 — layout 2 colonnes, ATS-friendly, A4
-// Utilisé pour l'aperçu iframe (CvConfigClient) ET la génération PDF (Puppeteer)
-// Note: Puppeteer doit utiliser waitUntil: 'networkidle0' pour charger les Google Fonts
+// Utilisé pour l'aperçu iframe (CvConfigClient) ET la génération PDF (PDFShift via /api/cv/generate)
 
 import type { CvConfig, SectionId, ProjetCvData } from './types';
 import type {

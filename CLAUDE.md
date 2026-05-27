@@ -366,11 +366,13 @@ app/dashboard/
 **Génération PDF (`app/api/cv/generate/route.ts`) :**
 
 - POST `/api/cv/generate` avec `{ candidatureId }` — auth admin requise
-- `maxDuration = 60` (Vercel) car Puppeteer peut prendre 10-20s
-- Stack : `puppeteer-core` + `@sparticuz/chromium` (compatible Vercel Functions)
-- Environnement local : set `CHROME_EXECUTABLE_PATH` dans `.env.local` pour pointer vers Chrome installé (ex: `C:\Program Files\Google\Chrome\Application\chrome.exe` sur Windows). Sans ça, la génération PDF ne fonctionnera qu'en prod.
-- Environnement production : @sparticuz/chromium fournit le binaire Chromium
-- PDF généré via `page.pdf({ format: 'A4', printBackground: true, margin: 14mm/16mm })`
+- `maxDuration = 60` (Vercel)
+- Stack : **PDFShift** (service SaaS, `fetch` natif, zéro dépendance système)
+- Variables d'env : `PDF_BUILD_URL` (endpoint PDFShift) + `PDF_BUILD_KEY` (clé API)
+- Logique PDF isolée dans `lib/cv/pdf-service.ts` → `generatePdfFromHtml(html, sandbox?)` — remplacer uniquement cette fonction pour switcher vers n8n
+- Mode sandbox (`sandbox: true`) disponible sur `/api/cv/generate/test` pour tester sans consommer le quota (ajoute un watermark)
+- Quota free tier PDFShift : 50 PDF/mois (largement suffisant pour usage perso)
+- PDF format A4, marges 14mm/16mm
 - Upload dans Supabase Storage bucket `cv-pdfs` (PRIVATE) via service role key
 - Path stocké dans `applications.candidature_cv.nom_fichier` (ex: `{candidatureId}/v{version}.pdf`)
 - Téléchargement via signed URL expirable 1h — `getSignedCvPdfUrl()` dans `lib/supabase/storage.ts`
@@ -389,9 +391,12 @@ app/dashboard/
 **Bouton "Exporter PDF" dans `CvConfigClient` :**
 
 - Disabled si `hasUnsaved = true` (config non sauvegardée)
-- Click → `POST /api/cv/generate` → loader → `pdfPath` en state
+- Click → `POST /api/cv/generate` → loader → toast succès "PDF v{N} généré" + `pdfPath` / `pdfVersion` en state
+- Bouton label : "Exporter PDF" → "Régénérer PDF (v{N})" après première génération
+- Erreurs PDFShift remontées via toast (401 clé invalide, 402 quota dépassé, 422 HTML invalide, timeout 30s)
 - Bouton "Télécharger PDF" apparaît après génération → appelle `getCvDownloadUrl()` server action → signed URL → download programmatique
-- Dans `CandidatureDetail` : icône download si `nom_fichier` existe (even chemin vers PDF)
+- Aperçu iframe : `srcDoc={html}` recalculé localement à chaque modif config (zéro appel externe, instantané)
+- Dans `CandidatureDetail` : icône download si `nom_fichier` existe (chemin vers PDF)
 
 **`saveCvConfig` (fix important) :**
 
