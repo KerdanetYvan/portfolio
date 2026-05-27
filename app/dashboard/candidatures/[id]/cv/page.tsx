@@ -53,26 +53,25 @@ function syncProjetsInConfig(config: CvConfig, currentProjets: ProjetCvData[]): 
   };
 }
 
-// GitHub peut être lent en cold-cache — on lui donne 3s max, puis fallback DB-only
+// GitHub peut être lent en cold-cache — 1s max sur Hobby (limite fonction 10s)
 function githubWithTimeout() {
   return Promise.race([
     getGitHubRepos(),
-    new Promise<[]>((resolve) => setTimeout(() => resolve([]), 3000)),
+    new Promise<[]>((resolve) => setTimeout(() => resolve([]), 1000)),
   ]);
 }
 
 export default async function CandidatureCvPage({ params }: PageProps) {
   const { id } = await params;
 
-  const result = await getCandidatureForCvPage(id);
-  if (!result) notFound();
-  const { candidature, cv } = result;
-
+  // Tout en parallèle — évite un aller-retour DB séquentiel avant le Promise.all
   const [
+    result,
     profile,
     experiences, formations, competences, softSkills,
     langues, certifications, centresInteret, projetsMeta, githubRepos,
   ] = await Promise.all([
+    getCandidatureForCvPage(id),
     getProfile(),
     getAllExperiences(),
     getAllFormations(),
@@ -84,6 +83,9 @@ export default async function CandidatureCvPage({ params }: PageProps) {
     getAllProjetsMeta(),
     githubWithTimeout(),
   ]);
+
+  if (!result) notFound();
+  const { candidature, cv } = result;
 
   // Enrichir les projets meta avec les données GitHub
   const repoById = new Map(githubRepos.map((r) => [String(r.id), r]));
