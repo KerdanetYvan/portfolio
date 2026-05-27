@@ -13,6 +13,7 @@ import { uploadCvPdf } from '@/lib/supabase/storage';
 import type { CvConfig, ProjetCvData } from '@/lib/cv/types';
 
 export const maxDuration = 60;
+export const runtime = 'nodejs';
 
 async function requireAdmin(): Promise<boolean> {
   const supabase = await createClient();
