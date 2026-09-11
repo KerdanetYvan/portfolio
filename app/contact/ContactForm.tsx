@@ -44,16 +44,16 @@ export default function ContactForm() {
     const data = Object.fromEntries(new FormData(e.currentTarget));
 
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nom:          data.name,
-          email:        data.email,
-          type_demande: data.type,
-          entreprise:   data.company || undefined,
-          message:      data.message,
-          _honeypot:    data.website,
+          name:        data.name,
+          email:       data.email,
+          requestType: data.type,
+          company:     data.company || undefined,
+          message:     data.message,
+          website:     data.website || undefined,
         }),
       });
       if (!res.ok) throw new Error();
