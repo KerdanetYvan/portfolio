@@ -12,15 +12,23 @@ interface NavLink {
   label: string;
 }
 
-const navLinks: NavLink[] = [
+const BASE_NAV_LINKS: NavLink[] = [
   { href: '/projects',  label: 'Projets'       },
   { href: '/skills',    label: 'Compétences'   },
   { href: '/about',     label: 'À Propos'      },
-  { href: '/blog',      label: 'Blog'          },
 ];
 
-export default function Header() {
+interface HeaderProps {
+  // Aucun article publié pour l'instant : mieux vaut ne pas mettre en avant
+  // une section vide plutôt que de proposer un service qui n'a rien à montrer.
+  showBlog: boolean;
+}
+
+export default function Header({ showBlog }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const navLinks = showBlog
+    ? [...BASE_NAV_LINKS, { href: '/blog', label: 'Blog' }]
+    : BASE_NAV_LINKS;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-surface/80 backdrop-blur-md">
