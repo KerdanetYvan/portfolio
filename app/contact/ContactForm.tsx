@@ -9,6 +9,10 @@ import { SiGithub, SiLinkedin, SiReddit } from 'react-icons/si';
 
 type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
+// Délai artificiel minimum avant d'afficher le résultat : la vraie requête
+// est quasi instantanée, ce qui donne l'impression que rien ne s'est passé.
+const MIN_SUBMIT_DELAY_MS = 3000;
+
 const SOCIALS = [
   { name: 'GitHub',   handle: 'KerdanetYvan', href: 'https://github.com/KerdanetYvan',       Icon: SiGithub   },
   { name: 'LinkedIn', handle: 'yvankerdanet',  href: 'https://linkedin.com/in/yvankerdanet',  Icon: SiLinkedin },
@@ -42,7 +46,9 @@ export default function ContactForm() {
 
     setStatus('loading');
     const data = Object.fromEntries(new FormData(e.currentTarget));
+    const startedAt = Date.now();
 
+    let succeeded: boolean;
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
         method: 'POST',
@@ -57,9 +63,20 @@ export default function ContactForm() {
         }),
       });
       if (!res.ok) throw new Error();
+      succeeded = true;
+    } catch {
+      succeeded = false;
+    }
+
+    const remaining = MIN_SUBMIT_DELAY_MS - (Date.now() - startedAt);
+    if (remaining > 0) {
+      await new Promise((resolve) => setTimeout(resolve, remaining));
+    }
+
+    if (succeeded) {
       track('contact_form_submitted');
       setStatus('success');
-    } catch {
+    } else {
       setStatus('error');
     }
   }
