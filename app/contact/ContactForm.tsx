@@ -11,7 +11,7 @@ type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
 // Délai artificiel minimum avant d'afficher le résultat : la vraie requête
 // est quasi instantanée, ce qui donne l'impression que rien ne s'est passé.
-const MIN_SUBMIT_DELAY_MS = 3000;
+const MIN_SUBMIT_DELAY_MS = 1500;
 
 const SOCIALS = [
   { name: 'GitHub',   handle: 'KerdanetYvan', href: 'https://github.com/KerdanetYvan',       Icon: SiGithub   },
