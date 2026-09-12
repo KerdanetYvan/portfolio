@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "lib/markdown-components.tsx"
+        ],
+        "createdAt": "2026-09-11T23:09:34.397Z",
+        "reason": "Pre-existing blockquote style copied verbatim from app/projects/[owner]/[repo]/page.tsx (already in prod before this refactor) — standard blockquote left-border convention for markdown rendering, not a card accent"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "app/portfolio/[url]/page.tsx"
+        ],
+        "createdAt": "2026-09-12T17:07:49.158Z",
+        "reason": "blockquote Markdown préexistant (citation de texte), pas une card — convention typographique standard, non lié aux changements de cette PR"
+      }
+    ]
+  }
+}

@@ -14,6 +14,7 @@ import {
   RiCalendarLine,
 } from 'react-icons/ri';
 import projects from '../../../public/projets.json';
+import { buildMetadata } from '@/lib/site';
 
 interface FeaturedProject {
   id: number;
@@ -153,11 +154,12 @@ const mdComponents: Components = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { url } = await params;
   const project = (projects as FeaturedProject[]).find((p) => p.url === url);
-  if (!project) return { title: 'Projet — Yvan Kerdanet' };
-  return {
+  if (!project) return buildMetadata({ title: 'Projet — Yvan Kerdanet', path: `/portfolio/${url}` });
+  return buildMetadata({
     title: `${project.name} — Yvan Kerdanet`,
     description: project.description,
-  };
+    path: `/portfolio/${url}`,
+  });
 }
 
 export default async function FeaturedProjectPage({ params }: PageProps) {

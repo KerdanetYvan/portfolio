@@ -3,11 +3,13 @@ import { SKILL_CATEGORIES } from '@/data/skills';
 import type { SkillCategory } from '@/data/skills';
 import { LEARNING_ITEMS } from '@/data/learning';
 import SkillsGrid from './SkillsGrid';
+import { buildMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Compétences — Yvan Kerdanet',
   description: 'Stack technique : Frontend, Backend, Bases de données, DevOps & Outillage.',
-};
+  path: '/skills',
+});
 
 const HIDDEN_TOPICS = ['github-config'];
 

@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import type { Metadata } from 'next';
 import { mdComponents } from '@/lib/markdown-components';
+import { buildMetadata } from '@/lib/site';
 import {
   RiArrowLeftLine,
   RiGithubFill,
@@ -95,10 +96,11 @@ async function fetchReadme(owner: string, repo: string, branch: string): Promise
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { owner, repo } = await params;
   const data = await fetchGitHub<RepoDetail>(`/repos/${owner}/${repo}`);
-  return {
+  return buildMetadata({
     title: data ? `${data.name} — Yvan Kerdanet` : 'Projet — Yvan Kerdanet',
     description: data?.description ?? undefined,
-  };
+    path: `/projects/${owner}/${repo}`,
+  });
 }
 
 function formatDate(iso: string): string {
