@@ -3,9 +3,9 @@ import { useState, useRef, useEffect } from 'react';
 import { track } from '@vercel/analytics';
 import {
   RiCheckLine, RiCloseLine, RiLoader4Line,
-  RiFileCopyLine, RiArrowDownSLine,
+  RiFileCopyLine, RiArrowDownSLine, RiLinkedinFill,
 } from 'react-icons/ri';
-import { SiGithub, SiLinkedin, SiReddit } from 'react-icons/si';
+import { SiGithub, SiReddit } from 'react-icons/si';
 
 type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -15,7 +15,7 @@ const MIN_SUBMIT_DELAY_MS = 1500;
 
 const SOCIALS = [
   { name: 'GitHub',   handle: 'KerdanetYvan', href: 'https://github.com/KerdanetYvan',       Icon: SiGithub   },
-  { name: 'LinkedIn', handle: 'yvankerdanet',  href: 'https://linkedin.com/in/yvankerdanet',  Icon: SiLinkedin },
+  { name: 'LinkedIn', handle: 'yvankerdanet',  href: 'https://linkedin.com/in/yvankerdanet',  Icon: RiLinkedinFill },
   { name: 'Reddit',   handle: 'yvankdt',       href: 'https://reddit.com/user/yvankdt',       Icon: SiReddit   },
 ];
 

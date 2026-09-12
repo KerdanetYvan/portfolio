@@ -24,7 +24,7 @@
             "Blog avec éditeur privé et persistance en base de données"
         ],
         "images": ["landing_portfolio.webp", "mobile_skills.webp", "about_info.webp"],
-        "site": "https://www.kerdanetyvan.fr",
+        "site": "https://kerdanetyvan.dev",
         "github": "https://github.com/KerdanetYvan/portfolio",
         "date": "2025-03-16T11:10:00.150Z"
     },
