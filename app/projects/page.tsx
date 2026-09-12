@@ -1,13 +1,15 @@
 import ProjectsClient from './ProjectsClient';
 import type { Metadata } from 'next';
 import { getGitHubRepos, getGitHubUser } from '@/lib/github/repos';
+import { buildMetadata } from '@/lib/site';
 
 export { type GitHubRepo } from '@/lib/github/repos';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Projets — Yvan Kerdanet',
   description: 'Repos publics GitHub — projets personnels et contributions.',
-};
+  path: '/projects',
+});
 
 interface PageProps {
   searchParams?: Promise<{ lang?: string }>;

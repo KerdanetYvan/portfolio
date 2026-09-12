@@ -7,6 +7,7 @@ import type { Metadata } from 'next';
 import { RiArrowLeftLine } from 'react-icons/ri';
 import { getBlogPost } from '@/lib/api/blog';
 import { mdComponents } from '@/lib/markdown-components';
+import { buildMetadata } from '@/lib/site';
 
 interface PageProps {
   params: Promise<{ url: string }>;
@@ -19,10 +20,11 @@ function formatDate(iso: string): string {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { url } = await params;
   const post = await getBlogPost(url);
-  return {
+  return buildMetadata({
     title: post ? `${post.title} — Yvan Kerdanet` : 'Article — Yvan Kerdanet',
     description: post?.excerpt ?? undefined,
-  };
+    path: `/blog/${url}`,
+  });
 }
 
 export default async function ArticlePage({ params }: PageProps) {

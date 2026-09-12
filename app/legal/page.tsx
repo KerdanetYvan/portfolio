@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
+import { buildMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Mentions légales — Kerdanet Yvan',
   description: 'Mentions légales, données personnelles et politique de cookies du portfolio de Yvan Kerdanet.',
-};
+  path: '/legal',
+});
 
 export default function Legal() {
   return (

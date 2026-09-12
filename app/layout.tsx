@@ -8,7 +8,7 @@ import './globals.css';
 
 import { Providers } from './providers';
 import ConditionalNav from './ConditionalNav';
-import { SITE_NAME, SITE_URL } from '@/lib/site';
+import { SITE_NAME, SITE_URL, buildMetadata } from '@/lib/site';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
@@ -18,24 +18,8 @@ const DESCRIPTION = 'Portfolio de Yvan Kerdanet, développeur fullstack freelanc
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: TITLE,
-  description: DESCRIPTION,
   robots: { index: true, follow: true },
-  openGraph: {
-    type: 'website',
-    locale: 'fr_FR',
-    url: SITE_URL,
-    siteName: SITE_NAME,
-    title: TITLE,
-    description: DESCRIPTION,
-    images: [{ url: '/Yvan_portrait.webp' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: TITLE,
-    description: DESCRIPTION,
-    images: ['/Yvan_portrait.webp'],
-  },
+  ...buildMetadata({ title: TITLE, description: DESCRIPTION }),
 };
 
 const personJsonLd = {

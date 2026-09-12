@@ -2,11 +2,13 @@ import type { Metadata } from 'next';
 import ContactForm from './ContactForm';
 import { AVAILABILITY } from '@/data/status';
 import { COULEUR_CLASSES } from '@/lib/colors';
+import { buildMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Contact — Yvan Kerdanet',
   description: "Envie de discuter d'un projet ou d'une opportunité ? Contactez-moi directement.",
-};
+  path: '/contact',
+});
 
 export default function ContactPage() {
   const couleurClasses = COULEUR_CLASSES[AVAILABILITY.available ? 'vert' : 'rouge'];

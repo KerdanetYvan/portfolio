@@ -3,11 +3,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { getBlogPosts } from '@/lib/api/blog';
+import { buildMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Blog — Yvan Kerdanet',
   description: 'Articles techniques et retours d\'expérience.',
-};
+  path: '/blog',
+});
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
