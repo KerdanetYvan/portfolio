@@ -4,6 +4,7 @@ export interface BlogPostSummary {
   title: string;
   excerpt: string | null;
   published_at: string;
+  tags: string[];
 }
 
 export interface BlogPostDetail extends BlogPostSummary {

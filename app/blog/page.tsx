@@ -42,6 +42,18 @@ export default async function BlogPage() {
             >
               <span className="font-mono text-xs text-muted">{formatDate(post.published_at)}</span>
               <h2 className="text-lg font-semibold text-on-surface">{post.title}</h2>
+              {post.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="font-mono text-[11px] px-2 py-0.5 rounded border border-border text-muted bg-surface"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
               {post.excerpt && (
                 <p className="text-sm text-muted leading-relaxed flex-1">{post.excerpt}</p>
               )}

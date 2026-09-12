@@ -452,6 +452,7 @@ app/dashboard/
 - Exclusion du tracking sur `/dashboard/*` via `beforeSend` : les pages admin ne sont pas trackées
 - **Custom events** (via `track()` de `@vercel/analytics`) :
   - `contact_form_submitted` — envoi formulaire /contact (succès uniquement)
+  - `article_viewed` — chargement d'une page /blog/[url] (slug en propriété)
 - Pattern pour nouveaux events : `import { track } from '@vercel/analytics'` + `track('nom_event')` dans les handlers client
 - Données accessibles sur vercel.com → projet → onglet Analytics
 - ⚠️ Activer manuellement sur Vercel Dashboard : onglet "Analytics" → Enable, onglet "Speed Insights" → Enable

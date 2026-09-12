@@ -8,6 +8,7 @@ import { RiArrowLeftLine } from 'react-icons/ri';
 import { getBlogPost } from '@/lib/api/blog';
 import { mdComponents } from '@/lib/markdown-components';
 import { buildMetadata } from '@/lib/site';
+import { ArticleViewTracker } from './ArticleViewTracker';
 
 interface PageProps {
   params: Promise<{ url: string }>;
@@ -45,8 +46,23 @@ export default async function ArticlePage({ params }: PageProps) {
         </Link>
 
         <article>
+          <ArticleViewTracker slug={post.slug} />
           <p className="font-mono text-xs text-muted mb-2">{formatDate(post.published_at)}</p>
-          <h1 className="text-3xl font-bold text-on-surface mb-6">{post.title}</h1>
+          <h1 className={`text-3xl font-bold text-on-surface ${post.tags.length > 0 ? 'mb-2' : 'mb-6'}`}>
+            {post.title}
+          </h1>
+          {post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-6">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="font-mono text-[11px] px-2 py-0.5 rounded border border-border text-muted bg-surface"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
 
           <div className="prose-custom">
             <ReactMarkdown
