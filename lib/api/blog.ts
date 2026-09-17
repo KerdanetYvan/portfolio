@@ -3,6 +3,7 @@ export interface BlogPostSummary {
   slug: string;
   title: string;
   excerpt: string | null;
+  cover_image_url: string | null;
   published_at: string;
   tags: string[];
 }

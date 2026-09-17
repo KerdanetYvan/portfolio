@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: post ? `${post.title} — Yvan Kerdanet` : 'Article — Yvan Kerdanet',
     description: post?.excerpt ?? undefined,
     path: `/blog/${url}`,
+    image: post?.cover_image_url ?? undefined,
   });
 }
 
@@ -47,6 +48,14 @@ export default async function ArticlePage({ params }: PageProps) {
 
         <article>
           <ArticleViewTracker slug={post.slug} />
+          {post.cover_image_url && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={post.cover_image_url}
+              alt=""
+              className="mb-6 max-h-[400px] w-full rounded-md object-cover"
+            />
+          )}
           <p className="font-mono text-xs text-muted mb-2">{formatDate(post.published_at)}</p>
           <h1 className={`text-3xl font-bold text-on-surface ${post.tags.length > 0 ? 'mb-2' : 'mb-6'}`}>
             {post.title}
