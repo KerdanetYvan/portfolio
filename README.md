@@ -13,6 +13,7 @@ Portfolio personnel construit avec Next.js 16 App Router. Présente les projets 
 | `/` | Accueil — hero + points forts |
 | `/projects` | Dépôts GitHub (API live), filtrables par langage |
 | `/projects/[owner]/[repo]` | Détail d'un dépôt |
+| `/portfolio/[url]` | Détail d'un projet curaté (`public/projets.json`) ; `/portfolio` redirige vers `/` |
 | `/skills` | Grille de compétences avec stats GitHub + Currently Learning (statique) |
 | `/about` | Intro terminal + timeline, méthodes de travail, loisirs |
 | `/contact` | Formulaire de contact → `POST /contact` sur Ipse-back |
