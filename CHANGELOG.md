@@ -5,6 +5,50 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ---
 
+## [3.0.0] — 2026-09-12
+
+**Passage en front-only**, branché sur [Ipse-back](https://github.com/KerdanetYvan/Ipse-back).
+Le dashboard privé (CV, candidatures, personnalisation, messages, auth) et
+toute la couche données (Supabase, Drizzle) sont retirés de ce dépôt — ils
+deviennent le projet [Ipse-web](https://github.com/KerdanetYvan/Ipse-web),
+backé par la même API mutualisée sur le VPS. Le portfolio n'a plus de base de
+données ni de backend propres.
+
+### Supprimé
+
+- Dashboard privé complet : `/dashboard`, `/dashboard/cv`,
+  `/dashboard/candidatures[...]`, `/dashboard/personnalize`,
+  `/dashboard/contact_message`, `/login`, l'authentification Supabase
+  (GitHub OAuth) et `proxy.ts`.
+- Générateur de CV et suivi de candidatures (`lib/cv/*`, PDFShift, Supabase
+  Storage `cv-pdfs`).
+- Toute la couche Drizzle/Supabase : `db/schemas/`, `db/queries/`,
+  `lib/supabase/*`, `drizzle.config.ts`, les migrations et les commandes
+  `db:generate`/`db:migrate`/`db:studio`.
+- ~23 700 lignes de code supprimées au total (voir commit
+  `6b7fc46`) — le plus gros nettoyage de l'historique du dépôt.
+
+### Ajouté
+
+- `lib/api/blog.ts` — client pour les deux routes publiques d'Ipse-back
+  (`GET /blog/posts[/:slug]`), consommées par `/blog` et `/blog/[url]`.
+- `/contact` (`ContactForm.tsx`) rebranché sur `POST /contact` d'Ipse-back au
+  lieu de l'API route locale.
+- `NEXT_PUBLIC_API_URL` — seule variable d'environnement pour parler à
+  Ipse-back ; plus aucune clé Supabase dans ce dépôt.
+
+### Suivi
+
+- Statut de disponibilité et "Currently Learning" restent des données
+  statiques locales (`data/status.ts`, `data/learning.ts`) en attendant
+  qu'Ipse-web les gère dynamiquement.
+- `/blog` masqué tant qu'aucun article n'est publié (`b42deb5`, `8a50c67`) ;
+  tags + compteur de vues (#6), image de couverture bannière/`og:image` (#7)
+  et fondations SEO (sitemap, robots, Open Graph, JSON-LD, #5) ajoutés dans
+  la foulée de la bascule.
+
+---
+
 ## [2.1.4] — 2026-05-27
 
 Migration de la génération PDF de Puppeteer vers PDFShift (SaaS). Suppression de ~150 Mo de dépendances Chromium du bundle Vercel, ce qui résout les erreurs de dépassement de mémoire en production.
