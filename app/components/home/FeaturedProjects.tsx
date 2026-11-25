@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { RiGithubFill, RiExternalLinkLine, RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 import projects from '../../../public/projets.json';
 import ProjectIcon from '../ProjectIcon';
+import { getTech } from '@/lib/tech';
+import TechLogo from '../TechLogo';
 
 interface Project {
   id: number;
@@ -102,20 +104,27 @@ export default function FeaturedProjects() {
               </span>
             </div>
 
-            <p className="text-sm text-muted leading-relaxed line-clamp-3 flex-1">
+            <p className="text-sm text-muted leading-relaxed line-clamp-3">
               {project.description}
             </p>
 
-            <div className="flex flex-wrap gap-1.5 mt-auto">
-              {project.tech.slice(0, 4).map((t) => (
-                <span
-                  key={t}
-                  className="font-mono text-[11px] px-2 py-0.5 rounded border border-border text-muted bg-surface"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
+            {/* Logos des technos (nom en infobulle) ; texte pour celles sans logo dans lib/tech.ts */}
+            <ul className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-auto" aria-label="Technologies">
+              {/* Logos d'abord, technos sans logo ensuite : la rangée de logos n'est pas coupée par du texte */}
+              {[...project.tech].sort((a, b) => Number(!getTech(a)) - Number(!getTech(b))).map((t) =>
+                getTech(t) ? (
+                  // relative : ancre le sr-only, sinon il sort du carrousel et élargit la page
+                  <li key={t} title={t} className="relative flex">
+                    <TechLogo label={t} size={18} />
+                    <span className="sr-only">{t}</span>
+                  </li>
+                ) : (
+                  <li key={t} className="font-mono text-[11px] px-2 py-0.5 rounded border border-border text-muted bg-surface">
+                    {t}
+                  </li>
+                ),
+              )}
+            </ul>
 
             <div className="flex items-center gap-3 pt-1 border-t border-border">
               {project.github && (
