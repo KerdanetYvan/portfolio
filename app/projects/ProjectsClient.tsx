@@ -9,6 +9,8 @@ import {
   RiGitForkLine,
 } from 'react-icons/ri';
 import type { GitHubRepo } from '@/lib/github/repos';
+import { getTech } from '@/lib/tech';
+import TechLogo from '@/app/components/TechLogo';
 
 const LANG_COLORS: Record<string, string> = {
   TypeScript:  '#3178c6',
@@ -31,6 +33,18 @@ const LANG_COLORS: Record<string, string> = {
   Dart:        '#00b4ab',
   SCSS:        '#c6538c',
 };
+
+/** Logo du langage (lib/tech.ts) ; pastille de couleur GitHub à défaut. */
+function LangMark({ lang }: { lang: string }) {
+  if (getTech(lang)) return <TechLogo label={lang} size={12} />;
+  return (
+    <span
+      className="w-2 h-2 rounded-full shrink-0"
+      style={{ background: LANG_COLORS[lang] ?? '#8b949e' }}
+      aria-hidden="true"
+    />
+  );
+}
 
 function formatPushed(iso: string): string {
   const diffDays = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
@@ -104,11 +118,7 @@ export default function ProjectsClient({ repos, userLogin, initialLang }: Projec
                 : 'border-border text-muted hover:border-accent-bg hover:text-on-surface'
             }`}
           >
-            <span
-              className="w-2 h-2 rounded-full shrink-0"
-              style={{ background: LANG_COLORS[lang] ?? '#8b949e' }}
-              aria-hidden="true"
-            />
+            <LangMark lang={lang} />
             {lang}
           </button>
         ))}
@@ -212,11 +222,7 @@ function RepoCard({ repo, userLogin }: { repo: GitHubRepo; userLogin: string }) 
         <div className="relative z-10 flex flex-wrap gap-1.5">
           {repo.language && (
             <span className="flex items-center gap-1 font-mono text-[11px] px-2 py-0.5 rounded border border-border text-muted bg-surface">
-              <span
-                className="w-2 h-2 rounded-full shrink-0"
-                style={{ background: LANG_COLORS[repo.language] ?? '#8b949e' }}
-                aria-hidden="true"
-              />
+              <LangMark lang={repo.language} />
               {repo.language}
             </span>
           )}

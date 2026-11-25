@@ -2,6 +2,9 @@ import Link from 'next/link';
 import type { SkillCategory, Skill, Level } from '@/data/skills';
 import type { LearningItem } from '@/data/learning';
 import type { SkillStat } from './page';
+import { RiCodeSSlashLine } from 'react-icons/ri';
+import { getTech } from '@/lib/tech';
+import TechLogo from '@/app/components/TechLogo';
 
 const LEVEL_COLORS: Record<Level, string> = {
   'Daily driver': 'text-accent-bg',
@@ -30,6 +33,12 @@ function formatLearningDate(iso: string): string {
   return new Date(iso).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
 }
 
+/** Logo de la compétence (ou de sa techno parente) ; pictogramme neutre pour un concept sans logo (ex. REST APIs). */
+function SkillMark({ name }: { name: string }) {
+  if (getTech(name)) return <TechLogo label={name} size={18} />;
+  return <RiCodeSSlashLine size={18} aria-hidden="true" className="shrink-0 text-muted" />;
+}
+
 function SkillCard({ skill, stat }: { skill: Skill; stat?: SkillStat }) {
   const hasRepos = stat && stat.repos.length > 0;
 
@@ -37,7 +46,10 @@ function SkillCard({ skill, stat }: { skill: Skill; stat?: SkillStat }) {
     <div className="card-hover group flex flex-col gap-2.5 rounded-lg border bg-surface-raised p-4">
       {/* Name + level */}
       <div className="flex items-start justify-between gap-2">
-        <span className="font-medium text-sm text-on-surface">{skill.name}</span>
+        <span className="flex min-w-0 items-center gap-2 font-medium text-sm text-on-surface">
+          <SkillMark name={skill.name} />
+          {skill.name}
+        </span>
         <span
           className={`font-mono text-[10px] px-2 py-0.5 rounded border border-border bg-surface shrink-0 ${LEVEL_COLORS[skill.level]}`}
         >
@@ -87,7 +99,10 @@ function LearningCard({ item }: { item: LearningItem }) {
   return (
     <div className="flex flex-col gap-2 rounded-lg border border-dashed border-border bg-surface p-4">
       <div className="flex items-start justify-between gap-2">
-        <span className="font-medium text-sm text-on-surface">{item.name}</span>
+        <span className="flex min-w-0 items-center gap-2 font-medium text-sm text-on-surface">
+          <SkillMark name={item.name} />
+          {item.name}
+        </span>
         <span className="font-mono text-[10px] px-2 py-0.5 rounded border border-border bg-surface-raised text-muted shrink-0">
           {item.category}
         </span>
