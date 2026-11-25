@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { url } = await params;
   const post = await getBlogPost(url);
   return buildMetadata({
-    title: post ? `${post.title} — Yvan Kerdanet` : 'Article — Yvan Kerdanet',
+    title: post ? `${post.title} - Yvan Kerdanet` : 'Article - Yvan Kerdanet',
     description: post?.excerpt ?? undefined,
     path: `/blog/${url}`,
     image: post?.cover_image_url ?? undefined,
