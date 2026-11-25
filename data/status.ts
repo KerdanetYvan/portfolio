@@ -7,5 +7,5 @@ export interface AvailabilityStatus {
 export const AVAILABILITY: AvailabilityStatus = {
   available: true,
   emoji: '🟢',
-  label: 'En recherche active d\'alternance (Nov. 2026) — boîte mail grande ouverte',
+  label: 'Disponible immédiatement - CDI, CDD ou freelance · Paris/IDF & Finistère',
 };

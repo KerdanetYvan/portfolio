@@ -3,6 +3,7 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { RiGithubFill, RiExternalLinkLine, RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 import projects from '../../../public/projets.json';
+import ProjectIcon from '../ProjectIcon';
 
 interface Project {
   id: number;
@@ -13,6 +14,9 @@ interface Project {
   status: string;
   site?: string;
   github?: string;
+  icon?: string;
+  iconDark?: string;
+  monogram?: string;
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -86,11 +90,14 @@ export default function FeaturedProjects() {
             href={`/portfolio/${project.url}`}
             className="card-hover group snap-start shrink-0 w-full sm:w-[calc(50%-8px)] lg:w-[calc((100%-32px)/3)] flex flex-col gap-3 rounded-lg border bg-surface-raised p-5"
           >
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="font-semibold text-on-surface group-hover:text-accent transition-colors leading-tight">
-                {project.name}
-              </h3>
-              <span className={`font-mono text-xs shrink-0 mt-0.5 ${STATUS_COLORS[project.status] ?? 'text-muted'}`}>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex min-w-0 items-center gap-2.5">
+                <ProjectIcon project={project} />
+                <h3 className="font-semibold text-on-surface group-hover:text-accent transition-colors leading-tight">
+                  {project.name}
+                </h3>
+              </div>
+              <span className={`font-mono text-xs shrink-0 ${STATUS_COLORS[project.status] ?? 'text-muted'}`}>
                 {project.status}
               </span>
             </div>

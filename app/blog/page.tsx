@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { RiArrowRightLine } from 'react-icons/ri';
 import { getBlogPosts } from '@/lib/api/blog';
 import { buildMetadata } from '@/lib/site';
+import TagList from './TagList';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Blog — Yvan Kerdanet',
+  title: 'Blog - Yvan Kerdanet',
   description: 'Articles techniques et retours d\'expérience.',
   path: '/blog',
 });
@@ -34,34 +34,50 @@ export default async function BlogPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {posts.map((post) => (
-            <Link
-              key={post.id}
-              href={`/blog/${post.slug}`}
-              className="card-hover flex flex-col gap-3 rounded-lg border border-border bg-surface-raised p-5"
-            >
-              <span className="font-mono text-xs text-muted">{formatDate(post.published_at)}</span>
-              <h2 className="text-lg font-semibold text-on-surface">{post.title}</h2>
-              {post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5">
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="font-mono text-[11px] px-2 py-0.5 rounded border border-border text-muted bg-surface"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {post.excerpt && (
-                <p className="text-sm text-muted leading-relaxed flex-1">{post.excerpt}</p>
-              )}
-              <span className="inline-flex items-center gap-1.5 text-sm text-accent mt-auto">
-                Lire l&apos;article <RiArrowRightLine size={14} aria-hidden="true" />
-              </span>
-            </Link>
-          ))}
+          {posts.map((post) => {
+            const cover = post.cover_image_url;
+            return (
+              <Link
+                key={post.id}
+                href={`/blog/${post.slug}`}
+                className="card-hover group relative isolate flex h-56 flex-col justify-end overflow-hidden rounded-lg border border-border bg-surface-raised p-5"
+              >
+                {cover && (
+                  <>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={cover}
+                      alt=""
+                      loading="lazy"
+                      className="absolute inset-0 -z-10 size-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-105"
+                    />
+                    {/* Dégradé bas → haut : garantit la lisibilité du texte quelle que soit l'image */}
+                    <div
+                      className="absolute inset-0 -z-10 bg-linear-to-t from-black/85 via-black/40 to-black/0"
+                      aria-hidden="true"
+                    />
+                  </>
+                )}
+
+                <span className={`font-mono text-xs mb-1.5 ${cover ? 'text-white/80' : 'text-muted'}`}>
+                  {formatDate(post.published_at)}
+                </span>
+                <h2 className={`line-clamp-2 text-lg font-semibold leading-snug ${cover ? 'text-white' : 'text-on-surface'}`}>
+                  {post.title}
+                </h2>
+                {post.tags.length > 0 && (
+                  <TagList
+                    tags={post.tags}
+                    pillClassName={`font-mono text-[11px] px-2 py-0.5 rounded border ${
+                      cover
+                        ? 'border-white/20 bg-black/40 text-white/90 backdrop-blur-sm'
+                        : 'border-border bg-surface text-muted'
+                    }`}
+                  />
+                )}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </main>

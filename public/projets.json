@@ -1,144 +1,220 @@
 [
-    {
-        "id": 1,
-        "name": "Portfolio v2",
-        "url": "portfolio-personnel",
-        "description": "Refonte complète du portfolio en Next.js 16 App Router et TypeScript. L'API GitHub alimente en temps réel les pages /projects et /skills. Design system cohérent (tokens CSS, thème clair/sombre persisté sans flash), page à propos avec intro terminal typewriter.",
-        "tech": ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS v4", "Three.js", "Framer Motion"],
-        "status": "En cours",
-        "fonctionnalites": [
-            "Page projets alimentée par l'API GitHub (repos propres + contributions)",
-            "Page compétences avec stats GitHub par technologie et détection de frameworks via package.json",
-            "Page à propos avec animation terminal typewriter",
-            "Formulaire de contact avec états animés et anti-spam honeypot",
-            "Thème clair/sombre persisté via cookie (sans flash SSR)"
-        ],
-        "defis": [
-            "Détection des frameworks JS via parsing du package.json de chaque repo (API Contents GitHub)",
-            "Zéro flash de thème au chargement sans JavaScript côté client au premier rendu",
-            "Migration TypeScript complète depuis une base JavaScript"
-        ],
-        "evolution": [
-            "Dashboard privé avec suivi financier multi-banques",
-            "Authentification NextAuth v5 pour les routes /dashboard",
-            "Blog avec éditeur privé et persistance en base de données"
-        ],
-        "images": ["landing_portfolio.webp", "mobile_skills.webp", "about_info.webp"],
-        "site": "https://kerdanetyvan.dev",
-        "github": "https://github.com/KerdanetYvan/portfolio",
-        "date": "2025-03-16T11:10:00.150Z"
-    },
-    {
-        "id": 2,
-        "name": "Application E-Shop",
-        "url": "e-shop",
-        "description": "Application mobile e-commerce en React Native avec backend Node.js. Exploration de l'écosystème mobile React et intégration d'une API de paiement.",
-        "tech": ["React Native", "Node.js", "MongoDB"],
-        "status": "Abandonné",
-        "fonctionnalites": [
-            "Catalogue de produits",
-            "Panier d'achat",
-            "Système de paiement"
-        ],
-        "defis": [
-            "Première expérience avec React Native",
-            "Intégration d'une API de paiement tierce",
-            "Gestion des stocks en temps réel"
-        ],
-        "github": "https://github.com/KerdanetYvan/e-shop",
-        "date": "2025-01-12T15:05:00.150Z"
-    },
-    {
-        "id": 3,
-        "name": "CoffeeX",
-        "url": "coffeex",
-        "description": "Clone du réseau social X (ex-Twitter) construit avec Next.js et MongoDB. Création de compte, fil de messages en temps réel et système de suivi entre utilisateurs.",
-        "tech": ["Next.js", "React", "Node.js", "MongoDB"],
-        "status": "En cours",
-        "fonctionnalites": [
-            "Création de compte et authentification",
-            "Publication et affichage de messages en temps réel",
-            "Système de suivi entre utilisateurs"
-        ],
-        "defis": [
-            "Application fullstack complète dans un temps contraint",
-            "Gestion des événements temps réel",
-            "Conception d'une API RESTful cohérente"
-        ],
-        "evolution": [
-            "Messagerie directe entre utilisateurs",
-            "Notifications en temps réel",
-            "Refonte de l'interface utilisateur"
-        ],
-        "github": "https://github.com/KerdanetYvan/tp_y",
-        "date": "2025-02-18T14:00:00.150Z"
-    },
-    {
-        "id": 4,
-        "name": "Soutien Orthopédagogique",
-        "url": "soutien-orthopedagogique",
-        "description": "Site WordPress livré en 3 mois pour un service de soutien orthopédagogique destiné aux jeunes enfants. Projet client réel réalisé en équipe de 9 personnes de spécialités différentes (dev, design, chef de projet).",
-        "tech": ["WordPress", "PHP", "JavaScript", "CSS"],
-        "status": "Terminé",
-        "fonctionnalites": [
-            "Présentation du service et des praticiens",
-            "Section témoignages",
-            "Blog"
-        ],
-        "defis": [
-            "Livraison en 3 mois avec un cahier des charges client",
-            "Intégration d'une charte graphique imposée",
-            "Coordination d'une équipe pluridisciplinaire de 9 personnes"
-        ],
-        "images": ["tef_landing.webp", "tef_blog.webp", "tef_about.webp"],
-        "site": "https://soutien-orthopedagogique.com/",
-        "github": "https://github.com/KerdanetYvan/wp-tef",
-        "date": "2024-12-08T17:10:00.150Z"
-    },
-    {
-        "id": 5,
-        "name": "Site E-Commerce",
-        "url": "tp_e-commerce",
-        "description": "Vitrine e-commerce fictive développée en binôme avec React et Node.js. Inclut un back-office CRUD complet pour la gestion des produits, utilisateurs et avis.",
-        "tech": ["React", "Node.js", "JavaScript", "CSS"],
-        "status": "Terminé",
-        "fonctionnalites": [
-            "Catalogue de produits en vedette",
-            "Panier d'achat",
-            "Back-office CRUD : produits, utilisateurs et avis"
-        ],
-        "defis": [
-            "Livraison dans un temps contraint",
-            "Respect des contraintes techniques imposées",
-            "Développement en binôme"
-        ],
-        "github": "https://github.com/KerdanetYvan/tp_e-commerce",
-        "date": "2024-11-08T17:00:00.150Z"
-    },
-    {
-        "id": 6,
-        "name": "Encyclopé'DnD",
-        "url": "encyclopednd",
-        "description": "Encyclopédie Donjons & Dragons développée en équipe de 3 avec Angular et Firebase. Répertorie monstres, sorts, aventuriers et objets via une API externe, avec authentification et hébergement Firebase.",
-        "tech": ["Angular", "TypeScript", "Firebase", "JavaScript", "CSS"],
-        "status": "Terminé",
-        "fonctionnalites": [
-            "Catalogue de monstres, sorts, aventuriers et objets",
-            "Authentification utilisateur via Firebase",
-            "Hébergement Firebase"
-        ],
-        "defis": [
-            "Exploitation d'une API tierce à la documentation partielle",
-            "Livraison en 3 mois",
-            "Collaboration en équipe de 3 personnes"
-        ],
-        "evolution": [
-            "Refonte de l'interface et de la charte graphique",
-            "Ajout de nouvelles sections (races, classes…)"
-        ],
-        "images": ["ency_landing.webp", "ency_auth.webp", "ency_spells.webp"],
-        "site": "https://encyclope-dnd.web.app",
-        "github": "https://github.com/KerdanetYvan/encyclope-dnd",
-        "date": "2024-06-03T17:00:00.150Z"
-    }
+  {
+    "id": 1,
+    "name": "Kernshine",
+    "url": "kernshine",
+    "icon": "icon.png",
+    "description": "Application de bureau Windows open source pour entretenir son PC sans jargon technique : nettoyage, réparation et mises à jour. Projet personnel, en alpha.",
+    "tech": [
+      "React",
+      "TypeScript",
+      "Tauri 2",
+      "Electron",
+      "Tailwind CSS",
+      "winget",
+      "GitHub Actions",
+      "Figma"
+    ],
+    "status": "En cours",
+    "fonctionnalites": [
+      "Nettoyage des fichiers inutiles",
+      "Mises à jour des logiciels basées sur winget",
+      "Analyse et réparation des fichiers système (sfc /scannow)",
+      "Versions alpha avec installeur Windows et mises à jour automatiques"
+    ],
+    "defis": [
+      "Développer seul la v0.1 sous Electron et React",
+      "Migrer d'Electron vers Tauri 2 (backend Rust, webview système) pour réduire la consommation de mémoire et de processeur, une migration pilotée avec un assistant IA (Claude Code)",
+      "Expliquer avant d'agir : l'application ne fait rien d'irréversible sans l'accord de l'utilisateur",
+      "Créer la direction artistique de la marque (nom, logo, couleurs, typographie, ton), avec une charte et des maquettes Figma produites avec l'aide de l'IA"
+    ],
+    "evolution": [
+      "Mises à jour des pilotes avec point de restauration",
+      "Suivi de la santé du matériel",
+      "Entretien guidé avec une note sur 100"
+    ],
+    "github": "https://github.com/KerdanetYvan/Kernshine",
+    "date": "2025-10-01T00:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Le Professeur",
+    "url": "le-professeur",
+    "monogram": "LP",
+    "description": "Plugin Claude Code qui fait de Claude un mentor « projet d'abord » : il explique chaque notion au moment où le projet la rencontre, laisse coder soi-même et garde la trace de ce qui est vraiment maîtrisé. Né d'un besoin personnel, rédigé par Claude au fil de nos échanges. Open source.",
+    "tech": [
+      "Claude Code",
+      "Prompt engineering",
+      "Bash",
+      "GitHub Actions"
+    ],
+    "status": "En cours",
+    "fonctionnalites": [
+      "Modes découverte, debug, revue pédagogique, cadrage et cheatsheet, choisis selon le contexte",
+      "Progression par notion (déclarée, vue, confirmée, infirmée) : une notion n'est confirmée qu'une fois pratiquée seul",
+      "Aide graduée : un indice, puis un exemple analogue, puis la forme générale, et la solution seulement en dernier recours",
+      "Données locales en Markdown, versionnables avec le projet"
+    ],
+    "defis": [
+      "Partir d'un besoin réel : réfléchir à l'usage, explorer ce que Claude Code permet (skills, hooks, plugins), puis faire rédiger le plugin par Claude en discussion et en itérations",
+      "Empêcher l'IA d'écrire le code à la place de l'apprenant, sans la rendre inutile",
+      "Évaluer le comportement du mentor avec des scénarios et des critères de notation automatiques",
+      "Recharger la progression à chaque session grâce à un hook de démarrage, testé en CI"
+    ],
+    "github": "https://github.com/KerdanetYvan/le-professeur",
+    "date": "2026-11-04T00:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "name": "UrbanFlow Mobility",
+    "url": "urbanflow-mobility",
+    "icon": "favicon.svg",
+    "description": "Plateforme de mobilité urbaine qui planifie des itinéraires multimodaux. Projet de certification (Titre 6 CDSD, obtenu), mené en chef de projet et pilote d'IA.",
+    "tech": [
+      "React",
+      "NestJS",
+      "PostgreSQL",
+      "PostGIS",
+      "OpenTripPlanner",
+      "PWA",
+      "Docker",
+      "Caddy",
+      "GitHub Actions"
+    ],
+    "status": "Terminé",
+    "fonctionnalites": [
+      "PWA React (Vite, Workbox) et API REST NestJS sur PostgreSQL / PostGIS",
+      "Moteur de routage OpenTripPlanner pour les itinéraires multimodaux",
+      "Réinitialisation du mot de passe par email, via un relais SMTP auto-hébergé",
+      "Environnement complet en Docker Compose (base, moteur de routage, backend, frontend)"
+    ],
+    "defis": [
+      "Piloter le développement par IA en chef de projet : GitHub Project (kanban, sprints, milestones), Definition of Done, convention de commits et checklist de PR",
+      "Déployer sur un VPS : accès SSH par clé, pare-feu et fail2ban, Caddy en reverse proxy HTTPS, backend joignable uniquement en local",
+      "Mettre en place la qualité continue : CI GitHub Actions, lint en pre-commit, migrations de base versionnées",
+      "Argumenter chaque choix technique dans le dossier de certification (hébergement en UE, RGPD)"
+    ],
+    "github": "https://github.com/KerdanetYvan/urbanflow-mobility",
+    "date": "2026-07-22T00:00:00.000Z"
+  },
+  {
+    "id": 4,
+    "name": "Grimoria Scantrad",
+    "url": "grimoria-scantrad",
+    "monogram": "GS",
+    "description": "Plateforme de scantrad en construction. Première brique : un back-office qui suit chaque chapitre planche par planche, de la page brute à l'export. Le catalogue, le lecteur et la communauté suivront. Projet personnel, codé moi-même avec Le Professeur en mentor.",
+    "tech": [
+      "Python",
+      "Django",
+      "Django REST Framework",
+      "PostgreSQL",
+      "Celery",
+      "Redis",
+      "pytest",
+      "GitHub Actions"
+    ],
+    "status": "En cours",
+    "fonctionnalites": [
+      "Squelette de l'API Django / DRF avec endpoint de santé",
+      "Tests pytest et CI GitHub Actions sur chaque PR, lancée seulement quand l'API change"
+    ],
+    "defis": [
+      "Concevoir le pipeline de production : clean et trad en parallèle, puis edit et check, avec renvoi en reprise si le check échoue",
+      "Laisser chaque membre s'auto-assigner planche par planche selon ses compétences, sans attribution centralisée",
+      "Réapprendre Django en codant moi-même, avec Le Professeur en mentor"
+    ],
+    "evolution": [
+      "Back-office équipe : pipeline planche par planche, invitations par lien, notifications Discord et export des planches finales",
+      "Catalogue public et lecteur",
+      "Comptes lecteurs, commentaires et favoris",
+      "Bot Discord dédié"
+    ],
+    "github": "https://github.com/KerdanetYvan/GrimoriaScantrad",
+    "date": "2026-08-10T00:00:00.000Z"
+  },
+  {
+    "id": 5,
+    "name": "Doo",
+    "url": "doo",
+    "icon": "logo.svg",
+    "description": "Application mobile anti-doomscrolling : elle construit un programme avec l'utilisateur, puis l'incite par notification à décrocher en lui proposant une activité. Projet scolaire, Lead Dev d'une équipe de 3 développeurs.",
+    "tech": [
+      "React Native",
+      "Expo",
+      "Supabase"
+    ],
+    "status": "Terminé",
+    "fonctionnalites": [
+      "Onboarding, gestion des pages et page de réglages",
+      "V1 de l'algorithme qui construit le programme de l'utilisateur à partir de ses données",
+      "Intégration de la maquette",
+      "APK fonctionnel, installable depuis le site de Doo"
+    ],
+    "defis": [
+      "Mener 3 développeurs en sprints au sein d'un groupe projet de 9 personnes, et gérer les rendus",
+      "Livrer en 2 semaines (fin mai - début juin 2026)",
+      "Rechercher les algorithmes à intégrer pour construire le programme",
+      "Présenter le projet à 9 devant un amphithéâtre de 200 personnes"
+    ],
+    "evolution": [
+      "Publication sur l'App Store (page en phase de test)"
+    ],
+    "site": "https://doo.kerdanetyvan.dev/",
+    "date": "2026-05-25T00:00:00.000Z"
+  },
+  {
+    "id": 6,
+    "name": "Absolut",
+    "url": "absolut",
+    "icon": "logo.webp",
+    "iconDark": "logo_dark.webp",
+    "description": "PWA qui répertorie les écoles de MoCap et d'animation d'Île-de-France, avec une carte de Paris des écoles. Projet de compétition scolaire, Lead Dev d'une équipe de 3 développeurs, coup de cœur annoncé par le jury.",
+    "tech": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "MongoDB",
+      "Mongoose",
+      "PWA"
+    ],
+    "status": "Terminé",
+    "fonctionnalites": [
+      "Initialisation du projet Next.js fullstack",
+      "PWA : manifest, application installable et gestion de la perte de connexion",
+      "Carte de Paris des écoles (réalisée par un coéquipier)"
+    ],
+    "defis": [
+      "Premier rôle de Lead Dev : coordonner 3 développeurs au sein d'un groupe projet de 9 personnes (dev, marketing, design, PO / UX, motion design)",
+      "Gérer le projet de développement jusqu'au rendu de la compétition"
+    ],
+    "github": "https://github.com/KerdanetYvan/absolute-app",
+    "date": "2025-05-01T00:00:00.000Z"
+  },
+  {
+    "id": 7,
+    "name": "Générateur CDC",
+    "url": "generateur-cdc",
+    "monogram": "CDC",
+    "description": "Outil de bureau qui guide un rendez-vous client écran par écran, puis génère avec LangChain et un LLM une première version du cahier des charges, relue avant l'export en PDF. Projet personnel, réalisé seul.",
+    "tech": [
+      "Python",
+      "PySide6",
+      "LangChain",
+      "OpenAI API"
+    ],
+    "status": "En pause",
+    "fonctionnalites": [
+      "Une suite d'écrans PySide6, chacun dédié à une partie du cahier des charges",
+      "Génération du cahier des charges en Markdown via LangChain et un LLM",
+      "Relecture et ajustement du document avant l'export en PDF"
+    ],
+    "defis": [
+      "Suivre l'ordre logique d'un rendez-vous client pour repartir avec une première version du document",
+      "Construire le modèle de données avec le pattern Builder",
+      "Mettre en pratique une formation sur LangChain"
+    ],
+    "github": "https://github.com/KerdanetYvan/cdc_generator",
+    "date": "2025-12-01T00:00:00.000Z"
+  }
 ]

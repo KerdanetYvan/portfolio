@@ -48,7 +48,7 @@ export default async function StatusBar() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-bg opacity-60" />
               <span className="relative inline-flex size-2 rounded-full bg-accent-bg" />
             </span>
-            Disponible pour alternance — Nov. 2026
+            Disponible immédiatement - CDI · CDD · freelance
           </span>
 
           <span className="hidden sm:block text-border">|</span>
@@ -67,7 +67,7 @@ export default async function StatusBar() {
                 <RiGithubFill size={13} aria-hidden="true" />
                 Dernier commit sur{' '}
                 <span className="text-on-surface">{lastCommit.repo}</span>
-                {' '}— {timeAgo(lastCommit.date)}
+                {' '}- {timeAgo(lastCommit.date)}
               </span>
             </>
           )}

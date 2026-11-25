@@ -6,7 +6,7 @@ import SkillsGrid from './SkillsGrid';
 import { buildMetadata } from '@/lib/site';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Compétences — Yvan Kerdanet',
+  title: 'Compétences - Yvan Kerdanet',
   description: 'Stack technique : Frontend, Backend, Bases de données, DevOps & Outillage.',
   path: '/skills',
 });

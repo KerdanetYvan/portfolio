@@ -8,9 +8,9 @@ interface Line {
 
 const SCRIPT: Line[] = [
   { kind: 'prompt',   text: 'whoami' },
-  { kind: 'response', text: 'Yvan Kerdanet — dev fullstack' },
+  { kind: 'response', text: 'Yvan Kerdanet - dev fullstack' },
   { kind: 'prompt',   text: 'cat status.txt' },
-  { kind: 'response', text: '🟢  En alternance · disponible nov. 2026' },
+  { kind: 'response', text: '🟢  Disponible immédiatement · CDI, CDD ou freelance' },
   { kind: 'response', text: 'Paris, FR · origines bretonnes' },
   { kind: 'response', text: 'Bachelor CDSD · Digital Campus Paris' },
   { kind: 'prompt',   text: 'ls interests/' },

@@ -15,6 +15,7 @@ import {
 } from 'react-icons/ri';
 import projects from '../../../public/projets.json';
 import { buildMetadata } from '@/lib/site';
+import ProjectIcon from '@/app/components/ProjectIcon';
 
 interface FeaturedProject {
   id: number;
@@ -30,6 +31,9 @@ interface FeaturedProject {
   images?: string[];
   site?: string;
   github?: string;
+  icon?: string;
+  iconDark?: string;
+  monogram?: string;
 }
 
 interface RepoDetail {
@@ -154,9 +158,9 @@ const mdComponents: Components = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { url } = await params;
   const project = (projects as FeaturedProject[]).find((p) => p.url === url);
-  if (!project) return buildMetadata({ title: 'Projet — Yvan Kerdanet', path: `/portfolio/${url}` });
+  if (!project) return buildMetadata({ title: 'Projet - Yvan Kerdanet', path: `/portfolio/${url}` });
   return buildMetadata({
-    title: `${project.name} — Yvan Kerdanet`,
+    title: `${project.name} - Yvan Kerdanet`,
     description: project.description,
     path: `/portfolio/${url}`,
   });
@@ -205,6 +209,7 @@ export default async function FeaturedProjectPage({ params }: PageProps) {
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div className="space-y-3 min-w-0">
               <div className="flex items-center gap-3 flex-wrap">
+                <ProjectIcon project={project} size="lg" />
                 <h1 className="text-2xl font-bold text-on-surface">{project.name}</h1>
                 {status && (
                   <span className={`inline-flex items-center gap-1.5 font-mono text-[11px] px-2 py-0.5 rounded border border-border bg-surface ${status.text}`}>
@@ -333,7 +338,7 @@ export default async function FeaturedProjectPage({ params }: PageProps) {
                 <img
                   key={i}
                   src={`/projects/${project.url}/${image}`}
-                  alt={`Aperçu ${i + 1} — ${project.name}`}
+                  alt={`Aperçu ${i + 1} - ${project.name}`}
                   className="rounded-md w-full object-cover border border-border"
                 />
               ))}

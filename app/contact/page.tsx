@@ -5,7 +5,7 @@ import { COULEUR_CLASSES } from '@/lib/colors';
 import { buildMetadata } from '@/lib/site';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Contact — Yvan Kerdanet',
+  title: 'Contact - Yvan Kerdanet',
   description: "Envie de discuter d'un projet ou d'une opportunité ? Contactez-moi directement.",
   path: '/contact',
 });
