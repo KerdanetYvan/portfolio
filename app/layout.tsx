@@ -13,8 +13,8 @@ import { SITE_NAME, SITE_URL, buildMetadata } from '@/lib/site';
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 
-const TITLE = 'Yvan Kerdanet — Concepteur Développeur Digital';
-const DESCRIPTION = 'Portfolio de Yvan Kerdanet, développeur fullstack freelance basé à Paris — projets, articles techniques et contact.';
+const TITLE = 'Yvan Kerdanet - Concepteur Développeur Digital';
+const DESCRIPTION = 'Portfolio de Yvan Kerdanet, développeur fullstack freelance basé à Paris - projets, articles techniques et contact.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

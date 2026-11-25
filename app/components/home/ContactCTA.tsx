@@ -13,7 +13,7 @@ export default function ContactCTA() {
           Un projet ? Une opportunité ?
         </h2>
         <p className="text-muted max-w-md mx-auto mb-8">
-          Je suis disponible pour une alternance à partir de novembre 2026.
+          Je suis disponible immédiatement pour un CDI, un CDD ou une mission freelance.
           N'hésitez pas à me contacter.
         </p>
         <Link

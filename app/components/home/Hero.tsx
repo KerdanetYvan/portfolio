@@ -48,7 +48,7 @@ export default function Hero() {
           <p className="text-muted text-base md:text-lg leading-relaxed max-w-sm">
             Bachelor CDSD · Digital Campus Paris
             <br />
-            Disponible en alternance — Nov. 2026
+            Disponible immédiatement - CDI, CDD ou freelance
           </p>
 
           <div className="flex flex-wrap gap-3">

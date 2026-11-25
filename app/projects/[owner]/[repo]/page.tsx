@@ -97,7 +97,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { owner, repo } = await params;
   const data = await fetchGitHub<RepoDetail>(`/repos/${owner}/${repo}`);
   return buildMetadata({
-    title: data ? `${data.name} — Yvan Kerdanet` : 'Projet — Yvan Kerdanet',
+    title: data ? `${data.name} - Yvan Kerdanet` : 'Projet - Yvan Kerdanet',
     description: data?.description ?? undefined,
     path: `/projects/${owner}/${repo}`,
   });

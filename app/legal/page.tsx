@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/site';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Mentions légales — Kerdanet Yvan',
+  title: 'Mentions légales - Kerdanet Yvan',
   description: 'Mentions légales, données personnelles et politique de cookies du portfolio de Yvan Kerdanet.',
   path: '/legal',
 });
@@ -57,7 +57,7 @@ export default function Legal() {
           Le formulaire de contact collecte les informations suivantes : nom, adresse e-mail, type de demande, entreprise (optionnel) et message. Ces données sont stockées dans une base de données sécurisée (Supabase / PostgreSQL) hébergée en Europe, dans le seul but de traiter et répondre à votre demande. Elles ne sont ni partagées avec des tiers, ni utilisées à des fins commerciales.
         </p>
         <p className="text-muted text-sm leading-relaxed">
-          Conformément au Règlement Général sur la Protection des Données (RGPD — UE 2016/679), vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour exercer ces droits, contactez{' '}
+          Conformément au Règlement Général sur la Protection des Données (RGPD - UE 2016/679), vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour exercer ces droits, contactez{' '}
           <a href="mailto:kerdanety@gmail.com" className="text-accent hover:underline">kerdanety@gmail.com</a>.
         </p>
       </section>
@@ -65,7 +65,7 @@ export default function Legal() {
       <section className="mb-10" id="analytics" aria-labelledby="analytics-title">
         <h2 id="analytics-title" className="text-xl font-semibold text-on-surface mb-3">Mesure d'audience</h2>
         <p className="text-muted text-sm leading-relaxed">
-          Ce site utilise <strong className="text-on-surface font-medium">Vercel Web Analytics</strong> pour mesurer l'audience de manière anonyme. Cet outil est sans cookie, sans empreinte digitale et sans collecte d'adresse IP. Les données agrégées (pages visitées, pays, appareil) sont strictement anonymes et ne permettent pas d'identifier un utilisateur. Ce service est conforme au RGPD et à la directive ePrivacy — aucun consentement n'est requis.
+          Ce site utilise <strong className="text-on-surface font-medium">Vercel Web Analytics</strong> pour mesurer l'audience de manière anonyme. Cet outil est sans cookie, sans empreinte digitale et sans collecte d'adresse IP. Les données agrégées (pages visitées, pays, appareil) sont strictement anonymes et ne permettent pas d'identifier un utilisateur. Ce service est conforme au RGPD et à la directive ePrivacy - aucun consentement n'est requis.
         </p>
       </section>
 
@@ -89,7 +89,7 @@ export default function Legal() {
                 <td className="px-4 py-3 font-mono text-on-surface">theme</td>
                 <td className="px-4 py-3 text-muted">Mémorise votre préférence d'affichage (mode clair / sombre)</td>
                 <td className="px-4 py-3 text-muted">1 an</td>
-                <td className="px-4 py-3 text-muted">Fonctionnel — 1ère partie</td>
+                <td className="px-4 py-3 text-muted">Fonctionnel - 1ère partie</td>
               </tr>
             </tbody>
           </table>

@@ -9,9 +9,9 @@ import CommandPalette from './components/home/CommandPalette';
 import { buildMetadata } from '@/lib/site';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Yvan Kerdanet — Concepteur Développeur Digital',
+  title: 'Yvan Kerdanet - Concepteur Développeur Digital',
   description:
-    'Portfolio de Yvan Kerdanet — développeur fullstack, spécialiste n8n, conception 3D. Disponible en alternance novembre 2026.',
+    'Portfolio de Yvan Kerdanet - développeur fullstack, spécialiste n8n, conception 3D. Disponible immédiatement en CDI, CDD ou freelance.',
   path: '',
 });
 

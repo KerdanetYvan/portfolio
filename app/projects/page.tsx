@@ -6,8 +6,8 @@ import { buildMetadata } from '@/lib/site';
 export { type GitHubRepo } from '@/lib/github/repos';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Projets — Yvan Kerdanet',
-  description: 'Repos publics GitHub — projets personnels et contributions.',
+  title: 'Projets - Yvan Kerdanet',
+  description: 'Repos publics GitHub - projets personnels et contributions.',
   path: '/projects',
 });
 
@@ -33,7 +33,7 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
             Mes Projets
           </h1>
           <p className="text-muted max-w-xl">
-            Repos publics GitHub — projets personnels et contributions. Mis à jour toutes les heures.
+            Repos publics GitHub - projets personnels et contributions. Mis à jour toutes les heures.
           </p>
         </div>
 
