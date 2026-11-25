@@ -144,7 +144,7 @@ export default function ContactForm() {
                 disabled={frozen}
               >
                 <option value="" disabled>Choisir...</option>
-                <option value="alternance">Alternance</option>
+                <option value="emploi">CDI / CDD</option>
                 <option value="mission_freelance">Mission freelance</option>
                 <option value="question">Question</option>
                 <option value="autre">Autre</option>
@@ -236,7 +236,7 @@ export default function ContactForm() {
               status === 'error' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 motion-reduce:hidden',
             ].join(' ')}
           >
-            <RiCloseLine size={18} /> Erreur — réessayer
+            <RiCloseLine size={18} /> Erreur - réessayer
           </span>
         </button>
       </form>
