@@ -1,22 +1,7 @@
 'use client';
 import { useRef } from 'react';
 import Terminal from './Terminal';
-
-interface TimelineEntry {
-  date: string;
-  title: string;
-  sub?: string;
-  kind: 'edu' | 'work';
-  parallel?: boolean;
-}
-
-const TIMELINE: TimelineEntry[] = [
-  { date: '2018',           title: 'BAC STI2D — mention Bien',    kind: 'edu'  },
-  { date: '2018–2021',      title: 'CPGE TSI',                    sub: "Techniques et Sciences de l'Ingénieur", kind: 'edu'  },
-  { date: '2021–2024',      title: 'Cursus Ingénieur Informatique', sub: 'EILCO — Calais (sans diplôme)', kind: 'edu'  },
-  { date: '2024–2026',      title: 'Bachelor CDSD',               sub: 'Digital Campus — Paris', kind: 'edu'  },
-  { date: 'mars → nov. 2026', title: 'Dev fullstack',             sub: 'Alternance · disponible nov. 2026', kind: 'work', parallel: true },
-];
+import GitLog from './GitLog';
 
 const LANGS = [
   { name: 'Français', level: 'Natif',    fill: 3, cert: null },
@@ -51,7 +36,7 @@ export default function AboutClient() {
           <p className="font-mono text-xs text-accent-bg mb-2">// à propos</p>
           <h1 className="text-3xl md:text-4xl font-bold text-on-surface mb-3">Yvan Kerdanet</h1>
           <p className="text-muted max-w-xl">
-            Dev fullstack. Basé à Paris, origines bretonnes, en alternance, disponible novembre 2026.
+            Dev fullstack. Basé à Paris, origines bretonnes, disponible immédiatement en CDI, CDD ou freelance.
           </p>
         </div>
 
@@ -59,38 +44,7 @@ export default function AboutClient() {
         <section aria-labelledby="section-parcours">
           <SectionHeader id="section-parcours" slug="parcours" label="Parcours" />
 
-          <ol className="relative ml-4 border-l border-border space-y-0">
-            {TIMELINE.map((entry, i) => entry.parallel ? (
-              <li key={i} className="pl-12 pb-8 relative last:pb-0">
-                {/* Connecteur horizontal de branche */}
-                <span className="absolute top-[9px] left-0 w-6 h-px bg-border" aria-hidden="true" />
-                <span
-                  className="absolute top-1 left-[19px] w-2.5 h-2.5 rounded-full border-2 border-pop-orange bg-surface"
-                  aria-hidden="true"
-                />
-                <div className="flex items-center gap-2 mb-0.5">
-                  <time className="font-mono text-[11px] text-muted">{entry.date}</time>
-                  <span className="font-mono text-[9px] px-1.5 py-px rounded border border-border text-pop-orange bg-surface">⎇ branche</span>
-                </div>
-                <p className="font-medium text-sm text-on-surface">{entry.title}</p>
-                {entry.sub && <p className="font-mono text-xs text-muted">{entry.sub}</p>}
-              </li>
-            ) : (
-              <li key={i} className="pl-6 pb-8 relative last:pb-0">
-                <span
-                  className={`absolute top-1 left-[-5px] w-2.5 h-2.5 rounded-full border-2 ${
-                    entry.kind === 'edu'
-                      ? 'border-accent-bg bg-surface'
-                      : 'border-pop-orange bg-surface'
-                  }`}
-                  aria-hidden="true"
-                />
-                <time className="font-mono text-[11px] text-muted">{entry.date}</time>
-                <p className="font-medium text-sm text-on-surface mt-0.5">{entry.title}</p>
-                {entry.sub && <p className="font-mono text-xs text-muted">{entry.sub}</p>}
-              </li>
-            ))}
-          </ol>
+          <GitLog />
         </section>
 
         {/* ── Comment je bosse ───────────────────────────────── */}
@@ -102,7 +56,7 @@ export default function AboutClient() {
               { icon: '⚡', title: 'Ship vite, itère souvent', desc: 'Je préfère livrer une V1 fonctionnelle et affiner que de chercher la perfection avant de déployer.' },
               { icon: '📐', title: 'Mobile-first by default',  desc: 'Chaque composant est pensé petit écran avant d\'être adapté aux formats larges.' },
               { icon: '🔍', title: 'Lisibilité avant tout',    desc: 'Code explicite, nommage soigné, commentaires uniquement quand le "pourquoi" n\'est pas évident.' },
-              { icon: '🧩', title: 'Composants réutilisables', desc: 'Un bout de UI écrit une fois, paramétré, documenté — pas copié-collé.' },
+              { icon: '🧩', title: 'Composants réutilisables', desc: 'Un bout de UI écrit une fois, paramétré, documenté - pas copié-collé.' },
             ].map((item) => (
               <div key={item.title} className="rounded-lg border bg-surface-raised p-4 flex gap-3">
                 <span className="text-lg shrink-0 mt-0.5" aria-hidden="true">{item.icon}</span>
